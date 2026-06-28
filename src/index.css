@@ -1,26 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #0a0b10;
-  --bg-secondary: #121420;
-  --bg-tertiary: #1c2038;
-  
-  --text-primary: #f8fafc;
-  --text-secondary: #b6c0d4;
-  --text-muted: #8490a8;
-  
-  --accent-neon: #a855f7;
-  --accent-neon-glow: rgba(168, 85, 247, 0.35);
-  --accent-info: #38bdf8;
-  --accent-info-bg: rgba(56, 189, 248, 0.08);
-  --accent-info-border: rgba(56, 189, 248, 0.22);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --border-color-hover: rgba(255, 255, 255, 0.22);
-  
+  --bg-primary: #ecf3ee;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #dbe7df;
+
+  --text-primary: #062f1c;
+  --text-secondary: #244233;
+  --text-muted: #526f5f;
+
+  --accent-neon: #0f766e;
+  --accent-neon-glow: rgba(15, 118, 110, 0.12);
+  --accent-info: #0284c7;
+  --accent-info-bg: rgba(2, 132, 199, 0.05);
+  --accent-info-border: rgba(2, 132, 199, 0.15);
+  --border-color: rgba(6, 47, 28, 0.08);
+  --border-color-hover: rgba(6, 47, 28, 0.16);
+
   --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
-  --card-shadow: 0 10px 36px 0 rgba(0, 0, 0, 0.42);
-  --glass-bg: rgba(16, 18, 30, 0.82);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.07);
+  --card-shadow: 0 10px 30px -4px rgba(6, 47, 28, 0.04), 0 4px 12px -2px rgba(6, 47, 28, 0.02);
+  --card-shadow-hover: 0 20px 40px -4px rgba(6, 47, 28, 0.08), 0 8px 20px -2px rgba(6, 47, 28, 0.03);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: 1px solid rgba(6, 47, 28, 0.05);
+
+  --overlay-bg: rgba(6, 47, 28, 0.04);
+  --overlay-bg-dense: rgba(6, 47, 28, 0.03);
+  --winrate-bar-bg: rgba(6, 47, 28, 0.06);
 }
 
 body {
@@ -46,13 +51,27 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {

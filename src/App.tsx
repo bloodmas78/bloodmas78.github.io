@@ -9,8 +9,6 @@ const MIN_GAMES_NOTICE =
 function App() {
   const [activeTab, setActiveTab] = useState<'monthly' | 'allTime'>('monthly')
   const [sortBy, setSortBy] = useState<'average' | 'highrun' | 'winRate'>('average')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filterMode, setFilterMode] = useState<'all' | 'hasMonthly' | 'hasAllTime'>('all')
 
   const getActiveStats = (member: Member): StatDetail | null => {
     return activeTab === 'monthly' ? member.monthly : member.allTime
@@ -18,16 +16,7 @@ function App() {
 
   const periodLabel = activeTab === 'monthly' ? monthlyLabel : '누적 전체'
 
-  const processedMembers = memberData
-    .filter((member) => {
-      const matchesSearch = member.nickname.toLowerCase().includes(searchQuery.toLowerCase())
-      if (!matchesSearch) return false
-
-      if (filterMode === 'hasMonthly' && !member.monthly) return false
-      if (filterMode === 'hasAllTime' && !member.allTime) return false
-
-      return true
-    })
+  const processedMembers = [...memberData]
     .sort((a, b) => {
       const aStats = getActiveStats(a)
       const bStats = getActiveStats(b)
@@ -54,17 +43,40 @@ function App() {
     return acc + stats.win + stats.draw + stats.loss
   }, 0)
 
-  const statsPool = memberData
-    .map((member) => getActiveStats(member))
-    .filter((stats): stats is StatDetail => stats !== null)
+  // Find members with stats in the current tab
+  const membersWithStatsList = memberData
+    .map((member) => ({ member, stats: getActiveStats(member) }))
+    .filter((item): item is { member: Member; stats: StatDetail } => item.stats !== null)
 
-  const highestAverage = statsPool.length
-    ? Math.max(...statsPool.map((stats) => stats.average))
-    : 0
+  // Highest Average
+  let highestAverageMember: { nickname: string; value: number } | null = null
+  if (membersWithStatsList.length > 0) {
+    const sortedByAvg = [...membersWithStatsList].sort((a, b) => b.stats.average - a.stats.average)
+    highestAverageMember = {
+      nickname: sortedByAvg[0].member.nickname,
+      value: sortedByAvg[0].stats.average,
+    }
+  }
 
-  const highestHighrun = statsPool.length
-    ? Math.max(...statsPool.map((stats) => stats.highrun))
-    : 0
+  // Highest Highrun
+  let highestHighrunMember: { nickname: string; value: number } | null = null
+  if (membersWithStatsList.length > 0) {
+    const sortedByHR = [...membersWithStatsList].sort((a, b) => b.stats.highrun - a.stats.highrun)
+    highestHighrunMember = {
+      nickname: sortedByHR[0].member.nickname,
+      value: sortedByHR[0].stats.highrun,
+    }
+  }
+
+  // Highest Win Rate
+  let highestWinRateMember: { nickname: string; value: number } | null = null
+  if (membersWithStatsList.length > 0) {
+    const sortedByWR = [...membersWithStatsList].sort((a, b) => b.stats.winRate - a.stats.winRate)
+    highestWinRateMember = {
+      nickname: sortedByWR[0].member.nickname,
+      value: sortedByWR[0].stats.winRate,
+    }
+  }
 
   return (
     <div className="dashboard-container">
@@ -73,7 +85,9 @@ function App() {
 
       <header className="dashboard-header animate-fade-in">
         <div className="header-logo">
-          <span className="billiard-ball">8</span>
+          <div className="billiard-ball">
+            <span className="ball-number">9</span>
+          </div>
           <div className="logo-text">
             <h1>매니아 당구클럽 <span className="highlight-text">9샷 멤버스</span></h1>
             <p className="subtitle">
@@ -101,14 +115,29 @@ function App() {
           <div className="quick-stat-card">
             <span className="label">최고 에버리지</span>
             <span className="value highlight">
-              {statsPool.length ? highestAverage.toFixed(3) : '-'}
+              {highestAverageMember ? highestAverageMember.value.toFixed(3) : '-'}
             </span>
+            {highestAverageMember && (
+              <span className="sub-value">{highestAverageMember.nickname}</span>
+            )}
           </div>
           <div className="quick-stat-card">
             <span className="label">최고 하이런</span>
             <span className="value highlight">
-              {statsPool.length ? `${highestHighrun}점` : '-'}
+              {highestHighrunMember ? `${highestHighrunMember.value}점` : '-'}
             </span>
+            {highestHighrunMember && (
+              <span className="sub-value">{highestHighrunMember.nickname}</span>
+            )}
+          </div>
+          <div className="quick-stat-card">
+            <span className="label">최고 승률</span>
+            <span className="value highlight">
+              {highestWinRateMember ? `${highestWinRateMember.value}%` : '-'}
+            </span>
+            {highestWinRateMember && (
+              <span className="sub-value">{highestWinRateMember.nickname}</span>
+            )}
           </div>
         </div>
       </header>
@@ -136,30 +165,6 @@ function App() {
               누적 전체 기록
             </button>
           </div>
-
-          <p className="control-hint">
-            현재 <strong>{periodLabel}</strong> 기준 · {processedMembers.length}명 표시 중
-          </p>
-        </div>
-
-        <div className="filter-controls">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="멤버 닉네임 검색..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-
-          <select
-            className="filter-select"
-            value={filterMode}
-            onChange={(e) => setFilterMode(e.target.value as 'all' | 'hasMonthly' | 'hasAllTime')}
-          >
-            <option value="all">모든 멤버 보기</option>
-            <option value="hasMonthly">월간 기록 보유자만</option>
-            <option value="hasAllTime">누적 기록 보유자만</option>
-          </select>
 
           <div className="sort-by-group">
             <span className="sort-label">정렬</span>
