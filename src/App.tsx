@@ -3,18 +3,14 @@ import { memberData, monthlyLabel } from './data'
 import type { Member, StatDetail } from './data'
 import './App.css'
 
-const MIN_GAMES_NOTICE =
-  'Billizone 클럽 랭킹은 해당 기간에 10경기 이상 치른 회원만 집계됩니다. 10게임 미만인 멤버는 공식 기록이 생성되지 않습니다.'
-
 function App() {
-  const [activeTab, setActiveTab] = useState<'monthly' | 'allTime'>('monthly')
   const [sortBy, setSortBy] = useState<'average' | 'highrun' | 'winRate'>('average')
 
   const getActiveStats = (member: Member): StatDetail | null => {
-    return activeTab === 'monthly' ? member.monthly : member.allTime
+    return member.monthly
   }
 
-  const periodLabel = activeTab === 'monthly' ? monthlyLabel : '누적 전체'
+  const periodLabel = monthlyLabel
 
   const processedMembers = [...memberData]
     .sort((a, b) => {
@@ -142,28 +138,11 @@ function App() {
         </div>
       </header>
 
-      <div className="info-notice animate-fade-in" role="note">
-        <span className="info-notice-icon" aria-hidden="true">i</span>
-        <p>{MIN_GAMES_NOTICE}</p>
-      </div>
-
       <section className="control-panel animate-slide-up">
         <div className="control-panel-top">
-          <div className="toggle-group">
-            <button
-              type="button"
-              className={`toggle-btn ${activeTab === 'monthly' ? 'active' : ''}`}
-              onClick={() => setActiveTab('monthly')}
-            >
-              월간 기록 ({monthlyLabel})
-            </button>
-            <button
-              type="button"
-              className={`toggle-btn ${activeTab === 'allTime' ? 'active' : ''}`}
-              onClick={() => setActiveTab('allTime')}
-            >
-              누적 전체 기록
-            </button>
+          <div className="panel-title-group">
+            <span className="panel-title">월간 기록</span>
+            <span className="panel-subtitle">{monthlyLabel} 데이터 기준</span>
           </div>
 
           <div className="sort-by-group">
@@ -212,9 +191,6 @@ function App() {
                 style={{ '--accent-color': member.avatarColor } as React.CSSProperties}
               >
                 <div className="card-header">
-                  <div className="avatar" style={{ backgroundColor: member.avatarColor }}>
-                    {member.nickname.replace('9샷', '').substring(0, 2) || '9'}
-                  </div>
                   <div className="member-name-info">
                     <h3>{member.nickname}</h3>
                     <span className="badge">
@@ -288,9 +264,7 @@ function App() {
                       </p>
                       <p className="empty-desc">
                         Billizone 랭킹은 10경기 이상 치른 회원만 집계됩니다.
-                        {activeTab === 'monthly'
-                          ? ` ${monthlyLabel} 기준 10게임 미만이면 월간 기록이 표시되지 않습니다.`
-                          : ' 누적 10게임 미만이면 전체 기록이 표시되지 않습니다.'}
+                        {` ${monthlyLabel} 기준 10게임 미만이면 월간 기록이 표시되지 않습니다.`}
                       </p>
                     </div>
                   )}

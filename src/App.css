@@ -209,32 +209,21 @@
   font-weight: 600;
 }
 
-.toggle-group {
+.panel-title-group {
   display: flex;
-  background: var(--overlay-bg);
-  padding: 4px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+  flex-direction: column;
+  gap: 4px;
 }
 
-.toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 9px 18px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 9px;
-  transition: all 0.2s ease;
-  font-family: var(--font-sans);
-}
-
-.toggle-btn.active {
-  background: var(--bg-secondary);
+.panel-title {
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--text-primary);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
-  border: 1px solid var(--border-color);
+}
+
+.panel-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
 }
 
 .filter-controls {
@@ -719,17 +708,6 @@
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
-  }
-
-  .toggle-group {
-    width: 100%;
-  }
-
-  .toggle-btn {
-    flex: 1;
-    text-align: center;
-    padding: 8px 12px;
-    font-size: 0.84rem;
   }
 
   .control-hint {
