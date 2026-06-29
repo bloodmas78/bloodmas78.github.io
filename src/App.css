@@ -1,3 +1,10 @@
+/* ═══════════════════════════════════════════════════════════════
+   DASHBOARD STYLES — COMPLETE (대시보드 전체 + 정산 페이지 개선)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────
+   DASHBOARD CONTAINER
+   ───────────────────────────────────────── */
 .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -9,7 +16,452 @@
   gap: 28px;
 }
 
-/* Background Aura Glows */
+/* ─────────────────────────────────────────
+   HOME PAGE
+   ───────────────────────────────────────── */
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 24px 56px;
+}
+
+.home-hero {
+  width: min(1120px, 100%);
+  background: rgba(255, 255, 255, 0.96);
+  border: var(--glass-border);
+  border-radius: 28px;
+  box-shadow: var(--card-shadow);
+  padding: 38px 34px;
+  text-align: left;
+  backdrop-filter: blur(18px);
+  margin: 0 auto 28px;
+}
+
+.home-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0;
+  line-height: 1.02;
+  text-align: left;
+}
+
+.home-hero p {
+  max-width: 46rem;
+  margin: 20px auto 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.75;
+  text-align: left;
+}
+
+.home-page .home-actions {
+  justify-content: flex-start;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.97rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.home-btn.primary {
+  background: var(--accent-neon);
+  color: #ffffff;
+}
+
+.home-btn.secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.home-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow);
+}
+
+/* ─────────────────────────────────────────
+   SETTLEMENT PAGE — 개선된 레이아웃
+   ───────────────────────────────────────── */
+.settlement-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 24px 64px;
+  gap: 0;
+}
+
+.settlement-hero {
+  width: min(1160px, 100%);
+  background: rgba(255, 255, 255, 0.96);
+  border: var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--card-shadow);
+  padding: 36px 40px;
+  text-align: left;
+  backdrop-filter: blur(18px);
+  margin: 0 auto 28px;
+}
+
+.settlement-hero h1 {
+  font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+  margin: 0 0 12px;
+  line-height: 1.08;
+  text-align: left;
+}
+
+.settlement-hero p {
+  max-width: 52rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.97rem;
+  line-height: 1.75;
+  text-align: left;
+}
+
+.settlement-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: min(1160px, 100%);
+  align-items: start;
+}
+
+.settlement-grid {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+.summary-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  margin-top: 6px;
+}
+
+.summary-card.summary-horizontal {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.summary-left {
+  flex: 0 0 320px;
+}
+
+.summary-right {
+  flex: 1 1 0;
+}
+
+@media (max-width: 880px) {
+  .summary-card.summary-horizontal {
+    flex-direction: column;
+  }
+  .summary-left {
+    flex: none;
+  }
+}
+
+.places-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.place-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(6, 47, 28, 0.02);
+  border: 1px solid rgba(6, 47, 28, 0.04);
+}
+
+.place-name {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.place-attendees {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+
+}
+
+
+/* Tweak summary horizontal card for readability */
+.summary-card.summary-horizontal {
+  padding: 18px;
+  border-radius: 14px;
+  gap: 20px;
+}
+
+.summary-left .summary-row {
+  padding: 8px 0;
+  font-size: 0.95rem;
+}
+
+.summary-right h3 {
+  margin-bottom: 10px;
+}
+/* ─────────────────────────────────────────
+   ROUND CARD
+   ───────────────────────────────────────── */
+.round-card {
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.round-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.round-card-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.round-meta {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────
+   FIELD GROUP
+   ───────────────────────────────────────── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field-group label {
+  display: grid;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.field-label {
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.field-group input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.field-group input::-webkit-outer-spin-button,
+.field-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.field-group input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.field-group input:focus {
+  outline: none;
+  border-color: var(--accent-neon);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.08);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+/* ─────────────────────────────────────────
+   ATTENDANCE GRID
+   ───────────────────────────────────────── */
+.attendance-section {
+  margin-bottom: 6px;
+}
+
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.attendance-chip {
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 11px 14px;
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  user-select: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.attendance-chip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent-neon) 55%, transparent);
+}
+
+.attendance-chip.selected {
+  background: var(--accent-neon);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.18);
+}
+
+/* ─────────────────────────────────────────
+   SUMMARY CARDS
+   ───────────────────────────────────────── */
+.summary-card {
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 12px 14px;
+  min-width: 0;
+}
+
+.summary-card.summary-highlights {
+  border-left: 3px solid var(--accent-neon);
+}
+
+.summary-highlights h2,
+.balance-card h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(6, 47, 28, 0.06);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.balance-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.balance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(15, 118, 110, 0.05);
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+
+.balance-item {
+  cursor: pointer;
+}
+
+.balance-item.highlighted {
+  background: var(--accent-neon);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(15,118,110,0.18);
+}
+
+@media (max-width: 880px) {
+  .balance-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 작은 버튼 스타일 (삭제 등) */
+.home-btn.small {
+  padding: 6px 8px;
+  min-width: 64px;
+  font-size: 0.85rem;
+}
+
+.balance-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────
+   BACKGROUND AURA GLOWS
+   ───────────────────────────────────────── */
 .bg-glow {
   position: absolute;
   width: 480px;
@@ -33,7 +485,9 @@
   right: -120px;
 }
 
-/* Dashboard Header */
+/* ─────────────────────────────────────────
+   DASHBOARD HEADER
+   ───────────────────────────────────────── */
 .dashboard-header {
   display: flex;
   flex-direction: column;
@@ -100,7 +554,9 @@
   line-height: 1.6;
 }
 
-/* Quick Stats Panel */
+/* ─────────────────────────────────────────
+   QUICK STATS PANEL
+   ───────────────────────────────────────── */
 .quick-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -144,7 +600,9 @@
   color: var(--text-muted);
 }
 
-/* Info Notice */
+/* ─────────────────────────────────────────
+   INFO NOTICE
+   ───────────────────────────────────────── */
 .info-notice {
   display: flex;
   align-items: flex-start;
@@ -177,7 +635,9 @@
   line-height: 1.65;
 }
 
-/* Control Panel */
+/* ─────────────────────────────────────────
+   CONTROL PANEL
+   ───────────────────────────────────────── */
 .control-panel {
   display: flex;
   flex-direction: column;
@@ -338,7 +798,124 @@
   border-color: rgba(124, 58, 237, 0.35);
 }
 
-/* Members Section */
+/* ─────────────────────────────────────────
+
+   SETTLEMENT: Modern / Minimal Enhancement (Deep Navy + Emerald)
+
+   - Overrides and enhancements for settlement cards to provide
+     a premium dark palette, subtle shimmer, hover lift, fade-up
+     entry animation, and a thin gradient deco bar at card bottoms.
+
+ */
+
+:root {
+  --settle-navy-900: #071029;
+  --settle-navy-800: #071a2b;
+  --settle-accent: #d4af37; /* gold accent */
+  --settle-card-glow: rgba(212,175,55,0.12);
+}
+
+/* Card base overrides (apply only within settlement page) */
+.settlement-page .summary-card,
+.settlement-page .round-card {
+  background: linear-gradient(180deg, rgba(10,18,30,0.88), rgba(6,12,20,0.94));
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #e6fbf4;
+  border-radius: 10px;
+  box-shadow: 0 14px 36px rgba(2,8,20,0.6);
+}
+
+.settlement-page .round-card {
+  padding: 18px 20px;
+  gap: 12px;
+  animation: fadeUp 560ms cubic-bezier(.18,.9,.32,1) both;
+}
+
+.settlement-page .round-card-header h2 {
+  color: #f1fff9;
+}
+
+.settlement-page .round-meta {
+  background: linear-gradient(90deg, rgba(15,118,110,0.06), rgba(15,118,110,0.03));
+  color: rgba(230,251,244,0.92);
+  border: 1px solid rgba(15,118,110,0.12);
+}
+
+.settlement-page .summary-card.summary-horizontal {
+  background: linear-gradient(180deg, rgba(7,14,26,0.96), rgba(6,10,18,0.98));
+  padding: 20px;
+  gap: 22px;
+}
+
+.settlement-page .summary-left {
+  background: linear-gradient(180deg, rgba(8,18,30,0.6), rgba(6,12,20,0.45));
+  padding: 14px;
+  border-radius: 8px;
+}
+
+.settlement-page .summary-row {
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  padding: 10px 0;
+}
+
+.settlement-page .places-list {
+  margin-top: 12px;
+}
+
+.settlement-page .place-item {
+  background: linear-gradient(90deg, rgba(12,22,36,0.28), rgba(8,14,24,0.24));
+  border: 1px solid rgba(255,255,255,0.02);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.settlement-page .place-name { color: #fff; }
+.settlement-page .place-attendees { color: rgba(230,251,244,0.78); }
+
+.settlement-page .balance-list { gap: 14px; }
+.settlement-page .balance-item {
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));
+  border: 1px solid rgba(255,255,255,0.03);
+  transition: transform 240ms ease, box-shadow 240ms ease, background 240ms ease;
+}
+
+.settlement-page .balance-item.highlighted {
+  background: linear-gradient(90deg, var(--settle-accent), #b88d2f);
+  color: #081005;
+  box-shadow: 0 20px 52px rgba(212,175,55,0.18);
+}
+
+/* subtle shimmer on hover via pseudo element */
+.settlement-page .summary-card::before,
+.settlement-page .round-card::before {
+  content: '';
+  position: absolute;
+  left: -30%;
+  top: -40%;
+  width: 50%;
+  height: 180%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 100%);
+  transform: rotate(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms ease;
+}
+
+/* Disable shimmer overlay specifically for the horizontal summary card to avoid
+   the moving gradient effect on hover (keep shimmer for individual round cards). */
+.settlement-page .summary-card.summary-horizontal::before {
+  display: none;
+}
+
+
+@keyframes fadeUp { from { opacity:0; transform: translateY(12px) scale(.994);} to { opacity:1; transform: translateY(0) scale(1);} }
+
+/* skeleton helper for future loading states */
+.settlement-page .skeleton { animation: shimmer 1.2s infinite linear; background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 100%); }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+   MEMBERS SECTION
+   ───────────────────────────────────────── */
 .members-section {
   display: flex;
   flex-direction: column;
@@ -371,7 +948,9 @@
   gap: 20px;
 }
 
-/* Member Card */
+/* ─────────────────────────────────────────
+   MEMBER CARD
+   ───────────────────────────────────────── */
 .member-card {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
@@ -398,7 +977,6 @@
   border-color: var(--border-color);
 }
 
-/* Card Header */
 .card-header {
   display: flex;
   align-items: center;
@@ -474,7 +1052,6 @@
   margin-top: 1px;
 }
 
-/* Card Body */
 .card-body {
   display: flex;
   flex-direction: column;
@@ -511,12 +1088,143 @@
   line-height: 1.1;
 }
 
+/* ─────────────────────────────────────────
+   SETTLEMENT: Light Theme Overrides
+   ───────────────────────────────────────── */
+/* These rules override the dark settlement styles to present a light, modern look */
+.settlement-page .summary-card,
+.settlement-page .round-card {
+  background: #ffffff;
+  border: 1px solid rgba(16,24,40,0.06);
+  color: var(--text-primary);
+  box-shadow: 0 6px 18px rgba(17,24,39,0.06);
+}
+
+.settlement-page .round-card {
+  padding: 16px 18px;
+  animation: fadeUp 380ms cubic-bezier(.2,.85,.25,1) both;
+}
+
+.settlement-page .round-card-header h2 { color: var(--text-primary); }
+
+.settlement-page .round-meta {
+  background: rgba(245,247,249,0.9);
+  color: var(--text-secondary);
+  border: 1px solid rgba(16,24,40,0.04);
+}
+
+.settlement-page .summary-card.summary-horizontal {
+  background: #fbfdff;
+}
+
+.settlement-page .summary-left {
+  background: transparent;
+  padding: 10px 6px;
+}
+
+.settlement-page .summary-row { border-bottom: 1px solid rgba(16,24,40,0.04); }
+
+.settlement-page .place-item {
+  background: #fbfdff;
+  border: 1px solid rgba(16,24,40,0.04);
+}
+
+.settlement-page .place-name { color: var(--text-primary); }
+.settlement-page .place-attendees { color: var(--text-secondary); }
+
+.settlement-page .balance-item {
+  background: #ffffff;
+  border: 1px solid rgba(16,24,40,0.04);
+  color: var(--text-primary);
+}
+
+.settlement-page .balance-item.highlighted {
+  background: linear-gradient(90deg, var(--settle-accent), #e0c37a);
+  color: #2b1700;
+  box-shadow: 0 12px 30px rgba(212,175,55,0.12);
+}
+
+.settlement-page .summary-card::before,
+.settlement-page .round-card::before {
+  background: linear-gradient(120deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0.02) 100%);
+}
+
+.settlement-page .summary-card::after {
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.9), transparent);
+}
+
+.settlement-page .summary-card::before,
+.settlement-page .round-card::before {
+  background: linear-gradient(120deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0.02) 100%);
+}
+
+.settlement-page .summary-card::after {
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.9), transparent);
+}
+
+/* Kakao-like yellow summary box */
+.settlement-page .summary-left {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  background: linear-gradient(180deg, #FFF061, #FFD93B);
+  color: #1a1a1a;
+  border-radius: 10px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.settlement-page .kakao-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #ffe34d;
+  border-radius: 10px;
+  margin: 0 auto 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.settlement-page .kakao-badge svg { display: block; }
+
+.settlement-page .summary-left .total-sum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(0,0,0,0.06);
+}
+
+.settlement-page .total-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1b1b1b;
+  background: rgba(255,255,255,0.6);
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* make place items blend on yellow background */
+.settlement-page .summary-left .place-item {
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+}
+
+.settlement-page .summary-left .place-name { color: #2b2b2b; }
+.settlement-page .summary-left .place-attendees { color: rgba(0,0,0,0.6); }
+
+
 .stat-box .stat-rank {
   font-size: 0.72rem;
   color: var(--text-secondary);
 }
 
-/* Record Details */
 .record-details {
   display: flex;
   flex-direction: column;
@@ -550,7 +1258,9 @@
   border-radius: 999px;
 }
 
-/* Empty Stats State */
+/* ─────────────────────────────────────────
+   EMPTY STATS STATE
+   ───────────────────────────────────────── */
 .empty-stats {
   display: flex;
   flex-direction: column;
@@ -586,7 +1296,6 @@
   max-width: 28ch;
 }
 
-/* Card Decor Accent Bar */
 .card-decor-bar {
   position: absolute;
   bottom: 0;
@@ -601,7 +1310,9 @@
   opacity: 0.35;
 }
 
-/* No Results Card */
+/* ─────────────────────────────────────────
+   NO RESULTS
+   ───────────────────────────────────────── */
 .no-results-card {
   grid-column: 1 / -1;
   background: var(--glass-bg);
@@ -613,7 +1324,9 @@
   font-size: 0.95rem;
 }
 
-/* Footer */
+/* ─────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────── */
 .dashboard-footer-info {
   margin-top: 12px;
   border-top: 1px solid var(--border-color);
@@ -636,7 +1349,43 @@
   opacity: 0.85;
 }
 
-/* Media Queries */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 태블릿 (< 980px) ── */
+@media (max-width: 980px) {
+  .settlement-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .settlement-grid { order: 1; }
+  .summary-panel   { order: 2; }
+
+  .settlement-hero {
+    padding: 28px 28px;
+  }
+
+  .settlement-hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+}
+
+/* ── 태블릿 세로 (< 820px) ── */
+@media (max-width: 820px) {
+  .settlement-page,
+  .home-page {
+    padding: 32px 18px 42px;
+  }
+
+  .home-hero,
+  .settlement-hero {
+    padding: 28px 22px;
+  }
+}
+
+/* ── 모바일 (< 768px) ── */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 24px 14px 36px;
@@ -675,7 +1424,6 @@
     line-height: 1.5;
   }
 
-  /* Compact Quick Stats Grid on Mobile */
   .quick-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -686,19 +1434,10 @@
     gap: 4px;
   }
 
-  .quick-stat-card .label {
-    font-size: 0.68rem;
-  }
+  .quick-stat-card .label  { font-size: 0.68rem; }
+  .quick-stat-card .value  { font-size: 1.25rem; }
+  .quick-stat-card .sub-value { font-size: 0.72rem; }
 
-  .quick-stat-card .value {
-    font-size: 1.25rem;
-  }
-
-  .quick-stat-card .sub-value {
-    font-size: 0.72rem;
-  }
-
-  /* Compact Control Panel */
   .control-panel {
     padding: 16px 18px;
     gap: 14px;
@@ -715,7 +1454,6 @@
     text-align: center;
   }
 
-  /* 2-Column Controls Grid on Mobile */
   .filter-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -748,10 +1486,7 @@
     margin-top: 4px;
   }
 
-  .sort-label {
-    font-size: 0.78rem;
-    padding-right: 4px;
-  }
+  .sort-label { font-size: 0.78rem; padding-right: 4px; }
 
   .sort-by-group .sort-btn {
     padding: 8px 6px;
@@ -759,7 +1494,6 @@
     text-align: center;
   }
 
-  /* Compact Member Cards */
   .members-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -777,13 +1511,8 @@
     border-radius: 10px;
   }
 
-  .member-name-info h3 {
-    font-size: 0.98rem;
-  }
-
-  .member-name-info .badge {
-    font-size: 0.68rem;
-  }
+  .member-name-info h3  { font-size: 0.98rem; }
+  .member-name-info .badge { font-size: 0.68rem; }
 
   .rank-badge {
     padding: 4px 8px;
@@ -791,50 +1520,120 @@
     border-radius: 6px;
   }
 
-  .rank-badge .rank-num {
-    font-size: 1.05rem;
-  }
+  .rank-badge .rank-num   { font-size: 1.05rem; }
+  .rank-badge .rank-label { font-size: 0.6rem; }
 
-  .rank-badge .rank-label {
-    font-size: 0.6rem;
-  }
-
-  .stats-row {
-    gap: 8px;
-  }
+  .stats-row { gap: 8px; }
 
   .stat-box {
     padding: 10px 4px;
     gap: 4px;
   }
 
-  .stat-box .stat-label {
-    font-size: 0.68rem;
-  }
+  .stat-box .stat-label { font-size: 0.68rem; }
+  .stat-box .stat-value { font-size: 1.05rem; }
+  .stat-box .stat-rank  { font-size: 0.68rem; }
 
-  .stat-box .stat-value {
-    font-size: 1.05rem;
-  }
-
-  .stat-box .stat-rank {
-    font-size: 0.68rem;
-  }
-
-  .record-text {
-    font-size: 0.82rem;
-  }
+  .record-text { font-size: 0.82rem; }
 
   .empty-stats {
     padding: 16px 12px;
     gap: 8px;
   }
 
-  .empty-title {
-    font-size: 0.88rem;
+  .empty-title { font-size: 0.88rem; }
+  .empty-desc  { font-size: 0.78rem; max-width: none; }
+}
+
+/* ── 소형 모바일 (< 680px) ── */
+@media (max-width: 680px) {
+  .round-card-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .empty-desc {
-    font-size: 0.78rem;
-    max-width: none;
+  .summary-panel {
+    gap: 18px;
+  }
+}
+
+/* ── 소형 모바일 (< 640px) ── */
+@media (max-width: 640px) {
+  .settlement-page {
+    padding: 20px 14px 48px;
+  }
+
+  .settlement-hero {
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 18px;
+  }
+
+  .settlement-hero h1 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .settlement-hero p {
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  .round-card {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+
+  .round-card-header {
+    margin-bottom: 4px;
+    gap: 6px;
+  }
+
+  .round-card-header h2 { font-size: 1rem; }
+
+  .field-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .attendance-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .attendance-chip {
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    border-radius: 10px;
+    min-height: 42px;
+  }
+
+  .summary-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .summary-highlights h2,
+  .balance-card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  .summary-row {
+    padding: 8px 0;
+    font-size: 0.85rem;
+  }
+
+  .balance-item {
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    border-radius: 10px;
+  }
+}
+
+/* ── 초소형 (< 380px) ── */
+@media (max-width: 380px) {
+  .attendance-grid {
+    grid-template-columns: 1fr;
   }
 }
