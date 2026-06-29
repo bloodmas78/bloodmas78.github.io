@@ -65,9 +65,6 @@ function Settlement() {
   })
 
   const totalCost = roundSummaries.reduce((sum, round) => sum + round.cost, 0)
-  const uniqueAttendees = Array.from(
-    new Set(roundSummaries.flatMap((round) => round.attendees)),
-  )
 
   const memberTotals = memberData.map((member) => {
     const total = roundSummaries.reduce((sum, round) => {

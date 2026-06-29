@@ -914,7 +914,7 @@
 .settlement-page .skeleton { animation: shimmer 1.2s infinite linear; background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 100%); }
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-   MEMBERS SECTION
+/* MEMBERS SECTION
    ───────────────────────────────────────── */
 .members-section {
   display: flex;
