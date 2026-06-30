@@ -126,11 +126,11 @@ function Settlement() {
                     const cost = Number(r.cost) || 0
                     return (
                       <div key={`place-${i}`} className="place-item">
-                        <strong className="place-name">{`${r.label} ${r.place ? r.place : '-'}`} 
-                          &nbsp; &nbsp; &nbsp;
-                          {cost > 0 ? `${cost.toLocaleString()}원` : '비용 -'}</strong>
-                          <span>
-                            {r.attendees.length ? ` ${r.attendees.join(', ')}` : '-'}
+                        <strong className="place-name">
+                          {`${r.label} ${r.place ? r.place : '-'}`} · {cost > 0 ? `${cost.toLocaleString()}원` : '비용 -'}
+                        </strong>
+                        <span className="place-attendees">
+                          {r.attendees.length ? `참석: ${r.attendees.join(', ')}` : '참석 없음'}
                         </span>
                       </div>
                     )
@@ -171,7 +171,7 @@ function Settlement() {
               <section key={summary.key} className="round-card">
                 <div className="round-card-header">
                   <h2>{round.label}</h2>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div className="round-card-actions">
                     <span className="round-meta">
                       비용 {summary.cost ? `${summary.cost.toLocaleString()}원` : '0원'} · 참석 {summary.participants}명 · 1인 {summary.participants ? `${summary.perPerson.toLocaleString()}원` : '0원'}
                     </span>

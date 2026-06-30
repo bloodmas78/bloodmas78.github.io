@@ -27,6 +27,14 @@ function Home() {
               정산 보기
             </Link>
           </article>
+
+          <article className="home-card">
+            <h2>🎲 랜덤 뽑기</h2>
+            <p>다음 순번이나 참여자를 랜덤으로 뽑아보세요.</p>
+            <Link className="home-card-link" to="/random">
+              랜덤 뽑기
+            </Link>
+          </article>
         </div>
       </section>
     </div>
