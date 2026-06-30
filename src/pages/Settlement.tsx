@@ -49,6 +49,13 @@ function Settlement() {
     })
   }
 
+  const confirmDeleteRound = (index: number) => {
+    const targetLabel = rounds[index]?.label || '해당 차수'
+    if (typeof window !== 'undefined' && window.confirm(`${targetLabel}를 삭제하시겠습니까?`)) {
+      deleteRound(index)
+    }
+  }
+
   const roundSummaries = rounds.map((round, idx) => {
     const cost = Number(round.cost) || 0
     const participants = round.attendees.length
@@ -98,16 +105,64 @@ function Settlement() {
       <section className="settlement-hero settlement-top-card">
         <h1>모임비 정산</h1>
         <p>
-          1차, 2차, 3차별 장소와 비용을 입력하고 참석 멤버를 선택하면 전체 합계와
+          장소와 비용을 입력하고 참석 멤버를 선택하면 전체 합계와
           멤버별 정산 금액을 자동 계산합니다.
         </p>
       </section>
 
       <main className="settlement-container">
         <div className="settlement-grid">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-            <button type="button" className="home-btn secondary" onClick={addRound}>
-              + 추가
+          <section className="summary-bottom">
+            <div className="summary-card summary-horizontal">
+              <div className="summary-left">
+                <div className="kakao-badge" aria-hidden="true">
+                  = 정산 =
+                </div>
+                <div className="summary-row total-sum">
+                  <strong className="total-amount">{totalCost.toLocaleString()}원</strong>
+                </div>
+                <div className="places-list">
+                  {rounds.map((r, i) => {
+                    const cost = Number(r.cost) || 0
+                    return (
+                      <div key={`place-${i}`} className="place-item">
+                        <strong className="place-name">{`${r.label} ${r.place ? r.place : '-'}`} 
+                          &nbsp; &nbsp; &nbsp;
+                          {cost > 0 ? `${cost.toLocaleString()}원` : '비용 -'}</strong>
+                          <span>
+                            {r.attendees.length ? ` ${r.attendees.join(', ')}` : '-'}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="summary-right">
+                <h3>멤버별 정산</h3>
+                <div className="balance-list">
+                  {sortedMembers.map((member) => (
+                    <div
+                      key={member.nickname}
+                      className={`balance-item ${highlighted === member.nickname ? 'highlighted' : ''}`}
+                      onClick={() => toggleHighlight(member.nickname)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && toggleHighlight(member.nickname)}
+                    >
+                      <span>{member.nickname}</span>
+                      <strong>{member.total > 0 ? `${member.total.toLocaleString()}원` : '0원'}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="add-round-row">
+            <button type="button" className="add-round-btn" onClick={addRound}>
+              <span className="add-round-icon">＋</span>
+              <span>차수 추가</span>
             </button>
           </div>
           {rounds.map((round, idx) => {
@@ -118,10 +173,10 @@ function Settlement() {
                   <h2>{round.label}</h2>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span className="round-meta">
-                      참석 {summary.participants}명 · 1인 {summary.participants ? `${summary.perPerson.toLocaleString()}원` : '0원'}
+                      비용 {summary.cost ? `${summary.cost.toLocaleString()}원` : '0원'} · 참석 {summary.participants}명 · 1인 {summary.participants ? `${summary.perPerson.toLocaleString()}원` : '0원'}
                     </span>
                     {idx > 0 && (
-                      <button type="button" className="home-btn small" onClick={() => deleteRound(idx)}>
+                      <button type="button" className="home-btn small" onClick={() => confirmDeleteRound(idx)}>
                         삭제
                       </button>
                     )}
@@ -173,50 +228,6 @@ function Settlement() {
             )
           })}
         </div>
-
-        <section className="summary-bottom">
-          <div className="summary-card summary-horizontal">
-            <div className="summary-left">
-              <div className="kakao-badge" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M4 4h16v10H7.5L4 17.5V4z" fill="#1a1a1a" />
-                </svg>
-              </div>
-              <h2>정산 요약</h2>
-              <div className="summary-row total-sum">
-                <span>전체 합계</span>
-                <strong className="total-amount">{totalCost.toLocaleString()}원</strong>
-              </div>
-              <div className="places-list">
-                {rounds.map((r, i) => (
-                  <div key={`place-${i}`} className="place-item">
-                    <strong className="place-name">{`${r.label} ${r.place ? r.place : '장소 미입력'}`}</strong>
-                    <span className="place-attendees">{r.attendees.length ? `- ${r.attendees.join(', ')}` : '- 참석없음'}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="summary-right">
-              <h3>멤버별 정산</h3>
-              <div className="balance-list">
-                {sortedMembers.map((member) => (
-                  <div
-                    key={member.nickname}
-                    className={`balance-item ${highlighted === member.nickname ? 'highlighted' : ''}`}
-                    onClick={() => toggleHighlight(member.nickname)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && toggleHighlight(member.nickname)}
-                  >
-                    <span>{member.nickname}</span>
-                    <strong>{member.total > 0 ? `${member.total.toLocaleString()}원` : '0원'}</strong>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   )
