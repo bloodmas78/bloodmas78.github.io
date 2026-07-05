@@ -64,8 +64,10 @@ function Ranking() {
 
       <header className="dashboard-header animate-fade-in">
         <div className="header-logo">
-          <div className="billiard-ball">
-            <span className="ball-number">9</span>
+          <div className="carom-balls">
+            <span className="carom-ball red"></span>
+            <span className="carom-ball yellow"></span>
+            <span className="carom-ball white"></span>
           </div>
           <div className="logo-text">
             <h1>매니아 당구클럽 <span className="highlight-text">9샷 멤버스</span></h1>
@@ -165,6 +167,9 @@ function Ranking() {
                 style={{ '--accent-color': member.avatarColor } as React.CSSProperties}
               >
                 <div className="card-header">
+                  <div className="member-avatar-ball">
+                    <span className="member-ball-number">{stats?.ranks.average ?? '•'}</span>
+                  </div>
                   <div className="member-name-info">
                     <h3>{member.nickname}</h3>
                     <span className="badge">
@@ -172,9 +177,9 @@ function Ranking() {
                     </span>
                   </div>
                   {stats && stats.ranks.average && (
-                    <div className="rank-badge">
+                    <div className="rank-badge chalk-badge" title="에버 랭크">
                       <span className="rank-num">#{stats.ranks.average}</span>
-                      <span className="rank-label">에버 랭크</span>
+                      <span className="rank-label">RANK</span>
                     </div>
                   )}
                 </div>
