@@ -1,0 +1,105 @@
+﻿
+/* ─────────────────────────────────────────
+   SETTLEMENT: Light Theme Overrides
+   ───────────────────────────────────────── */
+/* These rules override the dark settlement styles to present a light, modern look */
+.settlement-page .summary-card,
+.settlement-page .round-card {
+  background: #ffffff;
+  border: 1px solid rgba(16, 24, 40, 0.06);
+  color: var(--text-primary);
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+.settlement-page .round-card {
+  padding: 16px 18px;
+  animation: fadeUp 380ms cubic-bezier(0.2, 0.85, 0.25, 1) both;
+}
+
+.settlement-page .round-card-header h2 {
+  color: var(--text-primary);
+}
+
+.settlement-page .round-meta {
+  background: rgba(245, 247, 249, 0.9);
+  color: var(--text-secondary);
+  border: 1px solid rgba(16, 24, 40, 0.04);
+}
+
+.settlement-page .summary-card.summary-horizontal {
+  background: #fbfdff;
+}
+
+.settlement-page .summary-left {
+  background: transparent;
+  padding: 10px 6px;
+}
+
+.settlement-page .summary-row {
+  border-bottom: 1px solid rgba(16, 24, 40, 0.04);
+}
+
+.settlement-page .place-item {
+  background: #fbfdff;
+  border: 1px solid rgba(16, 24, 40, 0.04);
+}
+
+.settlement-page .place-name {
+  color: var(--text-primary);
+}
+
+.settlement-page .place-attendees {
+  color: var(--text-secondary);
+}
+
+.settlement-page .balance-item {
+  background: #ffffff;
+  border: 1px solid rgba(16, 24, 40, 0.04);
+  color: var(--text-primary);
+}
+
+.settlement-page .balance-item.highlighted {
+  background: linear-gradient(90deg, var(--settle-accent), #e0c37a);
+  color: #2b1700;
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.12);
+}
+
+.settlement-page .summary-card::before,
+.settlement-page .round-card::before {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.04) 50%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
+}
+
+.settlement-page .summary-card::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.9),
+    transparent
+  );
+}
+
+.settlement-page .summary-card::before,
+.settlement-page .round-card::before {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.04) 50%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
+}
+
+.settlement-page .summary-card::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.9),
+    transparent
+  );
+}
+
+/* Kakao-like yellow summary box */
