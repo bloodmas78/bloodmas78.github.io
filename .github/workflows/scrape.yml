@@ -32,7 +32,10 @@ jobs:
       - name: Scrape member data
         run: npm run scrape
 
-      - name: Commit and push if changed
+      - name: Commit and push if changed (use PAT if provided)
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+          PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -40,10 +43,9 @@ jobs:
           if git diff --staged --quiet; then
             echo "No data changes detected."
           else
-            git commit -m "$(cat <<'EOF'
-chore: update member stats from Billizone scrape
-
-EOF
-)"
-            git push
+            git commit -m "chore: update member stats from Billizone scrape"
+            if [ -n "$PAT_TOKEN" ]; then
+              git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+            fi
+            git push origin HEAD:refs/heads/${TARGET_BRANCH}
           fi
