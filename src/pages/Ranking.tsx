@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { memberData, monthlyLabel } from '../data'
 import type { SortKey } from '../types'
+import { fetchMemberStats, type MemberStat } from '../utils/firebaseUtils'
 import {
   sortMembers,
   getTopMember,
@@ -11,7 +12,16 @@ import {
 
 function Ranking() {
   const [sortBy, setSortBy] = useState<SortKey>('average')
+  const [firebaseStats, setFirebaseStats] = useState<Record<string, MemberStat>>({})
   const periodLabel = monthlyLabel
+
+  useEffect(() => {
+    fetchMemberStats().then(stats => {
+      const statsMap: Record<string, MemberStat> = {}
+      stats.forEach(s => statsMap[s.nickname] = s)
+      setFirebaseStats(statsMap)
+    })
+  }, [])
 
   const processedMembers = sortMembers(memberData, sortBy, 'monthly')
   const membersWithStats = getStatsCount('monthly')
@@ -180,7 +190,7 @@ function Ranking() {
                       <div className="record-details">
                         <div className="record-text">
                           <span>
-                            전적 <strong>{stats.win}승 {stats.draw}무 {stats.loss}패</strong>
+                            빌리존 전적 <strong>{stats.win}승 {stats.draw}무 {stats.loss}패</strong>
                           </span>
                           <span>총 {stats.win + stats.draw + stats.loss}경기</span>
                         </div>
@@ -191,6 +201,19 @@ function Ranking() {
                           ></div>
                         </div>
                       </div>
+
+                      {firebaseStats[member.nickname] && (
+                        <div className="record-details" style={{ marginTop: '12px', borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: '12px' }}>
+                          <div className="record-text">
+                            <span style={{ color: '#00ffff' }}>
+                              팀 매칭 전적 <strong>{firebaseStats[member.nickname].wins}승 {firebaseStats[member.nickname].losses}패</strong>
+                            </span>
+                            <span style={{ color: '#00ffff' }}>
+                              총 {firebaseStats[member.nickname].wins + firebaseStats[member.nickname].losses}경기
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <div className="empty-stats">

@@ -22,7 +22,7 @@ function Home() {
           </h1>
           <p>
             안양 매니아 당구클럽 동호인들의 전용 쉼터입니다.<br />
-            실시간 랭킹 확인, 투명한 모임비 정산, 공정한 팀 매칭까지 한눈에 즐겨보세요!
+            실시간 랭킹 확인, 스타크래프트 대전, 투명한 모임비 정산까지 한눈에 즐겨보세요!
           </p>
         </header>
 
@@ -70,7 +70,7 @@ function Home() {
             <div className="card-badge">STARCRAFT</div>
             <div className="card-icon-wrapper">⚔️</div>
             <div className="card-content">
-              <h2>🎮 팀 매칭</h2>
+              <h2>🎮 Starcraft 팀 매칭</h2>
               <p>개인별 실력(상/중/하)을 기준으로 균형 잡힌 최적의 팀 매칭을 지원합니다.</p>
             </div>
             <Link className="home-card-link matching-btn" to="/random">

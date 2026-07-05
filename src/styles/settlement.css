@@ -449,36 +449,30 @@
 }
 
 .carom-ball.red {
-  background: radial-gradient(
-    circle at 30% 30%,
-    #ff6b6b 0%,
-    #e60000 60%,
-    #7f0000 100%
-  );
+  background: radial-gradient(circle at 30% 30%,
+      #ff6b6b 0%,
+      #e60000 60%,
+      #7f0000 100%);
   left: 0;
   top: 10px;
   z-index: 1;
 }
 
 .carom-ball.yellow {
-  background: radial-gradient(
-    circle at 30% 30%,
-    #fffa85 0%,
-    #e6d300 60%,
-    #85740e 100%
-  );
+  background: radial-gradient(circle at 30% 30%,
+      #fffa85 0%,
+      #e6d300 60%,
+      #85740e 100%);
   left: 16px;
   top: 2px;
   z-index: 2;
 }
 
 .carom-ball.white {
-  background: radial-gradient(
-    circle at 30% 30%,
-    #ffffff 0%,
-    #cbd5e1 60%,
-    #475569 100%
-  );
+  background: radial-gradient(circle at 30% 30%,
+      #ffffff 0%,
+      #cbd5e1 60%,
+      #475569 100%);
   left: 32px;
   top: 14px;
   z-index: 3;
@@ -664,11 +658,9 @@
 /* Card base overrides (apply only within settlement page) */
 .settlement-page .summary-card,
 .settlement-page .round-card {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 18, 30, 0.88),
-    rgba(6, 12, 20, 0.94)
-  );
+  background: linear-gradient(180deg,
+      rgba(10, 18, 30, 0.88),
+      rgba(6, 12, 20, 0.94));
   border: 1px solid rgba(255, 255, 255, 0.03);
   color: #e6fbf4;
   border-radius: 10px;
@@ -686,21 +678,17 @@
 }
 
 .settlement-page .round-meta {
-  background: linear-gradient(
-    90deg,
-    rgba(15, 118, 110, 0.06),
-    rgba(15, 118, 110, 0.03)
-  );
+  background: linear-gradient(90deg,
+      rgba(15, 118, 110, 0.06),
+      rgba(15, 118, 110, 0.03));
   color: rgba(230, 251, 244, 0.92);
   border: 1px solid rgba(15, 118, 110, 0.12);
 }
 
 .settlement-page .summary-card.summary-horizontal {
-  background: linear-gradient(
-    180deg,
-    rgba(7, 14, 26, 0.96),
-    rgba(6, 10, 18, 0.98)
-  );
+  background: linear-gradient(180deg,
+      rgba(7, 14, 26, 0.96),
+      rgba(6, 10, 18, 0.98));
   padding: 20px;
   gap: 22px;
   width: 100%;
@@ -708,11 +696,9 @@
 }
 
 .settlement-page .summary-left {
-  background: linear-gradient(
-    180deg,
-    rgba(8, 18, 30, 0.6),
-    rgba(6, 12, 20, 0.45)
-  );
+  background: linear-gradient(180deg,
+      rgba(8, 18, 30, 0.6),
+      rgba(6, 12, 20, 0.45));
   padding: 14px;
   border-radius: 8px;
   flex: 1 1 320px;
@@ -736,11 +722,9 @@
 }
 
 .settlement-page .place-item {
-  background: linear-gradient(
-    90deg,
-    rgba(12, 22, 36, 0.28),
-    rgba(8, 14, 24, 0.24)
-  );
+  background: linear-gradient(90deg,
+      rgba(12, 22, 36, 0.28),
+      rgba(8, 14, 24, 0.24));
   border: 1px solid rgba(255, 255, 255, 0.02);
   padding: 10px 12px;
   border-radius: 8px;
@@ -759,11 +743,9 @@
 }
 
 .settlement-page .balance-item {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.008)
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.02),
+      rgba(255, 255, 255, 0.008));
   border: 1px solid rgba(255, 255, 255, 0.03);
   transition:
     transform 240ms ease,
@@ -786,12 +768,10 @@
   top: -40%;
   width: 50%;
   height: 180%;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.02) 100%);
   transform: rotate(-18deg);
   opacity: 0;
   pointer-events: none;
@@ -819,12 +799,10 @@
 /* skeleton helper for future loading states */
 .settlement-page .skeleton {
   animation: shimmer 1.2s infinite linear;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.03) 100%);
 }
 
 @keyframes shimmer {
@@ -906,40 +884,32 @@
 
 .settlement-page .summary-card::before,
 .settlement-page .round-card::before {
-  background: linear-gradient(
-    120deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.04) 50%,
-    rgba(0, 0, 0, 0.02) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(0, 0, 0, 0.02) 0%,
+      rgba(0, 0, 0, 0.04) 50%,
+      rgba(0, 0, 0, 0.02) 100%);
 }
 
 .settlement-page .summary-card::after {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212, 175, 55, 0.9),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(212, 175, 55, 0.9),
+      transparent);
 }
 
 .settlement-page .summary-card::before,
 .settlement-page .round-card::before {
-  background: linear-gradient(
-    120deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.04) 50%,
-    rgba(0, 0, 0, 0.02) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(0, 0, 0, 0.02) 0%,
+      rgba(0, 0, 0, 0.04) 50%,
+      rgba(0, 0, 0, 0.02) 100%);
 }
 
 .settlement-page .summary-card::after {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212, 175, 55, 0.9),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(212, 175, 55, 0.9),
+      transparent);
 }
 
 /* Kakao-like yellow summary box */
@@ -981,11 +951,13 @@
 }
 
 @keyframes pulse-fade {
+
   0%,
   100% {
     transform: scale(0.95);
     opacity: 0.8;
   }
+
   50% {
     transform: scale(1.1);
     opacity: 1;
@@ -1091,20 +1063,13 @@
   }
 
   .settlement-page .summary-left {
-    margin: 0 12px 0 24px;
-    width: auto;
-    max-width: 400px;
-    align-self: flex-end;
+    border-radius: 10px;
   }
 
   .settlement-page .summary-right {
-    background: linear-gradient(
-      180deg,
-      rgba(10, 18, 30, 0.88),
-      rgba(6, 12, 20, 0.94)
-    );
+    background: #fff;
     border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 16px;
+    border-radius: 10px;
     padding: 20px;
     margin: 0;
   }

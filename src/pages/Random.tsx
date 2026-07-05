@@ -1,9 +1,23 @@
+import { useState, useEffect } from 'react'
 import { memberData } from '../data'
 import type { TeamEntry } from '../types'
 import { useTeamMatch } from '../hooks/useTeamMatch'
 import heroImage from '../assets/protoss_crystal.png'
+import { createMatch, fetchMemberStats, type MemberStat } from '../utils/firebaseUtils'
+import MatchRecords from '../components/MatchRecords'
 
 function Random() {
+  const [activeTab, setActiveTab] = useState<'match' | 'records'>('match')
+  const [isStarting, setIsStarting] = useState(false)
+  const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
+
+  useEffect(() => {
+    fetchMemberStats().then(stats => {
+      const map: Record<string, MemberStat> = {}
+      stats.forEach(s => map[s.nickname] = s)
+      setMemberStats(map)
+    })
+  }, [])
   const {
     entries,
     count,
@@ -31,7 +45,37 @@ function Random() {
           </div>
           <div className="protoss-hero-overlay"></div>
         </div>
-        <aside className="protoss-panel protoss-sidebar">
+
+        <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '16px', margin: '16px 0', borderBottom: '1px solid rgba(0, 255, 255, 0.2)', paddingBottom: '16px' }}>
+          <button 
+            onClick={() => setActiveTab('match')}
+            className="protoss-btn"
+            style={{ 
+              background: activeTab === 'match' ? 'rgba(0, 255, 255, 0.15)' : 'transparent', 
+              color: activeTab === 'match' ? '#00ffff' : '#9ca3af',
+              border: activeTab === 'match' ? '1px solid #00ffff' : '1px solid rgba(255,255,255,0.1)',
+              flex: 1
+            }}
+          >
+            ⚔️ 팀 매칭하기
+          </button>
+          <button 
+            onClick={() => setActiveTab('records')}
+            className="protoss-btn"
+            style={{ 
+              background: activeTab === 'records' ? 'rgba(59, 130, 246, 0.15)' : 'transparent', 
+              color: activeTab === 'records' ? '#60a5fa' : '#9ca3af',
+              border: activeTab === 'records' ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)',
+              flex: 1
+            }}
+          >
+            📊 매치 기록 및 진행
+          </button>
+        </div>
+
+        {activeTab === 'match' ? (
+          <>
+            <aside className="protoss-panel protoss-sidebar">
           <div className="protoss-panel-header">
             <strong>참석 멤버 선택</strong>
           </div>
@@ -45,7 +89,7 @@ function Random() {
                     className={`protoss-chip ${selected ? 'active' : ''}`}
                   >
                     <span className="protoss-chip-dot" style={{ background: m.avatarColor }} />
-                    {m.nickname}
+                    {m.nickname} {memberStats[m.nickname] ? <span style={{fontSize:'0.75rem', opacity:0.8, marginLeft:'4px'}}>({memberStats[m.nickname].wins}승 {memberStats[m.nickname].losses}패)</span> : ''}
                   </button>
                   {selected && (
                     <select
@@ -70,7 +114,10 @@ function Random() {
                 <div key={idx} className="protoss-entry-row">
                   <div className="protoss-entry-info">
                     <span className="protoss-entry-dot" />
-                    <span>{e.name}</span>
+                    <span>
+                      {e.name} 
+                      {e.name !== '컴퓨터' && memberStats[e.name] ? <span style={{fontSize:'0.75rem', opacity:0.8, marginLeft:'4px'}}>({memberStats[e.name].wins}승 {memberStats[e.name].losses}패)</span> : ''}
+                    </span>
                     <span className="protoss-entry-score">{e.score === 30 ? '상' : e.score === 25 ? '중' : e.score === 20 ? '하' : '?'}</span>
                   </div>
                   <button onClick={() => removeEntry(idx)} className="protoss-text-btn">삭제</button>
@@ -88,6 +135,28 @@ function Random() {
             </div>
             <div className="protoss-btn-row">
               <button onClick={resetEntries} className="protoss-btn protoss-btn-ghost">선택 초기화</button>
+              {result && (
+                <button 
+                  disabled={isStarting}
+                  onClick={async () => {
+                    setIsStarting(true)
+                    const aMembers = result.a.map(m => m.name)
+                    const bMembers = result.b.map(m => m.name)
+                    const matchId = await createMatch(aMembers, bMembers)
+                    if (matchId) {
+                      alert('새로운 매치가 등록되었습니다! 매치 기록 탭에서 진행해 주세요.')
+                      setActiveTab('records')
+                    } else {
+                      alert('매치 등록에 실패했습니다.')
+                    }
+                    setIsStarting(false)
+                  }} 
+                  className="protoss-btn" 
+                  style={{ backgroundColor: '#10b981', color: '#fff', borderColor: '#10b981' }}
+                >
+                  {isStarting ? '등록 중...' : '🚀 이 매치로 게임 시작'}
+                </button>
+              )}
               <button onClick={matchTeams} className="protoss-btn protoss-btn-primary">⚡ 팀 매칭 시작</button>
             </div>
           </div>
@@ -130,7 +199,10 @@ function Random() {
                         .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
                         .map((p: TeamEntry, i: number) => (
                           <div key={i} className="protoss-team-item">
-                            <span>{p.name}</span>
+                            <span>
+                              {p.name}
+                              {p.name !== '컴퓨터' && memberStats[p.name] ? <span style={{fontSize:'0.75rem', opacity:0.8, marginLeft:'4px'}}>({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)</span> : ''}
+                            </span>
                             <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
                           </div>
                         ))}
@@ -156,7 +228,10 @@ function Random() {
                         .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
                         .map((p: TeamEntry, i: number) => (
                           <div key={i} className="protoss-team-item">
-                            <span>{p.name}</span>
+                            <span>
+                              {p.name}
+                              {p.name !== '컴퓨터' && memberStats[p.name] ? <span style={{fontSize:'0.75rem', opacity:0.8, marginLeft:'4px'}}>({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)</span> : ''}
+                            </span>
                             <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
                           </div>
                         ))}
@@ -169,6 +244,12 @@ function Random() {
             )}
           </div>
         </main>
+        </>
+        ) : (
+          <div style={{ gridColumn: '1 / -1' }}>
+            <MatchRecords />
+          </div>
+        )}
       </div>
     </div>
   )
