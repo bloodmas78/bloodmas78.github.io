@@ -29,10 +29,10 @@ function Home() {
           </article>
 
           <article className="home-card">
-            <h2>🎲 랜덤 뽑기</h2>
-            <p>다음 순번이나 참여자를 랜덤으로 뽑아보세요.</p>
+            <h2>� 팀 뽑기</h2>
+            <p>팀 매칭에 어울리는 균형 잡힌 A팀 / B팀을 바로 만들어보세요.</p>
             <Link className="home-card-link" to="/random">
-              랜덤 뽑기
+              팀 뽑기
             </Link>
           </article>
         </div>

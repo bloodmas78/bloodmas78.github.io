@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { memberData } from '../data'
+import heroImage from '../assets/hero.png'
 
 const MAX_PARTICIPANTS = 9
 
@@ -55,6 +56,13 @@ function Random() {
     return combos
   }
 
+  function computeWinRates(sumA: number, sumB: number) {
+    const total = sumA + sumB
+    if (!total) return { a: 50, b: 50 }
+    const aRate = Math.max(1, Math.min(99, Math.round((sumA / total) * 100)))
+    return { a: aRate, b: 100 - aRate }
+  }
+
   function matchTeams() {
     if (entries.length === 0) return alert('참석자를 추가하세요')
     let list = entries.slice()
@@ -89,30 +97,42 @@ function Random() {
     setResult({ a: pick.a, b: pick.b, sumA: pick.sumA, sumB: pick.sumB })
   }
 
+  const winRates = result ? computeWinRates(result.sumA, result.sumB) : null
+
   return (
-    <div className="home-page random-page">
-      <section className="home-hero random-hero">
-        <div className="home-badge">⚔️ 팀 매칭</div>
+    <div className="home-page random-page protoss-theme">
+      <section className="home-hero random-hero protoss-hero">
+        <div className="home-badge protoss-badge">⚔️ 팀 매칭</div>
         <h1>스타크래프트 팀 매칭</h1>
         <p>오른쪽에서 멤버를 선택하거나 직접 추가해 균형 잡힌 A팀 / B팀을 만들어보세요.</p>
 
-        <div style={{ display: 'flex', gap: 18, alignItems: 'flex-start', marginTop: 18 }}>
-          <div style={{ width: 320, background: 'rgba(255,255,255,0.03)', padding: 14, borderRadius: 10 }}>
-            <strong>9샷 멤버 (토글)</strong>
-            <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div className="protoss-grid">
+          <div className="protoss-hero-visual">
+            <img src={heroImage} alt="Protoss energy crystal" />
+            <div className="protoss-hero-overlay"></div>
+          </div>
+          <aside className="protoss-panel protoss-sidebar">
+            <div className="protoss-panel-header">
+              <strong>9샷 멤버 (토글)</strong>
+            </div>
+            <div className="protoss-toggle-grid">
               {memberData.map((m) => {
                 const selected = entries.find((e) => e.name === m.nickname)
                 return (
-                  <div key={m.nickname} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <div key={m.nickname} className="protoss-toggle-row">
                     <button
                       onClick={() => togglePrefill(m.nickname)}
-                      style={{ padding: '6px 8px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.04)', background: selected ? '#34d399' : 'transparent', color: selected ? '#04201a' : undefined, cursor: 'pointer' }}
+                      className={`protoss-chip ${selected ? 'active' : ''}`}
                     >
-                      <span style={{ width:10,height:10,display:'inline-block',borderRadius:12,background: m.avatarColor, marginRight:8 }} />
+                      <span className="protoss-chip-dot" style={{ background: m.avatarColor }} />
                       {m.nickname}
                     </button>
                     {selected && (
-                      <select value={selected.score} onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))} style={{ padding:6,borderRadius:8 }}>
+                      <select
+                        value={selected.score}
+                        onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))}
+                        className="protoss-select"
+                      >
                         <option value={30}>상 (30)</option>
                         <option value={25}>중 (25)</option>
                         <option value={20}>하 (20)</option>
@@ -123,69 +143,78 @@ function Random() {
               })}
             </div>
 
-            
-
-            <div style={{ marginTop: 12 }}>
-              <strong>참석자 목록 ({count})</strong>
-              <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap:8 }}>
+            <div className="protoss-section protoss-entries-section">
+              <div className="protoss-section-title">참석자 목록 ({count})</div>
+              <div className="protoss-entry-list">
                 {entries.map((e, idx) => (
-                  <div key={idx} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:8, borderRadius:8, background:'rgba(255,255,255,0.01)' }}>
-                    <div style={{ display:'flex', gap:8, alignItems:'center' }}>
-                      <div style={{ width:10, height:10, borderRadius:12, background: '#94a3b8' }} />
-                      <div>{e.name}</div>
-                      <div style={{ marginLeft:8, padding:'4px 6px', borderRadius:6, background:'rgba(255,255,255,0.03)', color:'#9aa4b2', fontSize:12 }}>{e.score===30?'상':e.score===25?'중': e.score===20?'하':'?'}</div>
+                  <div key={idx} className="protoss-entry-row">
+                    <div className="protoss-entry-info">
+                      <span className="protoss-entry-dot" />
+                      <span>{e.name}</span>
+                      <span className="protoss-entry-score">{e.score === 30 ? '상' : e.score === 25 ? '중' : e.score === 20 ? '하' : '?'}</span>
                     </div>
-                    <div>
-                      <button onClick={() => removeEntry(idx)} style={{ background:'transparent', border:0, color:'#ff6b6b', cursor:'pointer', fontWeight:700 }}>삭제</button>
-                    </div>
+                    <button onClick={() => removeEntry(idx)} className="protoss-text-btn">삭제</button>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
+          </aside>
 
-          <div style={{ flex:1, background:'rgba(255,255,255,0.02)', padding:16, borderRadius:10 }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <main className="protoss-panel protoss-main">
+            <div className="protoss-actions-row">
               <div>
                 <strong>매칭</strong>
-                <div style={{ color:'#9aa4b2', fontSize:13 }}>상=30, 중=25, 하=20 • 홀수면 컴퓨터(10) 자동 추가</div>
+                <div className="protoss-subtext">상=30, 중=25, 하=20 • 홀수면 컴퓨터(10) 자동 추가</div>
               </div>
-              <div style={{ display:'flex', gap:8 }}>
-                <button onClick={() => setEntries([])} style={{ padding:'8px 12px', borderRadius:8, background:'transparent', border:'1px solid rgba(255,255,255,0.04)', color:'#9aa4b2' }}>초기화</button>
-                <button onClick={matchTeams} style={{ padding:'8px 12px', borderRadius:8, background:'#34d399', border:0, cursor:'pointer' }}>팀 짜기</button>
+              <div className="protoss-btn-row">
+                <button onClick={() => setEntries([])} className="protoss-btn protoss-btn-ghost">초기화</button>
+                <button onClick={matchTeams} className="protoss-btn protoss-btn-primary">팀 짜기</button>
               </div>
             </div>
 
-            <div style={{ marginTop: 14 }}>
+            <div className="protoss-results">
               {result ? (
-                <div style={{ display:'flex', gap:12 }}>
-                  <div style={{ flex:1, padding:12, borderRadius:8, background:'rgba(255,255,255,0.01)' }}>
-                    <h3>A팀</h3>
-                    <div style={{ color:'#9aa4b2', fontSize:13 }}>총점: {result.sumA} • 평균: {(result.sumA / result.a.length).toFixed(1)}</div>
-                    <div style={{ marginTop:8, display:'flex', flexDirection:'column', gap:6 }}>
-                      {result.a.map((p:any, i:number) => (
-                        <div key={i} style={{ display:'flex', justifyContent:'space-between' }}><div>{p.name}</div><div style={{ color:'#9aa4b2' }}>{p.score===10? '컴퓨터(10)': p.score}</div></div>
+                <div className="protoss-team-grid">
+                  <section className="protoss-team-card">
+                    <div className="protoss-team-card-header">
+                      <h3>A팀</h3>
+                      <span className="protoss-winrate">승률 {winRates?.a}%</span>
+                    </div>
+                    <div className="protoss-team-summary">총점: {result.sumA} • 평균: {(result.sumA / result.a.length).toFixed(1)}</div>
+                    <div className="protoss-team-list">
+                      {result.a.map((p: any, i: number) => (
+                        <div key={i} className="protoss-team-item">
+                          <span>{p.name}</span>
+                          <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
+                        </div>
                       ))}
                     </div>
+                  </section>
+                  <div className="protoss-vs-box">
+                    <span>VS</span>
                   </div>
-                  <div style={{ flex:1, padding:12, borderRadius:8, background:'rgba(255,255,255,0.01)' }}>
-                    <h3>B팀</h3>
-                    <div style={{ color:'#9aa4b2', fontSize:13 }}>총점: {result.sumB} • 평균: {(result.sumB / result.b.length).toFixed(1)}</div>
-                    <div style={{ marginTop:8, display:'flex', flexDirection:'column', gap:6 }}>
-                      {result.b.map((p:any, i:number) => (
-                        <div key={i} style={{ display:'flex', justifyContent:'space-between' }}><div>{p.name}</div><div style={{ color:'#9aa4b2' }}>{p.score===10? '컴퓨터(10)': p.score}</div></div>
+                  <section className="protoss-team-card">
+                    <div className="protoss-team-card-header">
+                      <h3>B팀</h3>
+                      <span className="protoss-winrate">승률 {winRates?.b}%</span>
+                    </div>
+                    <div className="protoss-team-summary">총점: {result.sumB} • 평균: {(result.sumB / result.b.length).toFixed(1)}</div>
+                    <div className="protoss-team-list">
+                      {result.b.map((p: any, i: number) => (
+                        <div key={i} className="protoss-team-item">
+                          <span>{p.name}</span>
+                          <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
+                        </div>
                       ))}
                     </div>
-                  </div>
+                  </section>
                 </div>
               ) : (
-                <div style={{ color:'#9aa4b2' }}>아직 결과가 없습니다. 참석자를 추가한 뒤 '팀 짜기' 버튼을 눌러보세요.</div>
+                <div className="protoss-empty-state">아직 결과가 없습니다. 참석자를 추가한 뒤 '팀 짜기' 버튼을 눌러보세요.</div>
               )}
             </div>
-          </div>
+          </main>
         </div>
-
-
       </section>
     </div>
   )
