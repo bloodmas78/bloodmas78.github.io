@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>스타크래프트 팀 매칭</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--danger:#ff6b6b}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Noto Sans KR",sans-serif;background:linear-gradient(180deg,#071025 0%, #071b2b 60%);color:#e6eef6}
+    .wrap{max-width:980px;margin:36px auto;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{margin:0 0 8px;font-weight:600}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:20px}
+    .card{background:var(--card);padding:16px;border-radius:10px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .row{display:flex;gap:8px;align-items:center}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:0;background:linear-gradient(90deg,var(--accent),#34d399);color:#04201a;font-weight:600;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+    .list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.01),transparent)}
+    .item .meta{display:flex;gap:10px;align-items:center}
+    .badge{padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.03);font-size:13px;color:var(--muted)}
+    .del{background:transparent;border:0;color:var(--danger);cursor:pointer;font-weight:700}
+    .result{display:flex;gap:14px;align-items:flex-start}
+    .team{flex:1;padding:14px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent)}
+    .team h3{margin:0 0 6px}
+    .players{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .player{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.01)}
+    .stats{margin-top:10px;color:var(--muted);font-size:13px}
+    footer{margin-top:18px;text-align:right;color:var(--muted);font-size:13px}
+    .note{font-size:13px;color:var(--muted);margin-top:10px}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.wrap{margin:18px;padding:16px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>스타크래프트 팀 매칭</h1>
+    <p class="lead">참석자(최대 9명)를 입력하고 '팀 짜기'를 눌러 균형 잡힌 A팀 / B팀을 만들어보세요.</p>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <label>이름</label>
+          <input id="name" type="text" placeholder="플레이어 이름 입력" maxlength="30" />
+          <label style="margin-top:10px">실력 레이팅</label>
+          <select id="skill">
+            <option value="30">상</option>
+            <option value="25" selected>중</option>
+            <option value="20">하</option>
+          </select>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button id="addBtn" class="btn">참석자 추가</button>
+            <button id="clearBtn" class="btn secondary">초기화</button>
+          </div>
+          <div class="note">참석자 수가 홀수일 경우 자동으로 컴퓨터(실력: 최하)를 추가합니다.</div>
+          <div class="list" id="participants"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <label>참석자 현황</label>
+              <div class="badge" id="count">0명</div>
+            </div>
+            <div class="row">
+              <button id="matchBtn" class="btn">팀 짜기</button>
+              <button id="shuffleBtn" class="btn secondary">섞기(같은 인원)</button>
+            </div>
+          </div>
+          <div class="note" style="margin-top:10px">점수: 상=30, 중=25, 하=20, 컴퓨터=10</div>
+          <div style="margin-top:14px" id="resultArea"></div>
+        </div>
+      </div>
+    </div>
+    <footer>간단한 균형 매칭 도구 • 디자인: 모던 &amp; 깔끔</footer>
+  </div>
+
+  <script>
+    (function(){
+      const MAX = 9;
+      const participantsEl = document.getElementById('participants');
+      const countEl = document.getElementById('count');
+      const resultArea = document.getElementById('resultArea');
+      const nameInput = document.getElementById('name');
+      const skillSel = document.getElementById('skill');
+      const addBtn = document.getElementById('addBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const matchBtn = document.getElementById('matchBtn');
+      const shuffleBtn = document.getElementById('shuffleBtn');
+
+      let participants = [];
+
+      function renderList(){
+        participantsEl.innerHTML = '';
+        participants.forEach((p, idx)=>{
+          const it = document.createElement('div'); it.className='item';
+          const meta = document.createElement('div'); meta.className='meta';
+          const name = document.createElement('div'); name.textContent = p.name;
+          const badge = document.createElement('div'); badge.className='badge'; badge.textContent = skillLabel(p.score);
+          meta.appendChild(name); meta.appendChild(badge);
+          const right = document.createElement('div');
+          const del = document.createElement('button'); del.className='del'; del.textContent='삭제';
+          del.onclick = ()=>{participants.splice(idx,1); renderList();}
+          right.appendChild(del);
+          it.appendChild(meta); it.appendChild(right);
+          participantsEl.appendChild(it);
+        });
+        countEl.textContent = participants.length + '명';
+      }
+
+      function skillLabel(score){
+        if(score==30) return '상';
+        if(score==25) return '중';
+        if(score==20) return '하';
+        if(score==10) return '컴퓨터(최하)';
+        return '';
+      }
+
+      addBtn.addEventListener('click', ()=>{
+        const name = nameInput.value.trim();
+        const score = Number(skillSel.value);
+        if(!name){alert('이름을 입력하세요.'); nameInput.focus(); return;}
+        if(participants.length >= MAX){alert('참석자는 최대 '+MAX+'명까지 등록할 수 있습니다.'); return;}
+        participants.push({name, score});
+        nameInput.value=''; skillSel.value='25'; nameInput.focus();
+        renderList();
+      });
+
+      clearBtn.addEventListener('click', ()=>{
+        if(!confirm('참석자 목록을 초기화하시겠습니까?')) return;
+        participants = [];
+        renderList(); resultArea.innerHTML='';
+      });
+
+      shuffleBtn.addEventListener('click', ()=>{
+        if(participants.length % 2 !== 0){alert('참석자 수가 홀수이면 섞기 전에 컴퓨터가 자동으로 추가됩니다. 팀 짜기를 사용하세요.');}
+        participants = shuffleArray(participants.slice());
+        renderList();
+      });
+
+      matchBtn.addEventListener('click', ()=>{
+        if(participants.length===0){alert('참석자가 없습니다. 먼저 참가자를 추가하세요.'); return;}
+        let list = participants.slice();
+        let addedComputer=false;
+        if(list.length %2 ===1){ list.push({name:'컴퓨터', score:10}); addedComputer=true; }
+        if(list.length===2){ // trivial
+          const a=[list[0]], b=[list[1]]; showResult(a,b, addedComputer); return;
+        }
+        // partition into two equal-sized teams minimizing score diff
+        const n = list.length;
+        const half = n/2;
+        // precompute scores
+        const scores = list.map(p=>p.score);
+        let best = null; let bestDiff = Infinity; let bestPairs=[];
+        // enumerate combinations (choose indices for team A)
+        const indices = Array.from({length:n},(_,i)=>i);
+        const combos = k_combinations(indices, half);
+        for(const combo of combos){
+          const setA = new Set(combo);
+          let sumA=0,sumB=0; let a=[],b=[];
+          for(let i=0;i<n;i++){
+            if(setA.has(i)){ sumA+=scores[i]; a.push(list[i]); }
+            else { sumB+=scores[i]; b.push(list[i]); }
+          }
+          const diff = Math.abs(sumA - sumB);
+          if(diff < bestDiff){ bestDiff = diff; bestPairs = [{a,b,sumA,sumB}]; }
+          else if(diff === bestDiff){ bestPairs.push({a,b,sumA,sumB}); }
+        }
+        // pick randomly among bestPairs
+        const pick = bestPairs[Math.floor(Math.random()*bestPairs.length)];
+        // within teams, shuffle order
+        pick.a = shuffleArray(pick.a);
+        pick.b = shuffleArray(pick.b);
+        showResult(pick.a, pick.b, addedComputer, pick.sumA, pick.sumB);
+      });
+
+      function showResult(a,b, addedComputer, sumA, sumB){
+        const avgA = (sumA !== undefined) ? (sumA / a.length) : a.reduce((s,p)=>s+p.score,0)/a.length;
+        const avgB = (sumB !== undefined) ? (sumB / b.length) : b.reduce((s,p)=>s+p.score,0)/b.length;
+        resultArea.innerHTML = '';
+        const wrapper = document.createElement('div'); wrapper.className='result';
+        const left = document.createElement('div'); left.className='team';
+        const right = document.createElement('div'); right.className='team';
+        left.innerHTML = `<h3>A팀</h3><div class="stats">총점: ${Math.round(sumA||a.reduce((s,p)=>s+p.score,0))} • 평균: ${avgA.toFixed(1)}</div>`;
+        right.innerHTML = `<h3>B팀</h3><div class="stats">총점: ${Math.round(sumB||b.reduce((s,p)=>s+p.score,0))} • 평균: ${avgB.toFixed(1)}</div>`;
+        const listA = document.createElement('div'); listA.className='players';
+        a.forEach(p=>{ const el = document.createElement('div'); el.className='player'; el.innerHTML = `<div>${p.name}</div><div class="badge">${skillLabel(p.score)}</div>`; listA.appendChild(el); });
+        const listB = document.createElement('div'); listB.className='players';
+        b.forEach(p=>{ const el = document.createElement('div'); el.className='player'; el.innerHTML = `<div>${p.name}</div><div class="badge">${skillLabel(p.score)}</div>`; listB.appendChild(el); });
+        left.appendChild(listA); right.appendChild(listB);
+        if(addedComputer){
+          const note = document.createElement('div'); note.className='note'; note.textContent='홀수 인원으로 인해 자동으로 컴퓨터(실력: 최하, 점수=10)가 추가되었습니다.';
+          resultArea.appendChild(note);
+        }
+        wrapper.appendChild(left); wrapper.appendChild(right);
+        resultArea.appendChild(wrapper);
+      }
+
+      // utilities
+      function shuffleArray(arr){
+        for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+        return arr;
+      }
+
+      // generate k-combinations of array elements (returns arrays of indices)
+      function k_combinations(set, k) {
+        let i, j, combs, head, tailcombs;
+        if (k > set.length || k <= 0) { return []; }
+        if (k == set.length) { return [set]; }
+        if (k == 1) {
+          combs = [];
+          for (i = 0; i < set.length; i++) { combs.push([set[i]]); }
+          return combs;
+        }
+        combs = [];
+        for (i = 0; i < set.length - k + 1; i++) {
+          head = set.slice(i, i + 1);
+          tailcombs = k_combinations(set.slice(i + 1), k - 1);
+          for (j = 0; j < tailcombs.length; j++) { combs.push(head.concat(tailcombs[j])); }
+        }
+        return combs;
+      }
+
+      // initial
+      renderList();
+    })();
+  </script>
+</body>
+</html>
