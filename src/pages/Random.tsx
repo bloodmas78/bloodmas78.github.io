@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { memberData } from '../data'
 
 const MAX_PARTICIPANTS = 9
