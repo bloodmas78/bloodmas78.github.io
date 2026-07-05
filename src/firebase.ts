@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
-// 파이어베이스 프로젝트 설정값 (여기에 콘솔에서 복사한 값을 덮어쓰세요)
+// 파이어베이스 프로젝트 설정값
 const firebaseConfig = {
-  apiKey: "AIzaSyAkZMMXZrsQmh_UCBpjxnaH6G8toUGELnk",
-  authDomain: "bloodmas78-b41d2.firebaseapp.com",
-  projectId: "bloodmas78-b41d2",
-  storageBucket: "bloodmas78-b41d2.firebasestorage.app",
-  messagingSenderId: "997409312280",
-  appId: "1:997409312280:web:15c4c2a2b330e9545b3d6d",
-  measurementId: "G-7ZMGYQTXNN"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

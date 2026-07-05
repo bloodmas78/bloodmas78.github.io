@@ -75,7 +75,7 @@ export default function MatchRecords() {
   const handleDeleteCompletedMatch = async (match: MatchRecord) => {
     const password = window.prompt('관리자 비밀번호를 입력하세요:')
     if (password === null) return // 취소 버튼 클릭 시
-    if (password !== '1220') {
+    if (password !== (import.meta.env.VITE_ADMIN_PASSWORD || '1220')) {
       alert('비밀번호가 일치하지 않습니다. 삭제할 수 없습니다.')
       return
     }
@@ -94,7 +94,7 @@ export default function MatchRecords() {
   const handleEditCompletedMatch = async (match: MatchRecord) => {
     const password = window.prompt('관리자 비밀번호를 입력하세요:')
     if (password === null) return 
-    if (password !== '1220') {
+    if (password !== (import.meta.env.VITE_ADMIN_PASSWORD || '1220')) {
       alert('비밀번호가 일치하지 않습니다. 수정할 수 없습니다.')
       return
     }
