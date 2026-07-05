@@ -12,7 +12,7 @@ export default function MatchRecords() {
     const ongoing = await fetchMatches('ongoing')
     const completed = await fetchMatches('completed')
     const statsArray = await fetchMemberStats()
-    
+
     const statsMap: Record<string, MemberStat> = {}
     statsArray.forEach(stat => {
       statsMap[stat.nickname] = stat
@@ -31,7 +31,7 @@ export default function MatchRecords() {
   const handleScoreUpdate = async (matchId: string, isTeamA: boolean, currentScoreA: number, currentScoreB: number, change: number) => {
     let newScoreA = currentScoreA
     let newScoreB = currentScoreB
-    
+
     if (isTeamA) {
       newScoreA = Math.max(0, currentScoreA + change)
     } else {
@@ -62,7 +62,7 @@ export default function MatchRecords() {
 
   const handleDeleteMatch = async (matchId: string) => {
     if (!window.confirm('이 매치를 취소하고 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다)')) return;
-    
+
     const success = await deleteMatch(matchId)
     if (success) {
       alert('매치가 취소되었습니다.')
@@ -93,7 +93,7 @@ export default function MatchRecords() {
 
   const handleEditCompletedMatch = async (match: MatchRecord) => {
     const password = window.prompt('관리자 비밀번호를 입력하세요:')
-    if (password === null) return 
+    if (password === null) return
     if (password !== (import.meta.env.VITE_ADMIN_PASSWORD || '1220')) {
       alert('비밀번호가 일치하지 않습니다. 수정할 수 없습니다.')
       return
@@ -127,11 +127,11 @@ export default function MatchRecords() {
     <div className="match-records-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px', color: '#fff' }}>
       <section>
         <h2 style={{ color: '#00ffff', borderBottom: '1px solid rgba(0, 255, 255, 0.2)', paddingBottom: '8px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between' }}>
-          <span>🔥 진행 중인 매치</span>
+          <span>🔥 진행 중 매치</span>
           <button onClick={loadData} className="protoss-btn protoss-btn-ghost" style={{ fontSize: '0.8rem', padding: '4px 12px' }}>🔄 새로고침</button>
         </h2>
         {ongoingMatches.length === 0 ? (
-          <div className="protoss-empty-state" style={{ padding: '32px' }}>현재 진행 중인 매치가 없습니다.</div>
+          <div className="protoss-empty-state" style={{ padding: '32px' }}>지금은 평화롭네요. 다들 큐대 안 잡고 뭐하시나? 🤔</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {ongoingMatches.map(match => (
@@ -140,19 +140,19 @@ export default function MatchRecords() {
                   <span style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button onClick={() => handleDeleteMatch(match.id!)} className="protoss-btn" style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '6px 12px', fontSize: '0.9rem' }}>
-                      매치 취소
+                      빤스런 (매치 취소)
                     </button>
                     <button onClick={() => handleCompleteMatch(match)} className="protoss-btn" style={{ background: '#ef4444', color: '#fff', padding: '6px 12px', fontSize: '0.9rem' }}>
-                      🛑 매치 종료 및 전적 확정
+                      🛑 GG 치고 전적 확정
                     </button>
                   </div>
                 </div>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '20px', alignItems: 'center', textAlign: 'center' }}>
+
+                <div className="match-record-grid">
                   <div style={{ background: 'rgba(59, 130, 246, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
                     <h3 style={{ color: '#60a5fa', margin: '0 0 12px 0' }}>A팀</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreA}</div>
-                    
+
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                       <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, -1)} className="protoss-btn" style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }}>
                         -1
@@ -168,13 +168,13 @@ export default function MatchRecords() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4b5563' }}>VS</div>
-                  
+
                   <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                     <h3 style={{ color: '#34d399', margin: '0 0 12px 0' }}>B팀</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreB}</div>
-                    
+
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                       <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, -1)} className="protoss-btn" style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }}>
                         -1
@@ -199,32 +199,32 @@ export default function MatchRecords() {
 
       <section>
         <h2 style={{ color: '#a6cbd8', borderBottom: '1px solid rgba(166, 203, 216, 0.2)', paddingBottom: '8px', marginBottom: '16px' }}>
-          ✅ 종료된 매치 기록
+          ✅ 종료된 매치
         </h2>
         {completedMatches.length === 0 ? (
-          <div className="protoss-empty-state" style={{ padding: '32px' }}>종료된 매치 기록이 없습니다.</div>
+          <div className="protoss-empty-state" style={{ padding: '32px' }}>아직 끝난 매치가 없어요. 언능 한 겜 치시죠!</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {completedMatches.map(match => (
               <div key={match.id} style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', padding: '16px', position: 'relative' }}>
                 <div style={{ position: 'absolute', top: '12px', right: '16px', display: 'flex', gap: '8px' }}>
-                  <button 
+                  <button
                     onClick={() => handleEditCompletedMatch(match)}
                     style={{ background: 'transparent', border: '1px solid #3b82f6', color: '#60a5fa', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
                   >
-                    ✏️ 수정
+                    ✏️ 조작(?)하기
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleDeleteCompletedMatch(match)}
                     style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
                   >
-                    🗑️ 삭제
+                    🗑️ 역사에서 지우기
                   </button>
                 </div>
                 <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', paddingRight: '100px' }}>
                   {new Date(match.createdAt).toLocaleDateString()}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="match-record-flex">
                   <div style={{ flex: 1, textAlign: 'center' }}>
                     <div style={{ color: '#60a5fa', fontWeight: 'bold', marginBottom: '8px' }}>A팀</div>
                     <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>{match.scoreA}</div>

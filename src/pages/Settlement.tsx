@@ -41,10 +41,9 @@ function Settlement() {
   return (
     <div className="settlement-page">
       <section className="settlement-hero settlement-top-card">
-        <h1>모임비 정산</h1>
+        <h1>💸 모임비 정산기 (1/N 컷)</h1>
         <p>
-          장소와 비용을 입력하고 참석 멤버를 선택하면 전체 합계와
-          멤버별 정산 금액을 자동 계산합니다.
+          오늘 어디서 얼마 썼나요? 참석자만 콕콕 찝어주면 1원 단위까지 칼같이 쪼개드림! 😎
         </p>
       </section>
 
@@ -53,7 +52,7 @@ function Settlement() {
           <div className="add-round-row">
             <button type="button" className="add-round-btn" onClick={addRound}>
               <span className="add-round-icon">＋</span>
-              <span>차수 추가</span>
+              <span>차수 추가 가즈아 ➕</span>
             </button>
           </div>
 
@@ -151,15 +150,15 @@ function Settlement() {
                     type="text"
                     value={accountInfo}
                     onChange={(e) => setAccountInfo(e.target.value)}
-                    placeholder="정산 계좌번호 입력 (선택)"
+                    placeholder="돈 받을 계좌번호 (ex. 카카오뱅크 3333...)"
                     className="settlement-account-input"
                   />
                   <div className="settlement-btn-group" data-html2canvas-ignore="true">
                     <button type="button" onClick={handleCopy} className="settlement-copy-btn">
-                      📋 정산요약 복사
+                      📋 카톡 정산요약
                     </button>
                     <button type="button" onClick={handleCapture} className="settlement-capture-btn">
-                      📸 캡쳐하기
+                      📸 정산내역 캡쳐
                     </button>
                   </div>
                 </div>
@@ -186,7 +185,7 @@ function Settlement() {
                       ))
                   ) : (
                     <div className="balance-empty-state">
-                      비용과 참석자를 입력하면 정산 금액이 여기에 표시됩니다.
+                      누가 얼마 내야 할까? 비용이랑 사람을 찍어보세요! 👀
                     </div>
                   )}
                 </div>

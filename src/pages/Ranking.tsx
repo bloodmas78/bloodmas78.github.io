@@ -46,7 +46,7 @@ function Ranking() {
           <div className="logo-text">
             <h1>매니아 당구클럽 <span className="highlight-text">9샷 멤버스</span></h1>
             <p className="subtitle">
-              안양 매니아 당구클럽 동호인 중 9샷 멤버들의 Billizone 랭킹 · 전적 대시보드
+              안양 매니아 당구클럽 9샷 멤버들의 빌리존 랭킹 대시보드 🔥
             </p>
           </div>
         </div>
@@ -147,7 +147,7 @@ function Ranking() {
                   <div className="member-name-info">
                     <h3>{member.nickname}</h3>
                     <span className="badge">
-                      {stats ? `${periodLabel} 기록 보유` : '기록 미집계'}
+                      {stats ? `${periodLabel} 기록 보유` : '아직 쪼렙.. (기록 없음)'}
                     </span>
                   </div>
                   {stats && stats.ranks.average && (
@@ -226,11 +226,11 @@ function Ranking() {
                         />
                       </svg>
                       <p className="empty-title">
-                        {periodLabel} 공식 기록 없음
+                        {periodLabel} 공식 기록 없음 😅
                       </p>
                       <p className="empty-desc">
-                        Billizone 랭킹은 10경기 이상 치른 회원만 집계됩니다.
-                        {` ${monthlyLabel} 기준 10게임 미만이면 월간 기록이 표시되지 않습니다.`}
+                        빌리존 랭킹은 10경기 이상 치러야 인정해줍니다!
+                        {` ${monthlyLabel} 기준 10게임 미만이면 랭킹에 안 떠요 ㅠㅠ 분발하세요!`}
                       </p>
                     </div>
                   )}
@@ -243,7 +243,7 @@ function Ranking() {
 
           {processedMembers.length === 0 && (
             <div className="no-results-card">
-              <p>검색 조건에 맞는 멤버이 없습니다.</p>
+              <p>조건에 맞는 멤버가 없네요 ㅠㅠ</p>
             </div>
           )}
         </main>

@@ -18,11 +18,11 @@ function Home() {
             <span>9shot Members Portal</span>
           </div>
           <h1>
-            오늘도 신나는 <span className="highlight-gradient">9샷 멤버스</span>
+            오늘도 꿀잼! <span className="highlight-gradient">9샷</span>
           </h1>
           <p>
-            안양 매니아 당구클럽 동호인들의 전용 쉼터입니다.<br />
-            실시간 랭킹 확인, 스타크래프트 대전, 투명한 모임비 정산까지 한눈에 즐겨보세요!
+            9샷 전용 아지트! 😎<br />
+            실시간 당구 랭킹부터 스타 팀 매칭, 물론 칼같은 N분의1 정산도!! 한방에 즐기자구~ 🚀
           </p>
         </header>
 
@@ -61,7 +61,7 @@ function Home() {
               <p>이번 달 에버리지, 하이런, 승률 랭킹과 개인 전적 대시보드를 확인하세요.</p>
             </div>
             <Link className="home-card-link ranking-btn" to="/9shot">
-              <span>랭킹 페이지 이동</span>
+              <span>랭킹 구경가기</span>
               <span className="arrow-icon">→</span>
             </Link>
           </article>
@@ -70,11 +70,11 @@ function Home() {
             <div className="card-badge">STARCRAFT</div>
             <div className="card-icon-wrapper">⚔️</div>
             <div className="card-content">
-              <h2>🎮 Starcraft 팀 매칭</h2>
+              <h2>🎮 Starcraft <br />팀 매칭&전적 확인</h2>
               <p>실력(상/중/하)을 기준으로 균형 잡힌 팀 매칭을 지원합니다.</p>
             </div>
             <Link className="home-card-link matching-btn" to="/random">
-              <span>팀 짜러 가기</span>
+              <span>팀 짜러 가즈아!</span>
               <span className="arrow-icon">→</span>
             </Link>
           </article>
@@ -87,7 +87,7 @@ function Home() {
               <p>모임 1차/2차 회비를 N분의 1로 정산합니다.</p>
             </div>
             <Link className="home-card-link settlement-btn" to="/n1">
-              <span>정산기 실행</span>
+              <span>칼정산기 돌리기</span>
               <span className="arrow-icon">→</span>
             </Link>
           </article>
