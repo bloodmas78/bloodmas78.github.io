@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import html2canvas from 'html2canvas'
 import { memberData } from '../data'
 import { useSettlement } from '../hooks/useSettlement'
 
@@ -18,6 +20,23 @@ function Settlement() {
     toggleHighlight,
     handleCopy,
   } = useSettlement()
+
+  const summaryRef = useRef<HTMLDivElement>(null)
+
+  const handleCapture = async () => {
+    if (!summaryRef.current) return
+    try {
+      const canvas = await html2canvas(summaryRef.current, { scale: 2, useCORS: true })
+      const image = canvas.toDataURL('image/png')
+      const link = document.createElement('a')
+      link.href = image
+      link.download = 'settlement-summary.png'
+      link.click()
+    } catch (error) {
+      console.error('Capture failed', error)
+      alert('캡쳐에 실패했습니다.')
+    }
+  }
 
   return (
     <div className="settlement-page">
@@ -102,7 +121,7 @@ function Settlement() {
           })}
 
           <section className="summary-bottom">
-            <div className="summary-card summary-horizontal">
+            <div className="summary-card summary-horizontal" ref={summaryRef}>
               <div className="summary-left">
                 <div className="kakao-badge" aria-hidden="true">
                   = 정산 =
@@ -135,9 +154,14 @@ function Settlement() {
                     placeholder="정산 계좌번호 입력 (선택)"
                     className="settlement-account-input"
                   />
-                  <button type="button" onClick={handleCopy} className="settlement-copy-btn">
-                    📋 카카오톡 정산요약 복사
-                  </button>
+                  <div className="settlement-btn-group" data-html2canvas-ignore="true">
+                    <button type="button" onClick={handleCopy} className="settlement-copy-btn">
+                      📋 정산요약 복사
+                    </button>
+                    <button type="button" onClick={handleCapture} className="settlement-capture-btn">
+                      📸 캡쳐하기
+                    </button>
+                  </div>
                 </div>
               </div>
 

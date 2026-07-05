@@ -1,4 +1,4 @@
-﻿/* ─────────────────────────────────────────
+/* ─────────────────────────────────────────
    SETTLEMENT PAGE — 개선된 레이아웃
    ───────────────────────────────────────── */
 .settlement-page {
@@ -1030,25 +1030,44 @@
   box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.2);
 }
 
-.settlement-copy-btn {
+.settlement-btn-group {
+  display: flex;
+  gap: 8px;
   width: 100%;
+}
+
+.settlement-copy-btn,
+.settlement-capture-btn {
+  flex: 1;
   padding: 14px;
   border: none;
   border-radius: 12px;
-  background: #111;
-  color: #fee500;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.settlement-copy-btn:hover {
+.settlement-copy-btn {
+  background: #111;
+  color: #fee500;
+}
+
+.settlement-capture-btn {
+  background: #ffffff;
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.settlement-copy-btn:hover,
+.settlement-capture-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-.settlement-copy-btn:active {
+.settlement-copy-btn:active,
+.settlement-capture-btn:active {
   transform: translateY(0);
 }
 

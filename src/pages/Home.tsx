@@ -15,7 +15,7 @@ function Home() {
         <header className="home-header">
           <div className="home-badge">
             <span className="home-badge-dot"></span>
-            <span>💬 9shot Members • Club Portal</span>
+            <span>9shot Members Portal</span>
           </div>
           <h1>
             오늘도 신나는 <span className="highlight-gradient">9샷 멤버스</span>
@@ -71,7 +71,7 @@ function Home() {
             <div className="card-icon-wrapper">⚔️</div>
             <div className="card-content">
               <h2>🎮 Starcraft 팀 매칭</h2>
-              <p>개인별 실력(상/중/하)을 기준으로 균형 잡힌 최적의 팀 매칭을 지원합니다.</p>
+              <p>실력(상/중/하)을 기준으로 균형 잡힌 팀 매칭을 지원합니다.</p>
             </div>
             <Link className="home-card-link matching-btn" to="/random">
               <span>팀 짜러 가기</span>
@@ -84,7 +84,7 @@ function Home() {
             <div className="card-icon-wrapper">💸</div>
             <div className="card-content">
               <h2>💸 모임비 정산</h2>
-              <p>당구 게임비와 모임 1차/2차 회비를 명확하고 빠르게 N분의 1로 정산합니다.</p>
+              <p>모임 1차/2차 회비를 N분의 1로 정산합니다.</p>
             </div>
             <Link className="home-card-link settlement-btn" to="/n1">
               <span>정산기 실행</span>
