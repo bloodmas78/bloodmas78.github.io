@@ -1,61 +1,25 @@
 import { useState } from 'react'
 import { memberData, monthlyLabel } from '../data'
-import type { Member, StatDetail } from '../data'
-import '../App.css'
+import type { SortKey } from '../types'
+import {
+  sortMembers,
+  getTopMember,
+  getTotalGames,
+  getStatsCount,
+  getStats,
+} from '../utils'
 
 function Ranking() {
-  const [sortBy, setSortBy] = useState<'average' | 'highrun' | 'winRate'>('average')
-
-  const getActiveStats = (member: Member): StatDetail | null => {
-    return member.monthly
-  }
-
+  const [sortBy, setSortBy] = useState<SortKey>('average')
   const periodLabel = monthlyLabel
 
-  const processedMembers = [...memberData].sort((a, b) => {
-    const aStats = getActiveStats(a)
-    const bStats = getActiveStats(b)
+  const processedMembers = sortMembers(memberData, sortBy, 'monthly')
+  const membersWithStats = getStatsCount('monthly')
+  const totalGamesCount = getTotalGames('monthly')
 
-    if (!aStats && !bStats) return 0
-    if (!aStats) return 1
-    if (!bStats) return -1
-
-    if (sortBy === 'average') {
-      return bStats.average - aStats.average
-    } else if (sortBy === 'highrun') {
-      return bStats.highrun - aStats.highrun
-    }
-    return bStats.winRate - aStats.winRate
-  })
-
-  const membersWithStats = memberData.filter((member) => getActiveStats(member)).length
-  const totalGamesCount = memberData.reduce((acc, cur) => {
-    const stats = getActiveStats(cur)
-    if (!stats) return acc
-    return acc + stats.win + stats.draw + stats.loss
-  }, 0)
-
-  const membersWithStatsList = memberData
-    .map((member) => ({ member, stats: getActiveStats(member) }))
-    .filter((item): item is { member: Member; stats: StatDetail } => item.stats !== null)
-
-  const highestAverageMember = membersWithStatsList.length
-    ? membersWithStatsList.reduce((best, current) =>
-        current.stats.average > best.stats.average ? current : best,
-      )
-    : null
-
-  const highestHighrunMember = membersWithStatsList.length
-    ? membersWithStatsList.reduce((best, current) =>
-        current.stats.highrun > best.stats.highrun ? current : best,
-      )
-    : null
-
-  const highestWinRateMember = membersWithStatsList.length
-    ? membersWithStatsList.reduce((best, current) =>
-        current.stats.winRate > best.stats.winRate ? current : best,
-      )
-    : null
+  const highestAverageMember = getTopMember('average', 'monthly')
+  const highestHighrunMember = getTopMember('highrun', 'monthly')
+  const highestWinRateMember = getTopMember('winRate', 'monthly')
 
   return (
     <div className="dashboard-container">
@@ -158,7 +122,7 @@ function Ranking() {
 
         <main className="members-grid">
           {processedMembers.map((member) => {
-            const stats = getActiveStats(member)
+            const stats = getStats(member, 'monthly')
 
             return (
               <article

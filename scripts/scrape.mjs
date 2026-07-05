@@ -202,26 +202,7 @@ function generateDataTs(members, monthlyLabel, scrapedAt) {
 
 export const monthlyLabel = ${JSON.stringify(monthlyLabel)};
 
-export interface StatDetail {
-  average: number;
-  highrun: number;
-  win: number;
-  draw: number;
-  loss: number;
-  winRate: number;
-  ranks: {
-    average: number | null;
-    highrun: number | null;
-    winRate: number | null;
-  };
-}
-
-export interface Member {
-  nickname: string;
-  avatarColor: string;
-  monthly: StatDetail | null;
-  allTime: StatDetail | null;
-}
+import type { Member } from './types'
 
 export const memberData: Member[] = [
 ${memberBlocks}

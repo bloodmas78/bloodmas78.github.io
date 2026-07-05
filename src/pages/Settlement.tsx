@@ -1,161 +1,23 @@
-import { useState } from 'react'
 import { memberData } from '../data'
-import '../App.css'
-
-type RoundEntry = {
-  label: string
-  place: string
-  cost: string
-  attendees: string[]
-}
-
-const initialRounds: RoundEntry[] = [
-  { label: '1차', place: '', cost: '', attendees: [] },
-]
+import { useSettlement } from '../hooks/useSettlement'
 
 function Settlement() {
-  const [rounds, setRounds] = useState<RoundEntry[]>(initialRounds)
-  const [highlighted, setHighlighted] = useState<string | null>(null)
-  const [accountInfo, setAccountInfo] = useState(() => {
-    try {
-      return localStorage.getItem('9shot_account') || ''
-    } catch {
-      return ''
-    }
-  })
-
-  const handleAccountChange = (val: string) => {
-    setAccountInfo(val)
-    try {
-      localStorage.setItem('9shot_account', val)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const updateRound = (index: number, field: keyof RoundEntry, value: string) => {
-    setRounds((current) => current.map((r, i) => (i === index ? { ...r, [field]: value } : r)))
-  }
-
-  const updateCost = (index: number, value: string) => {
-    const filtered = value.replace(/[^0-9]/g, '')
-    updateRound(index, 'cost', filtered)
-  }
-
-  const toggleAttendee = (index: number, nickname: string) => {
-    setRounds((current) =>
-      current.map((r, i) => {
-        if (i !== index) return r
-        const attendees = r.attendees
-        const selected = attendees.includes(nickname) ? attendees.filter((name) => name !== nickname) : [...attendees, nickname]
-        return { ...r, attendees: selected }
-      }),
-    )
-  }
-
-  const addRound = () => {
-    setRounds((current) => [...current, { label: `${current.length + 1}차`, place: '', cost: '', attendees: [] }])
-  }
-
-  const deleteRound = (index: number) => {
-    setRounds((current) => {
-      const next = current.filter((_, i) => i !== index).map((r, i) => ({ ...r, label: `${i + 1}차` }))
-      if (next.length === 0) return [{ label: '1차', place: '', cost: '', attendees: [] }]
-      return next
-    })
-  }
-
-  const confirmDeleteRound = (index: number) => {
-    const targetLabel = rounds[index]?.label || '해당 차수'
-    if (typeof window !== 'undefined' && window.confirm(`${targetLabel}를 삭제하시겠습니까?`)) {
-      deleteRound(index)
-    }
-  }
-
-  const roundSummaries = rounds.map((round, idx) => {
-    const cost = Number(round.cost) || 0
-    const participants = round.attendees.length
-    const perPersonRounded = participants ? Math.ceil((cost / participants) / 100) * 100 : 0
-    return {
-      key: `round-${idx}`,
-      label: round.label,
-      place: round.place,
-      cost,
-      participants,
-      perPerson: perPersonRounded,
-      attendees: round.attendees,
-    }
-  })
-
-  const totalCost = roundSummaries.reduce((sum, round) => sum + round.cost, 0)
-
-  const memberTotals = memberData.map((member) => {
-    const total = roundSummaries.reduce((sum, round) => {
-      if (!round.attendees.includes(member.nickname) || round.participants === 0) {
-        return sum
-      }
-      return sum + round.perPerson
-    }, 0)
-
-    const attendance = roundSummaries.reduce((c, round) => (round.attendees.includes(member.nickname) ? c + 1 : c), 0)
-
-    return {
-      nickname: member.nickname,
-      total,
-      attendance,
-    }
-  })
-
-  const sortedMembers = [...memberTotals].sort((a, b) => {
-    if (b.total !== a.total) return b.total - a.total
-    if (b.attendance !== a.attendance) return b.attendance - a.attendance
-    return a.nickname.localeCompare(b.nickname, 'ko')
-  })
-
-  const handleCopy = () => {
-    const activeRounds = rounds.filter(r => (Number(r.cost) || 0) > 0)
-    if (activeRounds.length === 0) {
-      alert('정산할 내역(비용이 입력된 차수)이 없습니다.')
-      return
-    }
-
-    const lines = [
-      '💬 [9샷 모임 정산 요약]',
-      `총 정산 금액: ${totalCost.toLocaleString()}원`,
-      '',
-      '■ 차수별 내역:'
-    ]
-
-    roundSummaries.forEach(r => {
-      if (r.cost > 0) {
-        lines.push(`- ${r.label} ${r.place || '-'}: ${r.cost.toLocaleString()}원 (참석: ${r.attendees.length ? r.attendees.join(', ') : '없음'}) → 1인당 ${r.perPerson.toLocaleString()}원`)
-      }
-    })
-
-    lines.push('', '■ 멤버별 정산 금액:')
-    sortedMembers.forEach(m => {
-      if (m.total > 0) {
-        lines.push(`- ${m.nickname}: ${m.total.toLocaleString()}원 (참석: ${m.attendance}회)`)
-      }
-    })
-
-    if (accountInfo.trim()) {
-      lines.push('', `💰 송금 계좌: ${accountInfo.trim()}`)
-    }
-
-    navigator.clipboard.writeText(lines.join('\n'))
-      .then(() => {
-        alert('정산 내역이 클립보드에 복사되었습니다! 카카오톡에 붙여넣기 하세요.')
-      })
-      .catch((err) => {
-        console.error('Copy failed', err)
-        alert('복사에 실패했습니다. 직접 복사해 주세요.')
-      })
-  }
-
-  const toggleHighlight = (nickname: string) => {
-    setHighlighted((cur) => (cur === nickname ? null : nickname))
-  }
+  const {
+    rounds,
+    highlighted,
+    accountInfo,
+    roundSummaries,
+    totalCost,
+    sortedMembers,
+    setAccountInfo,
+    updateRound,
+    updateCost,
+    toggleAttendee,
+    addRound,
+    confirmDeleteRound,
+    toggleHighlight,
+    handleCopy,
+  } = useSettlement()
 
   return (
     <div className="settlement-page">
@@ -269,7 +131,7 @@ function Settlement() {
                   <input
                     type="text"
                     value={accountInfo}
-                    onChange={(e) => handleAccountChange(e.target.value)}
+                    onChange={(e) => setAccountInfo(e.target.value)}
                     placeholder="정산 계좌번호 입력 (선택)"
                     className="settlement-account-input"
                   />

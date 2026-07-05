@@ -66,6 +66,19 @@ function Home() {
             </Link>
           </article>
 
+          <article className="home-card matching-card">
+            <div className="card-badge">STARCRAFT</div>
+            <div className="card-icon-wrapper">⚔️</div>
+            <div className="card-content">
+              <h2>🎮 팀 매칭</h2>
+              <p>개인별 실력(상/중/하)을 기준으로 균형 잡힌 최적의 팀 매칭을 지원합니다.</p>
+            </div>
+            <Link className="home-card-link matching-btn" to="/random">
+              <span>팀 짜러 가기</span>
+              <span className="arrow-icon">→</span>
+            </Link>
+          </article>
+
           <article className="home-card settlement-card">
             <div className="card-badge">FINANCE</div>
             <div className="card-icon-wrapper">💸</div>
@@ -79,18 +92,6 @@ function Home() {
             </Link>
           </article>
 
-          <article className="home-card matching-card">
-            <div className="card-badge">STARCRAFT</div>
-            <div className="card-icon-wrapper">⚔️</div>
-            <div className="card-content">
-              <h2>🎮 팀 매칭</h2>
-              <p>개인별 실력(상/중/하)을 기준으로 균형 잡힌 최적의 팀 매칭을 지원합니다.</p>
-            </div>
-            <Link className="home-card-link matching-btn" to="/random">
-              <span>팀 짜러 가기</span>
-              <span className="arrow-icon">→</span>
-            </Link>
-          </article>
         </div>
       </section>
     </div>

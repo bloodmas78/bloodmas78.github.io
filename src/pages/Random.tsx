@@ -1,108 +1,21 @@
-import { useState } from 'react'
 import { memberData } from '../data'
+import type { TeamEntry } from '../types'
+import { useTeamMatch } from '../hooks/useTeamMatch'
 import heroImage from '../assets/protoss_crystal.png'
 
-const MAX_PARTICIPANTS = 9
-
 function Random() {
-  const [entries, setEntries] = useState<Array<{ name: string; score: number }>>([])
-  const [result, setResult] = useState<null | { a: any[]; b: any[]; sumA: number; sumB: number }>(null)
-  const [isMatching, setIsMatching] = useState(false)
-
-  const count = entries.length
-
-
-
-  function removeEntry(idx: number) {
-    setEntries((s) => s.filter((_, i) => i !== idx))
-  }
-
-  function togglePrefill(nick: string) {
-    setEntries((s) => {
-      const idx = s.findIndex((e) => e.name === nick)
-      if (idx >= 0) {
-        const copy = s.slice()
-        copy.splice(idx, 1)
-        return copy
-      }
-      if (s.length >= MAX_PARTICIPANTS) { alert('최대 인원입니다'); return s }
-      return [...s, { name: nick, score: 25 }]
-    })
-  }
-
-  function setMemberScore(nick: string, newScore: number) {
-    setEntries((s) => s.map((e) => (e.name === nick ? { ...e, score: newScore } : e)))
-  }
-
-  function shuffleArray<T>(arr: T[]) {
-    const a = arr.slice()
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-        ;[a[i], a[j]] = [a[j], a[i]]
-    }
-    return a
-  }
-
-  // brute-force combination helper
-  function k_combinations<T>(set: T[], k: number): T[][] {
-    if (k === 0) return [[]]
-    if (k > set.length) return []
-    if (k === set.length) return [set.slice()]
-    const combos: T[][] = []
-    for (let i = 0; i <= set.length - k; i++) {
-      const head = set.slice(i, i + 1)
-      const tail = k_combinations(set.slice(i + 1), k - 1)
-      for (const t of tail) combos.push(head.concat(t))
-    }
-    return combos
-  }
-
-  function computeWinRates(sumA: number, sumB: number) {
-    const total = sumA + sumB
-    if (!total) return { a: 50, b: 50 }
-    const aRate = Math.max(1, Math.min(99, Math.round((sumA / total) * 100)))
-    return { a: aRate, b: 100 - aRate }
-  }
-
-  function matchTeams() {
-    if (entries.length === 0) return alert('참석자를 추가하세요')
-    setIsMatching(true)
-    setTimeout(() => {
-      let list = entries.slice()
-      if (list.length % 2 === 1) {
-        list.push({ name: '컴퓨터', score: 10 })
-      }
-      const n = list.length
-      const half = n / 2
-      // enumerate index combinations
-      const indices = Array.from({ length: n }, (_, i) => i)
-      const combos = k_combinations(indices, half)
-      let bestPairs: Array<any> = []
-      let bestDiff = Infinity
-      const scores = list.map((p) => p.score)
-      for (const combo of combos) {
-        const setA = new Set(combo)
-        let sumA = 0
-        let sumB = 0
-        const a: any[] = []
-        const b: any[] = []
-        for (let i = 0; i < n; i++) {
-          if (setA.has(i)) { sumA += scores[i]; a.push(list[i]) }
-          else { sumB += scores[i]; b.push(list[i]) }
-        }
-        const diff = Math.abs(sumA - sumB)
-        if (diff < bestDiff) { bestDiff = diff; bestPairs = [{ a, b, sumA, sumB }] }
-        else if (diff === bestDiff) bestPairs.push({ a, b, sumA, sumB })
-      }
-      const pick = bestPairs[Math.floor(Math.random() * bestPairs.length)]
-      pick.a = shuffleArray(pick.a)
-      pick.b = shuffleArray(pick.b)
-      setResult({ a: pick.a, b: pick.b, sumA: pick.sumA, sumB: pick.sumB })
-      setIsMatching(false)
-    }, 850)
-  }
-
-  const winRates = result ? computeWinRates(result.sumA, result.sumB) : null
+  const {
+    entries,
+    count,
+    result,
+    isMatching,
+    winRates,
+    toggleMember: togglePrefill,
+    setMemberScore,
+    removeEntry,
+    resetEntries,
+    matchTeams,
+  } = useTeamMatch()
 
   return (
     <div className="home-page random-page protoss-theme">
@@ -174,7 +87,7 @@ function Random() {
               <div className="protoss-subtext">기준 점수: 상(30점), 중(25점), 하(20점) | 홀수 인원일 경우 컴퓨터(10점)가 자동 추가됩니다.</div>
             </div>
             <div className="protoss-btn-row">
-              <button onClick={() => setEntries([])} className="protoss-btn protoss-btn-ghost">선택 초기화</button>
+              <button onClick={resetEntries} className="protoss-btn protoss-btn-ghost">선택 초기화</button>
               <button onClick={matchTeams} className="protoss-btn protoss-btn-primary">⚡ 팀 매칭 시작</button>
             </div>
           </div>
@@ -214,8 +127,8 @@ function Random() {
                     <div className="protoss-team-list">
                       {result.a
                         .slice()
-                        .sort((x: any, y: any) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
-                        .map((p: any, i: number) => (
+                        .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
+                        .map((p: TeamEntry, i: number) => (
                           <div key={i} className="protoss-team-item">
                             <span>{p.name}</span>
                             <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
@@ -240,8 +153,8 @@ function Random() {
                     <div className="protoss-team-list">
                       {result.b
                         .slice()
-                        .sort((x: any, y: any) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
-                        .map((p: any, i: number) => (
+                        .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
+                        .map((p: TeamEntry, i: number) => (
                           <div key={i} className="protoss-team-item">
                             <span>{p.name}</span>
                             <span>{p.score === 10 ? '컴퓨터(10)' : p.score}</span>
@@ -252,7 +165,7 @@ function Random() {
                 </div>
               </>
             ) : (
-              <div className="protoss-empty-state">왼쪽 명단에서 참석할 멤버를 선택한 후 '팀 매칭 시작' 버튼을 눌러보세요!</div>
+              <div className="protoss-empty-state">명단에서 참석할 멤버를 선택한 후 '팀 매칭 시작' 버튼을 눌러보세요!</div>
             )}
           </div>
         </main>
