@@ -1,4 +1,4 @@
-﻿/* ─────────────────────────────────────────
+/* ─────────────────────────────────────────
    HOME PAGE
    ───────────────────────────────────────── */
 .home-page {
@@ -74,6 +74,26 @@
   100% {
     transform: translate(-30px, 40px) scale(0.9);
   }
+}
+
+/* 3D Logo Container */
+.three-logo-container {
+  width: 100%;
+  height: 350px;
+  margin: -30px auto -10px;
+  cursor: grab;
+  position: relative;
+  z-index: 20;
+}
+
+.three-logo-container:active {
+  cursor: grabbing;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
 }
 
 /* Home Hero Container */

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { memberData, monthlyLabel } from '../data'
+import ThreeLogo from '../components/ThreeLogo'
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       </div>
 
       <section className="home-hero">
+        <ThreeLogo />
         <header className="home-header">
           <div className="home-badge">
             <span className="home-badge-dot"></span>
