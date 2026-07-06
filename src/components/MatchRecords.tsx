@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchMatches, updateMatchScore, completeMatch, deleteMatch, deleteCompletedMatch, revertMatchToOngoing, fetchMemberStats, type MatchRecord, type MemberStat } from '../utils/firebaseUtils'
+import { fetchMatches, updateMatchSetResult, completeMatch, deleteMatch, deleteCompletedMatch, revertMatchToOngoing, fetchMemberStats, type MatchRecord, type MemberStat } from '../utils/firebaseUtils'
 
 export default function MatchRecords() {
   const [ongoingMatches, setOngoingMatches] = useState<MatchRecord[]>([])
@@ -28,17 +28,11 @@ export default function MatchRecords() {
     loadData()
   }, [])
 
-  const handleScoreUpdate = async (matchId: string, isTeamA: boolean, currentScoreA: number, currentScoreB: number, change: number) => {
-    let newScoreA = currentScoreA
-    let newScoreB = currentScoreB
+  const handleSetResult = async (match: MatchRecord, setIndex: number, winner: 'A' | 'B' | null) => {
+    const newSetResults = [...(match.setResults || [null, null, null, null, null])]
+    newSetResults[setIndex] = winner
 
-    if (isTeamA) {
-      newScoreA = Math.max(0, currentScoreA + change)
-    } else {
-      newScoreB = Math.max(0, currentScoreB + change)
-    }
-
-    const success = await updateMatchScore(matchId, newScoreA, newScoreB)
+    const success = await updateMatchSetResult(match.id!, newSetResults)
     if (success) {
       loadData()
     } else {
@@ -139,10 +133,10 @@ export default function MatchRecords() {
                 <div className="match-record-header" style={{ marginBottom: '16px' }}>
                   <span style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
                   <div className="match-record-actions">
-                    <button onClick={() => handleDeleteMatch(match.id!)} className="protoss-btn" style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '6px 12px', fontSize: '0.9rem' }}>
+                    <button onClick={() => handleDeleteMatch(match.id!)} className="score-btn loss" style={{ flex: 'none', padding: '6px 16px', fontSize: '0.9rem' }}>
                       빤스런 (매치 취소)
                     </button>
-                    <button onClick={() => handleCompleteMatch(match)} className="protoss-btn" style={{ background: '#ef4444', color: '#fff', padding: '6px 12px', fontSize: '0.9rem' }}>
+                    <button onClick={() => handleCompleteMatch(match)} className="score-btn win team-a" style={{ flex: 'none', padding: '6px 16px', fontSize: '0.9rem' }}>
                       🛑 GG 치고 전적 확정
                     </button>
                   </div>
@@ -152,15 +146,6 @@ export default function MatchRecords() {
                   <div style={{ background: 'rgba(59, 130, 246, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
                     <h3 style={{ color: '#60a5fa', margin: '0 0 12px 0' }}>A팀</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreA}</div>
-
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, -1)} className="score-btn loss">
-                        1패
-                      </button>
-                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, 1)} className="score-btn win team-a">
-                        1승
-                      </button>
-                    </div>
 
                     <div style={{ fontSize: '0.85rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {match.teamA.map(member => (
@@ -177,19 +162,45 @@ export default function MatchRecords() {
                     <h3 style={{ color: '#34d399', margin: '0 0 12px 0' }}>B팀</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreB}</div>
 
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, -1)} className="score-btn loss">
-                        1패
-                      </button>
-                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, 1)} className="score-btn win team-b">
-                        1승
-                      </button>
-                    </div>
-
                     <div style={{ fontSize: '0.85rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {match.teamB.map(member => (
                         <div key={member}>{formatMember(member)}</div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* 5-Set Toggle UI */}
+                  <div className="set-toggles-container" style={{ gridColumn: '1 / -1', marginTop: '16px' }}>
+                    <h4 style={{ color: '#a6cbd8', marginBottom: '12px', fontSize: '0.9rem', textAlign: 'center' }}>BO5 세트 스코어 기록</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '400px', margin: '0 auto' }}>
+                      {[0, 1, 2, 3, 4].map(idx => {
+                        const result = (match.setResults || [null, null, null, null, null])[idx]
+                        return (
+                          <div key={idx} className="set-toggle-row">
+                            <span className="set-label">SET {idx + 1}</span>
+                            <div className="set-toggle-group">
+                              <button 
+                                className={`set-toggle-btn ${result === 'A' ? 'active-a' : ''}`}
+                                onClick={() => handleSetResult(match, idx, 'A')}
+                              >
+                                A 승
+                              </button>
+                              <button 
+                                className={`set-toggle-btn ${result === null ? 'active-none' : ''}`}
+                                onClick={() => handleSetResult(match, idx, null)}
+                              >
+                                -
+                              </button>
+                              <button 
+                                className={`set-toggle-btn ${result === 'B' ? 'active-b' : ''}`}
+                                onClick={() => handleSetResult(match, idx, 'B')}
+                              >
+                                B 승
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
@@ -251,6 +262,61 @@ export default function MatchRecords() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+      </section>
+
+      <section style={{ marginTop: '16px' }}>
+        <h2 style={{ color: '#ffea00', borderBottom: '1px solid rgba(255, 234, 0, 0.2)', paddingBottom: '8px', marginBottom: '16px' }}>
+          🏆 명예의 전당 (최다승 랭킹)
+        </h2>
+        {Object.keys(memberStats).length === 0 ? (
+          <div className="protoss-empty-state">아직 등록된 전적이 없습니다. 첫 게임을 시작하세요!</div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {Object.values(memberStats)
+              .filter(m => m.nickname !== '컴퓨터')
+              .sort((a, b) => {
+                const totalA = a.wins + a.losses
+                const winRateA = totalA > 0 ? a.wins / totalA : 0
+                const totalB = b.wins + b.losses
+                const winRateB = totalB > 0 ? b.wins / totalB : 0
+                
+                if (winRateB !== winRateA) {
+                  return winRateB - winRateA
+                }
+                // 승률이 같으면 다승 순으로 정렬
+                return b.wins - a.wins
+              })
+              .map((member, idx) => {
+                const totalGames = member.wins + member.losses
+                const winRate = totalGames > 0 ? Math.round((member.wins / totalGames) * 100) : 0
+                return (
+                  <div key={member.nickname} style={{ 
+                    display: 'flex', alignItems: 'center', background: 'rgba(4, 10, 30, 0.6)', 
+                    padding: '16px 20px', borderRadius: '16px', border: '1px solid rgba(255, 215, 0, 0.15)',
+                    boxShadow: 'inset 0 0 10px rgba(255, 215, 0, 0.05)'
+                  }}>
+                    <div style={{ 
+                      width: '44px', fontSize: '1.4rem', fontWeight: '900', fontStyle: 'italic',
+                      color: idx === 0 ? '#ffea00' : idx === 1 ? '#e2e8f0' : idx === 2 ? '#b45309' : '#64748b',
+                      textShadow: idx === 0 ? '0 0 10px rgba(255,234,0,0.5)' : 'none'
+                    }}>
+                      {idx + 1}
+                    </div>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontSize: '1.15rem', fontWeight: 'bold', color: '#e5efff' }}>
+                        {member.nickname}
+                      </span>
+                      {idx === 0 && <span style={{ fontSize: '0.8rem', padding: '2px 6px', background: 'rgba(255,215,0,0.2)', color: '#ffea00', borderRadius: '4px', border: '1px solid rgba(255,215,0,0.4)' }}>👑 1위</span>}
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '1.1rem', color: '#34d399', fontWeight: 'bold' }}>{member.wins}승 <span style={{ color: '#ef4444' }}>{member.losses}패</span></div>
+                      <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>승률 {winRate}% ({totalGames}전)</div>
+                    </div>
+                  </div>
+                )
+              })}
           </div>
         )}
       </section>

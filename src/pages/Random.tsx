@@ -104,11 +104,11 @@ function Random() {
                         <select
                           value={selected.score}
                           onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))}
-                          className="protoss-select"
+                          className={`protoss-select rank-select ${selected.score === 30 ? 'plat' : selected.score === 25 ? 'gold' : 'silver'}`}
                         >
-                          <option value={30}>상 (30)</option>
-                          <option value={25}>중 (25)</option>
-                          <option value={20}>하 (20)</option>
+                          <option value={30}>💎 플래 (30)</option>
+                          <option value={25}>🥇 골드 (25)</option>
+                          <option value={20}>🥈 실버 (20)</option>
                         </select>
                       )}
                     </div>
@@ -127,7 +127,9 @@ function Random() {
                           {e.name}
                           {e.name !== '컴퓨터' && memberStats[e.name] ? <span style={{ fontSize: '0.75rem', opacity: 0.8, marginLeft: '4px' }}>({memberStats[e.name].wins}승 {memberStats[e.name].losses}패)</span> : ''}
                         </span>
-                        <span className="protoss-entry-score">{e.score === 30 ? '상' : e.score === 25 ? '중' : e.score === 20 ? '하' : '?'}</span>
+                        <span className={`protoss-entry-score rank-badge ${e.score === 30 ? 'plat' : e.score === 25 ? 'gold' : e.score === 20 ? 'silver' : ''}`}>
+                          {e.score === 30 ? '💎 플래' : e.score === 25 ? '🥇 골드' : e.score === 20 ? '🥈 실버' : '💻 컴퓨터'}
+                        </span>
                       </div>
                       <button onClick={() => removeEntry(idx)} className="protoss-text-btn">삭제</button>
                     </div>
@@ -140,7 +142,7 @@ function Random() {
               <div className="protoss-actions-row" ref={actionsRef}>
                 <div>
                   <strong>팀 매칭 설정</strong>
-                  <div className="protoss-subtext">기준 점수: 상(30점), 중(25점), 하(20점) | 홀수 인원일 경우 컴퓨터(10점)가 자동 추가됩니다.</div>
+                  <div className="protoss-subtext">기준 점수: 플래(30점), 골드(25점), 실버(20점) | 홀수 인원일 경우 컴퓨터(10점)가 자동 추가됩니다.</div>
                 </div>
                 <div className="protoss-btn-row">
                   <button onClick={resetEntries} className="protoss-btn protoss-btn-ghost">선택 초기화</button>

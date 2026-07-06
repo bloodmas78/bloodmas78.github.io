@@ -126,6 +126,7 @@ export interface MatchRecord {
   teamB: string[]
   scoreA: number
   scoreB: number
+  setResults?: ('A' | 'B' | null)[]
   status: 'ongoing' | 'completed'
   createdAt: number
 }
@@ -139,6 +140,7 @@ export async function createMatch(teamA: string[], teamB: string[]): Promise<str
       teamB,
       scoreA: 0,
       scoreB: 0,
+      setResults: [null, null, null, null, null],
       status: 'ongoing',
       createdAt: Date.now()
     })
@@ -170,14 +172,16 @@ export async function fetchMatches(status: 'ongoing' | 'completed'): Promise<Mat
   }
 }
 
-// 6. 진행 중인 매치 스코어 업데이트
-export async function updateMatchScore(matchId: string, scoreA: number, scoreB: number): Promise<boolean> {
+// 6. 진행 중인 매치 스코어 세트 업데이트
+export async function updateMatchSetResult(matchId: string, setResults: ('A' | 'B' | null)[]): Promise<boolean> {
   try {
+    const scoreA = setResults.filter(r => r === 'A').length
+    const scoreB = setResults.filter(r => r === 'B').length
     const matchRef = doc(db, 'matches', matchId)
-    await updateDoc(matchRef, { scoreA, scoreB })
+    await updateDoc(matchRef, { scoreA, scoreB, setResults })
     return true
   } catch (error) {
-    console.error('Error updating match score:', error)
+    console.error('Error updating match set result:', error)
     return false
   }
 }
