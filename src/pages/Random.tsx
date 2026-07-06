@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { memberData } from '../data'
 import type { TeamEntry } from '../types'
 import { useTeamMatch } from '../hooks/useTeamMatch'
@@ -30,6 +30,15 @@ function Random() {
     resetEntries,
     matchTeams,
   } = useTeamMatch()
+
+  const actionsRef = useRef<HTMLDivElement>(null)
+
+  const handleMatchTeams = () => {
+    matchTeams()
+    setTimeout(() => {
+      actionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
 
   return (
     <div className="home-page random-page protoss-theme">
@@ -128,7 +137,7 @@ function Random() {
             </aside>
 
             <main className="protoss-panel protoss-main">
-              <div className="protoss-actions-row">
+              <div className="protoss-actions-row" ref={actionsRef}>
                 <div>
                   <strong>팀 매칭 설정</strong>
                   <div className="protoss-subtext">기준 점수: 상(30점), 중(25점), 하(20점) | 홀수 인원일 경우 컴퓨터(10점)가 자동 추가됩니다.</div>
@@ -157,7 +166,7 @@ function Random() {
                       {isStarting ? '등록 중...' : '🚀 이 조합으로 ㄱㄱ!'}
                     </button>
                   )}
-                  <button onClick={matchTeams} className="protoss-btn protoss-btn-primary">⚡ 자동 팀 매칭 돌리기!</button>
+                  <button onClick={handleMatchTeams} className="protoss-btn protoss-btn-primary">⚡ 자동 팀 매칭 돌리기!</button>
                 </div>
               </div>
 

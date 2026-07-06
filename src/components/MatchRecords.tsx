@@ -135,10 +135,10 @@ export default function MatchRecords() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {ongoingMatches.map(match => (
-              <div key={match.id} style={{ background: 'rgba(10, 15, 30, 0.8)', border: '1px solid #3b82f6', borderRadius: '12px', padding: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div key={match.id} className="match-card-ongoing">
+                <div className="match-record-header" style={{ marginBottom: '16px' }}>
                   <span style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="match-record-actions">
                     <button onClick={() => handleDeleteMatch(match.id!)} className="protoss-btn" style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '6px 12px', fontSize: '0.9rem' }}>
                       빤스런 (매치 취소)
                     </button>
@@ -154,11 +154,11 @@ export default function MatchRecords() {
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreA}</div>
 
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, -1)} className="protoss-btn" style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }}>
-                        -1
+                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, -1)} className="score-btn loss">
+                        1패
                       </button>
-                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, 1)} className="protoss-btn" style={{ flex: 3, background: '#3b82f6', color: '#fff', fontSize: '1rem' }}>
-                        +1
+                      <button onClick={() => handleScoreUpdate(match.id!, true, match.scoreA, match.scoreB, 1)} className="score-btn win team-a">
+                        1승
                       </button>
                     </div>
 
@@ -169,18 +169,20 @@ export default function MatchRecords() {
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4b5563' }}>VS</div>
+                  <div className="match-vs-divider">
+                    <span className="match-vs-text">VS</span>
+                  </div>
 
                   <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                     <h3 style={{ color: '#34d399', margin: '0 0 12px 0' }}>B팀</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreB}</div>
 
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, -1)} className="protoss-btn" style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }}>
-                        -1
+                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, -1)} className="score-btn loss">
+                        1패
                       </button>
-                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, 1)} className="protoss-btn" style={{ flex: 3, background: '#10b981', color: '#fff', fontSize: '1rem' }}>
-                        +1
+                      <button onClick={() => handleScoreUpdate(match.id!, false, match.scoreA, match.scoreB, 1)} className="score-btn win team-b">
+                        1승
                       </button>
                     </div>
 
@@ -206,23 +208,23 @@ export default function MatchRecords() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {completedMatches.map(match => (
-              <div key={match.id} style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', padding: '16px', position: 'relative' }}>
-                <div style={{ position: 'absolute', top: '12px', right: '16px', display: 'flex', gap: '8px' }}>
-                  <button
-                    onClick={() => handleEditCompletedMatch(match)}
-                    style={{ background: 'transparent', border: '1px solid #3b82f6', color: '#60a5fa', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
-                  >
-                    ✏️ 조작(?)하기
-                  </button>
-                  <button
-                    onClick={() => handleDeleteCompletedMatch(match)}
-                    style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
-                  >
-                    🗑️ 역사에서 지우기
-                  </button>
-                </div>
-                <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', paddingRight: '100px' }}>
-                  {new Date(match.createdAt).toLocaleDateString()}
+              <div key={match.id} className="match-card-completed">
+                <div className="match-record-header" style={{ marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+                  <span style={{ fontSize: '0.8rem', color: '#9ca3af' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
+                  <div className="match-record-actions">
+                    <button
+                      onClick={() => handleEditCompletedMatch(match)}
+                      style={{ background: 'transparent', border: '1px solid #3b82f6', color: '#60a5fa', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
+                    >
+                      ✏️ 조작(?)하기
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCompletedMatch(match)}
+                      style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
+                    >
+                      🗑️ 역사에서 지우기
+                    </button>
+                  </div>
                 </div>
                 <div className="match-record-flex">
                   <div style={{ flex: 1, textAlign: 'center' }}>
@@ -234,7 +236,9 @@ export default function MatchRecords() {
                       ))}
                     </div>
                   </div>
-                  <div style={{ padding: '0 16px', color: '#6b7280', fontSize: '1.2rem', fontWeight: 'bold' }}>VS</div>
+                  <div className="match-vs-divider">
+                    <span className="match-vs-text">VS</span>
+                  </div>
                   <div style={{ flex: 1, textAlign: 'center' }}>
                     <div style={{ color: '#34d399', fontWeight: 'bold', marginBottom: '8px' }}>B팀</div>
                     <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>{match.scoreB}</div>
