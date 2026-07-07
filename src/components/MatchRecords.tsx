@@ -120,7 +120,7 @@ export default function MatchRecords() {
   return (
     <div className="match-records-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px', color: '#fff' }}>
       <section>
-        <h2 style={{ color: '#00ffff', borderBottom: '1px solid rgba(0, 255, 255, 0.2)', paddingBottom: '8px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between' }}>
+        <h2 className="match-section-title">
           <span>🔥 진행 중 매치</span>
           <button onClick={loadData} className="protoss-btn protoss-btn-ghost" style={{ fontSize: '0.8rem', padding: '4px 12px' }}>🔄 새로고침</button>
         </h2>
@@ -143,13 +143,13 @@ export default function MatchRecords() {
                 </div>
 
                 <div className="match-record-grid">
-                  <div style={{ background: 'rgba(59, 130, 246, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
-                    <h3 style={{ color: '#60a5fa', margin: '0 0 12px 0' }}>A팀</h3>
-                    <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreA}</div>
+                  <div className="team-score-card team-a">
+                    <h3 className="team-score-title">A팀</h3>
+                    <div className="team-score-value">{match.scoreA}</div>
 
-                    <div style={{ fontSize: '0.85rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div className="team-member-list">
                       {match.teamA.map(member => (
-                        <div key={member}>{formatMember(member)}</div>
+                        <div key={member} className="team-member-item">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
@@ -158,13 +158,13 @@ export default function MatchRecords() {
                     <span className="match-vs-text">VS</span>
                   </div>
 
-                  <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                    <h3 style={{ color: '#34d399', margin: '0 0 12px 0' }}>B팀</h3>
-                    <div style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '16px' }}>{match.scoreB}</div>
+                  <div className="team-score-card team-b">
+                    <h3 className="team-score-title">B팀</h3>
+                    <div className="team-score-value">{match.scoreB}</div>
 
-                    <div style={{ fontSize: '0.85rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div className="team-member-list">
                       {match.teamB.map(member => (
-                        <div key={member}>{formatMember(member)}</div>
+                        <div key={member} className="team-member-item">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
@@ -172,7 +172,7 @@ export default function MatchRecords() {
                   {/* 5-Set Toggle UI */}
                   <div className="set-toggles-container" style={{ gridColumn: '1 / -1', marginTop: '16px' }}>
                     <h4 style={{ color: '#a6cbd8', marginBottom: '12px', fontSize: '0.9rem', textAlign: 'center' }}>BO5 세트 스코어 기록</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '400px', margin: '0 auto' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', width: '100%', margin: '0 auto' }}>
                       {[0, 1, 2, 3, 4].map(idx => {
                         const result = (match.setResults || [null, null, null, null, null])[idx]
                         return (
@@ -211,8 +211,8 @@ export default function MatchRecords() {
       </section>
 
       <section>
-        <h2 style={{ color: '#a6cbd8', borderBottom: '1px solid rgba(166, 203, 216, 0.2)', paddingBottom: '8px', marginBottom: '16px' }}>
-          ✅ 종료된 매치
+        <h2 className="match-section-title" style={{ color: '#a6cbd8', textShadow: 'none' }}>
+          <span>✅ 종료된 매치</span>
         </h2>
         {completedMatches.length === 0 ? (
           <div className="protoss-empty-state" style={{ padding: '32px' }}>아직 끝난 매치가 없어요. 언능 한 겜 치시죠!</div>
@@ -239,11 +239,11 @@ export default function MatchRecords() {
                 </div>
                 <div className="match-record-flex">
                   <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div style={{ color: '#60a5fa', fontWeight: 'bold', marginBottom: '8px' }}>A팀</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>{match.scoreA}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <div className="team-score-title" style={{ color: '#60a5fa', textShadow: 'none' }}>A팀</div>
+                    <div className="team-score-value" style={{ fontSize: '2.5rem', background: 'none', filter: 'none', WebkitTextFillColor: 'currentColor' }}>{match.scoreA}</div>
+                    <div className="team-member-list">
                       {match.teamA.map(member => (
-                        <div key={member}>{formatMember(member)}</div>
+                        <div key={member} className="team-member-item">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
@@ -251,11 +251,11 @@ export default function MatchRecords() {
                     <span className="match-vs-text">VS</span>
                   </div>
                   <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div style={{ color: '#34d399', fontWeight: 'bold', marginBottom: '8px' }}>B팀</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>{match.scoreB}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#9ca3af', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <div className="team-score-title" style={{ color: '#34d399', textShadow: 'none' }}>B팀</div>
+                    <div className="team-score-value" style={{ fontSize: '2.5rem', background: 'none', filter: 'none', WebkitTextFillColor: 'currentColor' }}>{match.scoreB}</div>
+                    <div className="team-member-list">
                       {match.teamB.map(member => (
-                        <div key={member}>{formatMember(member)}</div>
+                        <div key={member} className="team-member-item">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
@@ -267,8 +267,8 @@ export default function MatchRecords() {
       </section>
 
       <section style={{ marginTop: '16px' }}>
-        <h2 style={{ color: '#ffea00', borderBottom: '1px solid rgba(255, 234, 0, 0.2)', paddingBottom: '8px', marginBottom: '16px' }}>
-          🏆 명예의 전당 (최다승 랭킹)
+        <h2 className="match-section-title" style={{ color: '#ffea00', textShadow: '0 0 10px rgba(255, 234, 0, 0.4)', borderBottomColor: 'rgba(255, 234, 0, 0.2)' }}>
+          <span>🏆 명예의 전당 (최다승 랭킹)</span>
         </h2>
         {Object.keys(memberStats).length === 0 ? (
           <div className="protoss-empty-state">아직 등록된 전적이 없습니다. 첫 게임을 시작하세요!</div>
@@ -292,25 +292,23 @@ export default function MatchRecords() {
                 const totalGames = member.wins + member.losses
                 const winRate = totalGames > 0 ? Math.round((member.wins / totalGames) * 100) : 0
                 return (
-                  <div key={member.nickname} style={{ 
-                    display: 'flex', alignItems: 'center', background: 'rgba(4, 10, 30, 0.6)', 
-                    padding: '16px 20px', borderRadius: '16px', border: '1px solid rgba(255, 215, 0, 0.15)',
-                    boxShadow: 'inset 0 0 10px rgba(255, 215, 0, 0.05)'
-                  }}>
-                    <div style={{ 
-                      width: '44px', fontSize: '1.4rem', fontWeight: '900', fontStyle: 'italic',
+                  <div key={member.nickname} className="hall-of-fame-card">
+                    <div className="hof-rank" style={{ 
                       color: idx === 0 ? '#ffea00' : idx === 1 ? '#e2e8f0' : idx === 2 ? '#b45309' : '#64748b',
                       textShadow: idx === 0 ? '0 0 10px rgba(255,234,0,0.5)' : 'none'
                     }}>
-                      {idx + 1}
+                      {idx === 0 ? <span className="hof-medal">🥇</span> : 
+                       idx === 1 ? <span className="hof-medal">🥈</span> : 
+                       idx === 2 ? <span className="hof-medal">🥉</span> : 
+                       idx + 1}
                     </div>
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div className="hof-info" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <span style={{ fontSize: '1.15rem', fontWeight: 'bold', color: '#e5efff' }}>
                         {member.nickname}
                       </span>
                       {idx === 0 && <span style={{ fontSize: '0.8rem', padding: '2px 6px', background: 'rgba(255,215,0,0.2)', color: '#ffea00', borderRadius: '4px', border: '1px solid rgba(255,215,0,0.4)' }}>👑 1위</span>}
                     </div>
-                    <div style={{ textAlign: 'right' }}>
+                    <div className="hof-stats" style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: '1.1rem', color: '#34d399', fontWeight: 'bold' }}>{member.wins}승 <span style={{ color: '#ef4444' }}>{member.losses}패</span></div>
                       <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>승률 {winRate}% ({totalGames}전)</div>
                     </div>
