@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import * as THREE from 'three'
 
 
@@ -19,7 +19,9 @@ function AnimatedScene() {
     cuePos: new THREE.Vector3(0, 0, -5),
     cueRot: new THREE.Vector3(-Math.PI / 2, 0, 0),
     cueOpacity: 0,
-    ballScale: new THREE.Vector3(1, 1, 1)
+    ballScale: new THREE.Vector3(1, 1, 1),
+    spinTarget: null as number | null,
+    spinStart: null as number | null
   })
   const dummy = useMemo(() => new THREE.Object3D(), [])
 
@@ -46,7 +48,7 @@ function AnimatedScene() {
     return tex
   }, [])
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     const s = stateRef.current
     s.timer += delta
 
@@ -121,7 +123,7 @@ function AnimatedScene() {
       // quintic ease-out: 처음에 아주 빠르게, 끝에서 아주 서서히 멈춤
       const eased = 1 - Math.pow(1 - progress, 5);
 
-      s.ballRot.x = s.spinStart + (s.spinTarget - s.spinStart) * eased;
+      s.ballRot.x = s.spinStart! + (s.spinTarget! - s.spinStart!) * eased;
       s.ballRot.y = THREE.MathUtils.lerp(s.ballRot.y, 0, progress);
       s.ballRot.z = THREE.MathUtils.lerp(s.ballRot.z, 0, progress);
 
