@@ -12,16 +12,13 @@ function Home() {
         <div className="home-blob blob-3"></div>
       </div>
 
-      <section className="home-hero">
+      <div className="home-content-wrapper">
         <ThreeLogo />
-        <header className="home-header">
-          <div className="home-badge">
-            <span className="home-badge-dot"></span>
-            <span>9shot Members Portal</span>
-          </div>
-          <h1>
-            오늘도 꿀잼! <span className="highlight-gradient">9샷</span>
-          </h1>
+        <section className="home-hero">
+          <header className="home-header">
+            <h1>
+              오늘도 꿀잼! <span className="highlight-green">9샷</span>
+            </h1>
           <p>
             9샷 전용 아지트! 😎<br />
             실시간 당구 랭킹부터 스타 팀 매칭, 물론 칼같은 N분의1 정산도!! 한방에 즐기자구~ 🚀
@@ -93,9 +90,9 @@ function Home() {
               <span className="arrow-icon">→</span>
             </Link>
           </article>
-
         </div>
       </section>
+      </div>
     </div>
   )
 }
