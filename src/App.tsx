@@ -43,7 +43,7 @@ function App() {
       {showHomeLink && (
         <Link className="page-home-link" to="/">
           <span className="page-home-link-icon">⌂</span>
-          <span>첫 화면</span>
+          <span>9샷 홈</span>
         </Link>
       )}
     </>

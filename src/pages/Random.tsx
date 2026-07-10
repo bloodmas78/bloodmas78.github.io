@@ -3,7 +3,6 @@ import { memberData } from '../data'
 import { guestMembers } from '../data/guestMembers'
 import type { TeamEntry } from '../types'
 import { useTeamMatch } from '../hooks/useTeamMatch'
-import heroImage from '../assets/protoss_crystal.png'
 import { createMatch, fetchMemberStats, type MemberStat } from '../utils/firebaseUtils'
 import MatchRecords from '../components/MatchRecords'
 
@@ -24,7 +23,6 @@ function Random() {
     count,
     result,
     isMatching,
-    winRates,
     toggleMember: togglePrefill,
     setMemberScore,
     removeEntry,
@@ -149,72 +147,156 @@ function Random() {
     <div className="home-page random-page">
       <div className="cc-layout cc-cyber-grid">
         {/* ═══ SIDEBAR (Desktop) ═══ */}
-        {renderSidebar('desktop-sidebar')}
+        {activeTab === 'match' && renderSidebar('desktop-sidebar')}
 
         {/* ═══ MAIN CONTENT ═══ */}
         <main className="cc-main">
           {/* Universal Hero with Tabs */}
-          <section className="cc-glass cc-brackets cc-hero">
+          <section className="cc-hero cc-glass cc-brackets animate-tactical-master">
+            {/* Background Images */}
+            <div className="cc-hero-bg-wrapper">
+              <img src="/images/random-hero-bg.jpg" className="cc-hero-bg-base" alt="Command Center" />
+              <img src="/images/random-hero-bg.jpg" className="cc-hero-bg-glitch" alt="" />
+            </div>
+
             <div className="cc-scanline" />
-            <span className="bracket-bl" />
-            <span className="bracket-br" />
+            <span className="corner-bracket bracket-tl" />
+            <span className="corner-bracket bracket-tr" />
+            <span className="corner-bracket bracket-bl" />
+            <span className="corner-bracket bracket-br" />
             <div className="cc-hero-content">
-              <div className="cc-hero-badge">
-                <span className="cc-hero-badge-dot" />
-                <span className="cc-hero-badge-text">COMMAND CENTER ONLINE</span>
+              {activeTab === 'match' && (
+                <div className="cc-hero-actions animate-tactical-master delay-300">
+                  {/* Ancient Rune: Match Button */}
+                <div className="cc-rune-btn-wrapper" onClick={handleMatchTeams}>
+                  <button className="cc-rune-match-btn">
+                    <svg className="cc-rune-match-rings" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" fill="none" r="48" stroke="url(#fireGradient)" strokeDasharray="1, 4" strokeWidth="0.5"></circle>
+                      <circle cx="50" cy="50" fill="none" r="42" stroke="url(#fireGradient)" strokeDasharray="10, 5" strokeWidth="1"></circle>
+                      <defs>
+                        <linearGradient id="fireGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+                          <stop offset="0%" style={{ stopColor: '#ff4500', stopOpacity: 1 }}></stop>
+                          <stop offset="100%" style={{ stopColor: '#ff8c00', stopOpacity: 1 }}></stop>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <svg className="cc-rune-match-core" viewBox="0 0 100 100">
+                      <polygon fill="rgba(255, 69, 0, 0.1)" points="50,5 95,25 95,75 50,95 5,75 5,25" stroke="#ff4500" strokeWidth="2"></polygon>
+                      <polygon fill="none" points="50,15 80,30 80,70 50,85 20,70 20,30" stroke="#ff8c00" strokeWidth="1.5"></polygon>
+                      <path className="cc-rune-match-rings" d="M50 20 A30 30 0 1 1 49.9 20" fill="none" stroke="#ffd700" strokeDasharray="2 2" strokeWidth="1" style={{ animationDirection: 'reverse' }}></path>
+                    </svg>
+                    <svg className="cc-rune-match-icon" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"></path>
+                      <circle cx="12" cy="12" fill="rgba(255,255,255,0.4)" r="3"></circle>
+                    </svg>
+                  </button>
+                  <span className="cc-rune-match-text">팀 배치 시작</span>
+                </div>
+
+                {/* Silver Rune: Reset Button */}
+                <div className="cc-rune-btn-wrapper" onClick={resetEntries}>
+                  <button className="cc-rune-reset-btn">
+                    <div className="cc-rune-reset-bg">
+                      <div className="cc-rune-reset-texture"></div>
+                      <div className="cc-rune-reset-cracks">
+                        <svg viewBox="0 0 100 100">
+                          <path d="M20 50 L40 50 M60 50 L80 50 M50 20 L50 40 M50 60 L50 80" fill="none" stroke="#00bfff" strokeWidth="0.5"></path>
+                          <circle cx="50" cy="50" fill="none" r="45" stroke="#00bfff" strokeDasharray="2 2" strokeWidth="0.2"></circle>
+                        </svg>
+                      </div>
+                    </div>
+                    <svg className="cc-rune-reset-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                      <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round"></path>
+                      <circle className="animate-pulse" cx="12" cy="12" fill="currentColor" r="2"></circle>
+                    </svg>
+                  </button>
+                  <span className="cc-rune-reset-text">팀 초기화</span>
+                </div>
               </div>
-              <h2 className="cc-hero-title">
-                STARCRAFT <em>전술 지휘소</em>
-              </h2>
-              <p className="cc-hero-desc" style={{ marginBottom: '24px' }}>
-                알파고 뺨치는 밸런스로 A팀/B팀을 찢어드립니다! 🔥
-              </p>
-              
-              <nav className="cc-nav" style={{ justifyContent: 'flex-start' }}>
+              )}
+            </div>
+
+            {/* Bottom Docked Tabs */}
+            <div className="cc-hero-tabs-container animate-tactical-master delay-400">
+              <nav className="cc-nav">
                 <button
                   onClick={() => setActiveTab('match')}
                   className={`cc-nav-link ${activeTab === 'match' ? 'active' : ''}`}
                 >
-                  TEAM MATCHING
+                  팀 매칭
                 </button>
                 <button
                   onClick={() => setActiveTab('records')}
                   className={`cc-nav-link ${activeTab === 'records' ? 'active' : ''}`}
                 >
-                  HISTORY
+                  전적 보기
                 </button>
               </nav>
-            </div>
-            <div className="cc-hero-image">
-              <img src={heroImage} alt="Protoss energy crystal" />
+              <div className="cc-hero-tabs-line" />
             </div>
           </section>
 
           {/* ═══ SIDEBAR (Mobile) ═══ */}
-          {renderSidebar('mobile-sidebar')}
+          {activeTab === 'match' && renderSidebar('mobile-sidebar')}
 
           {/* Tab Content */}
           {activeTab === 'match' ? (
             <>
 
-            {/* Settings + Power Ratio */}
-            <section className="cc-glass cc-settings-panel" ref={actionsRef}>
-              <div className="cc-settings-inner">
-                <div className="cc-settings-left">
-                  <h3 className="cc-section-label">
-                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>settings_input_component</span>
-                    팀 매칭 설정
-                  </h3>
-                  <p className="cc-settings-desc">
-                    기준 점수: <b>플래(30점), 골드(25점), 실버(20점)</b> | 홀수 인원일 경우 <b>컴퓨터(10점)</b>가 자동 추가됩니다.
-                  </p>
-                  <div className="cc-btn-row">
-                    <button onClick={handleMatchTeams} className="cc-btn cc-btn-primary">
-                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>bolt</span>
-                      자동 팀 매칭 돌리기!
-                    </button>
-                    <button onClick={resetEntries} className="cc-btn cc-btn-ghost">선택 초기화</button>
-                    {result && (
+              {/* Match Result */}
+              <section>
+                {isMatching ? (
+                  <div className="cc-warping">
+                    <div className="cc-warping-spinner" />
+                    <p className="cc-warping-text">[ 뇌 풀가동 밸런스 계산 중... 삐리빅 🤖 ]</p>
+                    <p className="cc-warping-sub">누가 누가 한 팀이 될까? 두구두구두구...</p>
+                  </div>
+                ) : result ? (
+                  <div className="cc-glass cc-match-active">
+                    <div className="cc-teams-vs">
+                      <div className="cc-team-block">
+                        <h4 className="cc-team-label team-a">A팀</h4>
+                        <div className="cc-team-score">{0}</div>
+                        <div className="cc-team-members">
+                          {result.a
+                            .slice()
+                            .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
+                            .map((p: TeamEntry, i: number) => (
+                              <div key={i} className="cc-team-member">
+                                {p.name}
+                                {p.name !== '컴퓨터' && memberStats[p.name] && (
+                                  <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
+                                    ({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      <div className="cc-vs-circle">VS</div>
+
+                      <div className="cc-team-block">
+                        <h4 className="cc-team-label team-b">B팀</h4>
+                        <div className="cc-team-score">{0}</div>
+                        <div className="cc-team-members">
+                          {result.b
+                            .slice()
+                            .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
+                            .map((p: TeamEntry, i: number) => (
+                              <div key={i} className="cc-team-member">
+                                {p.name}
+                                {p.name !== '컴퓨터' && memberStats[p.name] && (
+                                  <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
+                                    ({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                       <button
                         disabled={isStarting}
                         onClick={async () => {
@@ -231,100 +313,20 @@ function Random() {
                           setIsStarting(false)
                         }}
                         className="cc-btn cc-btn-success"
+                        style={{ fontSize: '16px', padding: '12px 32px' }}
                       >
                         {isStarting ? '등록 중...' : '🚀 이 조합으로 ㄱㄱ!'}
                       </button>
-                    )}
+                    </div>
                   </div>
-                </div>
-
-                {/* Power Ratio */}
-                {result && winRates && (
-                  <div className="cc-settings-right">
-                    <div className="cc-power-header">
-                      <span className="cc-power-label">A팀 전력 {winRates.a}%</span>
-                      <span className="cc-power-title">팀 전력 분석 (Power Ratio)</span>
-                      <span className="cc-power-label-b">B팀 전력 {winRates.b}%</span>
-                    </div>
-                    <div className="cc-power-bar">
-                      <div className="cc-power-a" style={{ width: `${winRates.a}%` }} />
-                      <div className="cc-power-b" style={{ width: `${winRates.b}%` }} />
-                    </div>
-                    <div className="cc-power-stats">
-                      <div>
-                        <p className="cc-power-stat-label">총점: {result.sumA}</p>
-                        <p className="cc-power-stat-value team-a">평균: {(result.sumA / result.a.length).toFixed(1)}</p>
-                      </div>
-                      <div className="cc-power-divider" />
-                      <div>
-                        <p className="cc-power-stat-label">총점: {result.sumB}</p>
-                        <p className="cc-power-stat-value team-b">평균: {(result.sumB / result.b.length).toFixed(1)}</p>
-                      </div>
-                    </div>
+                ) : (
+                  <div className="cc-empty" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                    <span>같이할 멤버들을 픽한 다음 '팀 배치 시작'을 꾹 눌러주세요! 🎮</span>
+                    <span style={{ fontSize: '12px', opacity: 0.7 }}>기준 점수: 플래(30점), 골드(25점), 실버(20점) | 홀수 인원일 경우 컴퓨터(10점)가 자동 추가됩니다</span>
                   </div>
                 )}
-              </div>
-            </section>
-
-            {/* Match Result */}
-            <section>
-              {isMatching ? (
-                <div className="cc-warping">
-                  <div className="cc-warping-spinner" />
-                  <p className="cc-warping-text">[ 뇌 풀가동 밸런스 계산 중... 삐리빅 🤖 ]</p>
-                  <p className="cc-warping-sub">누가 누가 한 팀이 될까? 두구두구두구...</p>
-                </div>
-              ) : result ? (
-                <div className="cc-glass cc-match-active">
-                  <div className="cc-teams-vs">
-                    <div className="cc-team-block">
-                      <h4 className="cc-team-label team-a">A팀</h4>
-                      <div className="cc-team-score">{0}</div>
-                      <div className="cc-team-members">
-                        {result.a
-                          .slice()
-                          .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
-                          .map((p: TeamEntry, i: number) => (
-                            <div key={i} className="cc-team-member">
-                              {p.name}
-                              {p.name !== '컴퓨터' && memberStats[p.name] && (
-                                <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
-                                  ({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-
-                    <div className="cc-vs-circle">VS</div>
-
-                    <div className="cc-team-block">
-                      <h4 className="cc-team-label team-b">B팀</h4>
-                      <div className="cc-team-score">{0}</div>
-                      <div className="cc-team-members">
-                        {result.b
-                          .slice()
-                          .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
-                          .map((p: TeamEntry, i: number) => (
-                            <div key={i} className="cc-team-member">
-                              {p.name}
-                              {p.name !== '컴퓨터' && memberStats[p.name] && (
-                                <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
-                                  ({memberStats[p.name].wins}승 {memberStats[p.name].losses}패)
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="cc-empty">같이할 멤버들을 픽한 다음 '자동 팀 매칭 돌리기'를 꾹 눌러주세요! 🎮</div>
-              )}
-            </section>
-          </>
+              </section>
+            </>
           ) : (
             <div style={{ marginTop: '32px' }}>
               <MatchRecords />

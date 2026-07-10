@@ -9,6 +9,8 @@ export default function MatchRecords() {
   const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
   const [loading, setLoading] = useState(true)
   const [selectedCompletedMatchId, setSelectedCompletedMatchId] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   const loadData = async () => {
     setLoading(true)
@@ -112,13 +114,19 @@ export default function MatchRecords() {
       .map((member) => [member.nickname, member]),
   )
 
+  const totalPages = Math.ceil(completedMatches.length / itemsPerPage)
+  const paginatedCompletedMatches = completedMatches.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
   if (loading) {
     return <div className="cc-empty">매치 기록을 불러오는 중...</div>
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-
+    <div className="cc-records-layout">
+      <div className="cc-records-left">
       {/* ═══ 진행 중 매치 ═══ */}
       <section>
         <div className="cc-section-title">
@@ -128,9 +136,9 @@ export default function MatchRecords() {
         </div>
 
         {ongoingMatches.length === 0 ? (
-          <div className="cc-empty">지금은 평화롭네요. 다들 큐대 안 잡고 뭐하시나? 🤔</div>
+          <div className="cc-empty">지금은 평화롭네요. 다들 마우스 안 잡고 뭐하시나? 🤔</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="cc-matches-grid">
             {ongoingMatches.map(match => (
               <div key={match.id} className="cc-glass cc-match-active">
                 <div className="cc-match-header">
@@ -279,12 +287,13 @@ export default function MatchRecords() {
         </div>
 
         {completedMatches.length === 0 ? (
-          <div className="cc-empty">아직 끝난 매치가 없어요. 언능 한 겜 치시죠!</div>
+          <div className="cc-empty">아직 끝난 매치가 없어요. 언능 한 겜 GOGO!</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {completedMatches.map(match => (
-              <div 
-                key={match.id} 
+          <>
+            <div className="cc-matches-grid">
+              {paginatedCompletedMatches.map(match => (
+              <div
+                key={match.id}
                 className="cc-glass cc-match-completed"
                 onClick={() => setSelectedCompletedMatchId(prev => prev === match.id ? null : match.id!)}
                 style={{ cursor: 'pointer' }}
@@ -387,10 +396,32 @@ export default function MatchRecords() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+            {totalPages > 1 && (
+              <div className="cc-pagination">
+                <button
+                  className="cc-pagination-btn"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  이전
+                </button>
+                <span className="cc-pagination-info">{currentPage} / {totalPages}</span>
+                <button
+                  className="cc-pagination-btn"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  다음
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
+      </div>
 
+      <div className="cc-records-right">
       {/* ═══ 명예의 전당 ═══ */}
       <section>
         <div className="cc-section-title">
@@ -402,38 +433,49 @@ export default function MatchRecords() {
           <div className="cc-empty">아직 등록된 전적이 없습니다. 첫 게임을 시작하세요!</div>
         ) : (
           <div className="cc-glass cc-hof-list">
-            {Object.values(memberStats)
-              .filter(m => m.nickname !== '컴퓨터')
-              .sort((a, b) => {
-                const totalA = a.wins + a.losses
-                const winRateA = totalA > 0 ? a.wins / totalA : 0
-                const totalB = b.wins + b.losses
-                const winRateB = totalB > 0 ? b.wins / totalB : 0
+            {(() => {
+              const sortedMembers = Object.values(memberStats)
+                .filter(m => m.nickname !== '컴퓨터')
+                .sort((a, b) => {
+                  const totalA = a.wins + a.losses
+                  const winRateA = totalA > 0 ? a.wins / totalA : 0
+                  const totalB = b.wins + b.losses
+                  const winRateB = totalB > 0 ? b.wins / totalB : 0
 
-                if (winRateB !== winRateA) {
-                  return winRateB - winRateA
+                  if (winRateB !== winRateA) {
+                    return winRateB - winRateA
+                  }
+                  if (b.wins !== a.wins) {
+                    return b.wins - a.wins
+                  }
+                  return a.losses - b.losses
+                });
+
+              let currentRank = 1;
+
+              return sortedMembers.map((member, idx, arr) => {
+                if (idx > 0) {
+                  const prev = arr[idx - 1];
+                  if (member.wins !== prev.wins || member.losses !== prev.losses) {
+                    currentRank = idx + 1;
+                  }
                 }
-                // 승률이 같으면 다승 순으로 정렬
-                return b.wins - a.wins
-              })
-              .map((member, idx) => {
+
                 const totalGames = member.wins + member.losses
                 const winRate = totalGames > 0 ? Math.round((member.wins / totalGames) * 100) : 0
+
                 return (
-                  <div key={member.nickname} className={`cc-hof-item rank-${idx + 1}`}>
+                  <div key={member.nickname} className={`cc-hof-item rank-${currentRank}`}>
                     <div className="cc-hof-left">
                       <div className="cc-hof-rank">
-                        {idx === 0 ? (
+                        {currentRank === 1 ? (
                           <>
                             <span className="material-symbols-outlined cc-hof-rank-icon">workspace_premium</span>
                             <span className="cc-hof-rank-label">1위</span>
                           </>
                         ) : (
-                          <span className="cc-hof-rank-num">{idx + 1}</span>
+                          <span className="cc-hof-rank-num">{currentRank}</span>
                         )}
-                      </div>
-                      <div className="cc-hof-avatar">
-                        {member.nickname.charAt(0)}
                       </div>
                       <div className="cc-hof-info">
                         <h4 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -460,8 +502,6 @@ export default function MatchRecords() {
                             </span>
                           )}
                         </h4>
-                        {idx === 0 && <span>GRANDMASTER COMMANDER</span>}
-                        {idx > 0 && <span>승률 {winRate}% ({totalGames}전)</span>}
                       </div>
                     </div>
                     <div className="cc-hof-right">
@@ -473,10 +513,12 @@ export default function MatchRecords() {
                     </div>
                   </div>
                 )
-              })}
+              })
+            })()}
           </div>
         )}
       </section>
+      </div>
     </div>
   )
 }
