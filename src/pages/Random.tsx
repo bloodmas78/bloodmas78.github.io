@@ -88,7 +88,9 @@ function Random() {
         <div className="cc-entries-section">
           <div className="cc-entries-header">
             <span className="cc-entries-label">출전 명단 ({count}명)</span>
-            <button onClick={resetEntries} className="cc-entries-clear">모두 삭제</button>
+            {count > 0 && (
+              <button onClick={resetEntries} className="cc-entries-clear">모두 삭제</button>
+            )}
           </div>
           <div className="cc-entry-list">
             {entries.map((e, idx) => (
