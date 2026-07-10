@@ -11,6 +11,7 @@ function App() {
   const showHomeLink = location.pathname !== '/'
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     switch (location.pathname) {
       case '/':
         document.title = '9샷 놀이터'
