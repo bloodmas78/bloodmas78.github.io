@@ -120,9 +120,10 @@
   height: auto;
   z-index: -1;
   pointer-events: none;
-  mix-blend-mode: multiply;
   filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
   animation: floatPlayer 8s ease-in-out infinite;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
 }
 
 @keyframes floatPlayer {
