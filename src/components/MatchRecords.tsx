@@ -6,6 +6,7 @@ export default function MatchRecords() {
   const [completedMatches, setCompletedMatches] = useState<MatchRecord[]>([])
   const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
   const [loading, setLoading] = useState(true)
+  const [selectedCompletedMatchId, setSelectedCompletedMatchId] = useState<string | null>(null)
 
   const loadData = async () => {
     setLoading(true)
@@ -114,95 +115,99 @@ export default function MatchRecords() {
   }
 
   if (loading) {
-    return <div className="protoss-empty-state">매치 기록을 불러오는 중...</div>
+    return <div className="cc-empty">매치 기록을 불러오는 중...</div>
   }
 
   return (
-    <div className="match-records-container" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px', color: '#fff' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+
+      {/* ═══ 진행 중 매치 ═══ */}
       <section>
-        <h2 className="match-section-title">
-          <span>🔥 진행 중 매치</span>
-          <button onClick={loadData} className="protoss-btn protoss-btn-ghost" style={{ fontSize: '0.8rem', padding: '4px 12px' }}>🔄 새로고침</button>
-        </h2>
+        <div className="cc-section-title">
+          <span style={{ color: '#f97316' }}>🔥</span>
+          <span>진행 중 매치</span>
+          <button onClick={loadData} className="cc-refresh-btn" style={{ marginLeft: 'auto' }}>🔄 새로고침</button>
+        </div>
+
         {ongoingMatches.length === 0 ? (
-          <div className="protoss-empty-state" style={{ padding: '32px' }}>지금은 평화롭네요. 다들 큐대 안 잡고 뭐하시나? 🤔</div>
+          <div className="cc-empty">지금은 평화롭네요. 다들 큐대 안 잡고 뭐하시나? 🤔</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {ongoingMatches.map(match => (
-              <div key={match.id} className="match-card-ongoing">
-                <div className="match-record-header" style={{ marginBottom: '16px' }}>
-                  <span style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
-                  <div className="match-record-actions">
-                    <button onClick={() => handleDeleteMatch(match.id!)} className="score-btn loss" style={{ flex: 'none', padding: '6px 16px', fontSize: '0.9rem' }}>
+              <div key={match.id} className="cc-glass cc-match-active">
+                <div className="cc-match-header">
+                  <span className="cc-match-date">{new Date(match.createdAt).toLocaleDateString()}</span>
+                  <div className="cc-match-actions">
+                    <button
+                      onClick={() => handleDeleteMatch(match.id!)}
+                      className="cc-match-action-btn cc-btn-danger"
+                    >
                       빤스런 (매치 취소)
                     </button>
-                    <button onClick={() => handleCompleteMatch(match)} className="score-btn win team-a" style={{ flex: 'none', padding: '6px 16px', fontSize: '0.9rem' }}>
-                      🛑 GG 치고 전적 확정
+                    <button
+                      onClick={() => handleCompleteMatch(match)}
+                      className="cc-match-action-btn cc-btn-cyan"
+                    >
+                      GG 치고 전적 확정
                     </button>
                   </div>
                 </div>
 
-                <div className="match-record-grid">
-                  <div className="team-score-card team-a">
-                    <h3 className="team-score-title">A팀</h3>
-                    <div className="team-score-value">{match.scoreA}</div>
-
-                    <div className="team-member-list">
+                <div className="cc-teams-vs">
+                  <div className="cc-team-block">
+                    <h4 className="cc-team-label team-a">A팀</h4>
+                    <div className="cc-team-score">{match.scoreA}</div>
+                    <div className="cc-team-members">
                       {match.teamA.map(member => (
-                        <div key={member} className="team-member-item">{formatMember(member)}</div>
+                        <div key={member} className="cc-team-member">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="match-vs-divider">
-                    <span className="match-vs-text">VS</span>
-                  </div>
+                  <div className="cc-vs-circle">VS</div>
 
-                  <div className="team-score-card team-b">
-                    <h3 className="team-score-title">B팀</h3>
-                    <div className="team-score-value">{match.scoreB}</div>
-
-                    <div className="team-member-list">
+                  <div className="cc-team-block">
+                    <h4 className="cc-team-label team-b">B팀</h4>
+                    <div className="cc-team-score">{match.scoreB}</div>
+                    <div className="cc-team-members">
                       {match.teamB.map(member => (
-                        <div key={member} className="team-member-item">{formatMember(member)}</div>
+                        <div key={member} className="cc-team-member">{formatMember(member)}</div>
                       ))}
                     </div>
                   </div>
+                </div>
 
-                  {/* 5-Set Toggle UI */}
-                  <div className="set-toggles-container" style={{ gridColumn: '1 / -1', marginTop: '16px' }}>
-                    <h4 style={{ color: '#a6cbd8', marginBottom: '12px', fontSize: '0.9rem', textAlign: 'center' }}>BO5 세트 스코어 기록</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px', width: '100%', margin: '0 auto' }}>
-                      {[0, 1, 2, 3, 4].map(idx => {
-                        const result = (match.setResults || [null, null, null, null, null])[idx]
-                        return (
-                          <div key={idx} className="set-toggle-row">
-                            <span className="set-label">SET {idx + 1}</span>
-                            <div className="set-toggle-group">
-                              <button 
-                                className={`set-toggle-btn ${result === 'A' ? 'active-a' : ''}`}
-                                onClick={() => handleSetResult(match, idx, 'A')}
-                              >
-                                A 승
-                              </button>
-                              <button 
-                                className={`set-toggle-btn ${result === null ? 'active-none' : ''}`}
-                                onClick={() => handleSetResult(match, idx, null)}
-                              >
-                                -
-                              </button>
-                              <button 
-                                className={`set-toggle-btn ${result === 'B' ? 'active-b' : ''}`}
-                                onClick={() => handleSetResult(match, idx, 'B')}
-                              >
-                                B 승
-                              </button>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
+                {/* BO5 Set Scores */}
+                <div className="cc-bo5">
+                  <p className="cc-bo5-title">BO5 세트 스코어 기록</p>
+                  {[0, 1, 2, 3, 4].map(idx => {
+                    const setResult = (match.setResults || [null, null, null, null, null])[idx]
+                    return (
+                      <div key={idx} className="cc-bo5-row">
+                        <span className="cc-bo5-label">SET {idx + 1}</span>
+                        <div className="cc-bo5-btns">
+                          <button
+                            className={`cc-bo5-btn ${setResult === 'A' ? 'active-a' : ''}`}
+                            onClick={() => handleSetResult(match, idx, 'A')}
+                          >
+                            A 승
+                          </button>
+                          <button
+                            className={`cc-bo5-btn ${setResult === null ? 'active-none' : ''}`}
+                            onClick={() => handleSetResult(match, idx, null)}
+                          >
+                            -
+                          </button>
+                          <button
+                            className={`cc-bo5-btn ${setResult === 'B' ? 'active-b' : ''}`}
+                            onClick={() => handleSetResult(match, idx, 'B')}
+                          >
+                            B 승
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             ))}
@@ -210,54 +215,58 @@ export default function MatchRecords() {
         )}
       </section>
 
+      {/* ═══ 종료된 매치 ═══ */}
       <section>
-        <h2 className="match-section-title" style={{ color: '#a6cbd8', textShadow: 'none' }}>
-          <span>✅ 종료된 매치</span>
-        </h2>
+        <div className="cc-section-title">
+          <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#4ade80' }}>check_circle</span>
+          <span>종료된 매치</span>
+        </div>
+
         {completedMatches.length === 0 ? (
-          <div className="protoss-empty-state" style={{ padding: '32px' }}>아직 끝난 매치가 없어요. 언능 한 겜 치시죠!</div>
+          <div className="cc-empty">아직 끝난 매치가 없어요. 언능 한 겜 치시죠!</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {completedMatches.map(match => (
-              <div key={match.id} className="match-card-completed">
-                <div className="match-record-header" style={{ marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
-                  <span style={{ fontSize: '0.8rem', color: '#9ca3af' }}>{new Date(match.createdAt).toLocaleDateString()}</span>
-                  <div className="match-record-actions">
-                    <button
-                      onClick={() => handleEditCompletedMatch(match)}
-                      style={{ background: 'transparent', border: '1px solid #3b82f6', color: '#60a5fa', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
-                    >
-                      ✏️ 조작(?)하기
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCompletedMatch(match)}
-                      style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
-                    >
-                      🗑️ 역사에서 지우기
-                    </button>
-                  </div>
+              <div 
+                key={match.id} 
+                className="cc-glass cc-match-completed"
+                onClick={() => setSelectedCompletedMatchId(prev => prev === match.id ? null : match.id!)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="cc-match-header" style={{ marginBottom: '12px' }}>
+                  <span className="cc-match-date" style={{ fontStyle: 'italic' }}>
+                    {new Date(match.createdAt).toLocaleDateString()}
+                  </span>
+                  {selectedCompletedMatchId === match.id && (
+                    <div className="cc-match-actions" onClick={e => e.stopPropagation()}>
+                      <button
+                        onClick={() => handleEditCompletedMatch(match)}
+                        className="cc-match-action-btn cc-btn-cyan"
+                      >
+                        조작(?)하기
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCompletedMatch(match)}
+                        className="cc-match-action-btn cc-btn-danger"
+                      >
+                        역사에서 지우기
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <div className="match-record-flex">
-                  <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div className="team-score-title" style={{ color: '#60a5fa', textShadow: 'none' }}>A팀</div>
-                    <div className="team-score-value" style={{ fontSize: '2.5rem', background: 'none', filter: 'none', WebkitTextFillColor: 'currentColor' }}>{match.scoreA}</div>
-                    <div className="team-member-list">
-                      {match.teamA.map(member => (
-                        <div key={member} className="team-member-item">{formatMember(member)}</div>
-                      ))}
-                    </div>
+                <div className="cc-completed-grid">
+                  <div className="cc-completed-team">
+                    <div className="cc-completed-team-label team-a">A팀</div>
+                    <div className="cc-completed-score">{match.scoreA}</div>
+                    <div className="cc-completed-members">{match.teamA.join(', ')}</div>
                   </div>
-                  <div className="match-vs-divider">
-                    <span className="match-vs-text">VS</span>
+                  <div className="cc-completed-vs">
+                    <span className="cc-completed-vs-badge">VS</span>
                   </div>
-                  <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div className="team-score-title" style={{ color: '#34d399', textShadow: 'none' }}>B팀</div>
-                    <div className="team-score-value" style={{ fontSize: '2.5rem', background: 'none', filter: 'none', WebkitTextFillColor: 'currentColor' }}>{match.scoreB}</div>
-                    <div className="team-member-list">
-                      {match.teamB.map(member => (
-                        <div key={member} className="team-member-item">{formatMember(member)}</div>
-                      ))}
-                    </div>
+                  <div className="cc-completed-team">
+                    <div className="cc-completed-team-label team-b">B팀</div>
+                    <div className="cc-completed-score">{match.scoreB}</div>
+                    <div className="cc-completed-members">{match.teamB.join(', ')}</div>
                   </div>
                 </div>
               </div>
@@ -266,14 +275,17 @@ export default function MatchRecords() {
         )}
       </section>
 
-      <section style={{ marginTop: '16px' }}>
-        <h2 className="match-section-title" style={{ color: '#ffea00', textShadow: '0 0 10px rgba(255, 234, 0, 0.4)', borderBottomColor: 'rgba(255, 234, 0, 0.2)' }}>
-          <span>🏆 명예의 전당 (최다승 랭킹)</span>
-        </h2>
+      {/* ═══ 명예의 전당 ═══ */}
+      <section>
+        <div className="cc-section-title">
+          <span style={{ color: '#eab308' }}>🏆</span>
+          <span>명예의 전당 (최다승 랭킹)</span>
+        </div>
+
         {Object.keys(memberStats).length === 0 ? (
-          <div className="protoss-empty-state">아직 등록된 전적이 없습니다. 첫 게임을 시작하세요!</div>
+          <div className="cc-empty">아직 등록된 전적이 없습니다. 첫 게임을 시작하세요!</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="cc-glass cc-hof-list">
             {Object.values(memberStats)
               .filter(m => m.nickname !== '컴퓨터')
               .sort((a, b) => {
@@ -281,7 +293,7 @@ export default function MatchRecords() {
                 const winRateA = totalA > 0 ? a.wins / totalA : 0
                 const totalB = b.wins + b.losses
                 const winRateB = totalB > 0 ? b.wins / totalB : 0
-                
+
                 if (winRateB !== winRateA) {
                   return winRateB - winRateA
                 }
@@ -292,25 +304,33 @@ export default function MatchRecords() {
                 const totalGames = member.wins + member.losses
                 const winRate = totalGames > 0 ? Math.round((member.wins / totalGames) * 100) : 0
                 return (
-                  <div key={member.nickname} className="hall-of-fame-card">
-                    <div className="hof-rank" style={{ 
-                      color: idx === 0 ? '#ffea00' : idx === 1 ? '#e2e8f0' : idx === 2 ? '#b45309' : '#64748b',
-                      textShadow: idx === 0 ? '0 0 10px rgba(255,234,0,0.5)' : 'none'
-                    }}>
-                      {idx === 0 ? <span className="hof-medal">🥇</span> : 
-                       idx === 1 ? <span className="hof-medal">🥈</span> : 
-                       idx === 2 ? <span className="hof-medal">🥉</span> : 
-                       idx + 1}
+                  <div key={member.nickname} className={`cc-hof-item rank-${idx + 1}`}>
+                    <div className="cc-hof-left">
+                      <div className="cc-hof-rank">
+                        {idx === 0 ? (
+                          <>
+                            <span className="material-symbols-outlined cc-hof-rank-icon">workspace_premium</span>
+                            <span className="cc-hof-rank-label">1위</span>
+                          </>
+                        ) : (
+                          <span className="cc-hof-rank-num">{idx + 1}</span>
+                        )}
+                      </div>
+                      <div className="cc-hof-avatar">
+                        {member.nickname.charAt(0)}
+                      </div>
+                      <div className="cc-hof-info">
+                        <h4>{member.nickname}</h4>
+                        {idx === 0 && <span>GRANDMASTER COMMANDER</span>}
+                        {idx > 0 && <span>승률 {winRate}% ({totalGames}전)</span>}
+                      </div>
                     </div>
-                    <div className="hof-info" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ fontSize: '1.15rem', fontWeight: 'bold', color: '#e5efff' }}>
-                        {member.nickname}
-                      </span>
-                      {idx === 0 && <span style={{ fontSize: '0.8rem', padding: '2px 6px', background: 'rgba(255,215,0,0.2)', color: '#ffea00', borderRadius: '4px', border: '1px solid rgba(255,215,0,0.4)' }}>👑 1위</span>}
-                    </div>
-                    <div className="hof-stats" style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '1.1rem', color: '#34d399', fontWeight: 'bold' }}>{member.wins}승 <span style={{ color: '#ef4444' }}>{member.losses}패</span></div>
-                      <div style={{ fontSize: '0.85rem', color: '#9ca3af' }}>승률 {winRate}% ({totalGames}전)</div>
+                    <div className="cc-hof-right">
+                      <div className="cc-hof-record">
+                        <span className="wins">{member.wins}승</span>{' '}
+                        <span className="losses">{member.losses}패</span>
+                      </div>
+                      <div className="cc-hof-winrate">승률 {winRate}% ({totalGames}전)</div>
                     </div>
                   </div>
                 )

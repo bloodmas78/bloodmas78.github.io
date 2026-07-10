@@ -43,7 +43,7 @@ function Settlement() {
       <section className="settlement-hero settlement-top-card">
         <h1>💸 모임비 정산기 (1/N 컷)</h1>
         <p>
-          오늘 어디서 얼마 썼나요? 참석자만 콕콕 찝어주면 1원 단위까지 칼같이 쪼개드림! 😎
+          오늘 어디서 얼마 썼나요? 참석자만 콕콕 찝어주면 칼같이 쪼개드림! 😎
         </p>
       </section>
 

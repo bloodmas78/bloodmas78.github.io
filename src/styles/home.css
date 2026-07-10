@@ -192,6 +192,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  white-space: nowrap;
 }
 
 .home-hero p {
@@ -275,7 +276,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 64px 28px 32px; /* Top padding increased to prevent overlap with absolute badge */
+  padding: 64px 28px 32px;
+  /* Top padding increased to prevent overlap with absolute badge */
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(16px);
@@ -301,15 +303,18 @@
 }
 
 .ranking-card .card-badge {
-  background: #8b5cf6; /* 보라색 (디자인 일치) */
+  background: #8b5cf6;
+  /* 보라색 (디자인 일치) */
 }
 
 .settlement-card .card-badge {
-  background: #f97316; /* 주황색 */
+  background: #f97316;
+  /* 주황색 */
 }
 
 .matching-card .card-badge {
-  background: #3b82f6; /* 파란색 */
+  background: #3b82f6;
+  /* 파란색 */
 }
 
 .card-icon-wrapper {
@@ -442,7 +447,8 @@
 
   .home-hero {
     padding: 24px 20px;
-    padding-top: 70px; /* 공 겹침 간격 유지 */
+    padding-top: 70px;
+    /* 공 겹침 간격 유지 */
   }
 
   /* 3D 캔버스 모바일 최적화 (높이 및 마진 축소) */

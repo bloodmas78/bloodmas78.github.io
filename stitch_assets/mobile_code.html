@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>COMMAND CENTER - Tactical Mobile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#705d00",
+                        "on-surface-variant": "#d0c6ab",
+                        "on-surface": "#dde2f8",
+                        "surface-container-high": "#242a3a",
+                        "on-secondary-container": "#007070",
+                        "surface-dim": "#0d1322",
+                        "on-tertiary-container": "#7316ff",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#00dddd",
+                        "surface-tint": "#e9c400",
+                        "surface-container-highest": "#2f3445",
+                        "on-primary-container": "#705e00",
+                        "on-tertiary": "#3c0090",
+                        "on-secondary": "#003737",
+                        "primary": "#fff6df",
+                        "inverse-surface": "#dde2f8",
+                        "background": "#0d1322",
+                        "primary-fixed-dim": "#e9c400",
+                        "on-primary-fixed-variant": "#544600",
+                        "on-background": "#dde2f8",
+                        "tertiary-fixed": "#e9ddff",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffe16d",
+                        "on-secondary-fixed": "#002020",
+                        "on-tertiary-fixed": "#23005b",
+                        "surface-variant": "#2f3445",
+                        "surface-container-lowest": "#080e1d",
+                        "secondary-fixed": "#00fbfb",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "on-tertiary-fixed-variant": "#5700c9",
+                        "outline": "#999077",
+                        "surface-container-low": "#151b2b",
+                        "primary-container": "#ffd700",
+                        "tertiary-fixed-dim": "#d1bcff",
+                        "surface-bright": "#33394a",
+                        "interface-surface": "rgba(30, 41, 59, 0.6)",
+                        "plasma-blue": "#00FFFF",
+                        "surface": "#0d1322",
+                        "tertiary": "#fbf4ff",
+                        "inverse-on-surface": "#2a3040",
+                        "secondary": "#ffffff",
+                        "on-primary": "#3a3000",
+                        "hazard-stripe": "#FFD700",
+                        "surface-container": "#191f2f",
+                        "secondary-container": "#00fbfb",
+                        "void-purple": "#7000FF",
+                        "on-error": "#690005",
+                        "tertiary-container": "#e2d3ff",
+                        "outline-variant": "#4d4732",
+                        "laser-border": "rgba(255, 255, 255, 0.15)",
+                        "on-primary-fixed": "#221b00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "data-numeral": ["JetBrains Mono"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-xl": ["Space Grotesk"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "body-md": ["Outfit"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "data-numeral": ["18px", {"lineHeight": "1", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(13, 19, 34, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .laser-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFFF, transparent);
+            animation: scan 3s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(-20px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100px); opacity: 0; }
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .warp-effect {
+            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.15) 0%, transparent 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col pb-24 overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-interface-surface backdrop-blur-md flex justify-between items-center px-4 py-4 border-b border-laser-border">
+<div class="flex flex-col">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tighter text-primary-container drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">COMMAND CENTER</span>
+<span class="font-label-caps text-[10px] tracking-widest text-plasma-blue opacity-80 uppercase">Tactical Mobile Interface</span>
+</div>
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-plasma-blue transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full border border-plasma-blue/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a futuristic Terran Commander wearing a sleek tactical visor and glowing blue cybernetic armor. The character has a determined expression, with reflections of data streams in the visor. The lighting is cinematic, featuring deep space shadows and vibrant cyan highlights, matching a high-tech sci-fi military aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYDtDjN5K05_eXATFT_2tZjFuuNNwsjYhfLrufZ1HH6pvYSfzsoJKYzkm92E5t80RwsneI97AqdkLbtehoSMwEY9PVpxLWx9VtzGUc5APCz9yab7GS2lP8NFJWNw6HoK5uIJSisTOm4k5lBuX7L8rGvz-m2Wla8MaE3H202vVMpueqtQhq_fMv_rm__G1NLWSPB9SQP89TVPdxYD-i06f0zqKL7cs0zdDjqtFDD4GFUdg6ytatSjUuNg"/>
+</div>
+</div>
+</header>
+<main class="mt-20 px-4 flex flex-col gap-6">
+<!-- Warp Gate Header -->
+<section class="relative glass-panel rounded-xl overflow-hidden p-6 warp-effect border-plasma-blue/20">
+<div class="absolute inset-0 pointer-events-none opacity-20">
+
+</div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-24 h-24 mb-4 relative flex items-center justify-center">
+<img class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]" data-alt="A circular, high-tech Starcraft Warp Gate pulsating with intense golden energy and intricate clockwork mechanisms. The core of the gate is a swirling vortex of blue and yellow plasma, surrounded by sharp, floating metallic pillars. The visual style is highly detailed 3D digital art with a cinematic, glowing effect set against a dark, cosmic background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY-PS338sKEicNPvqdJnU5xV2mGJa6o5tCTWL64C7F9_Y635FODWyCj8g70sgG3XsEXpzLm3QIYErDRVKtsmW_DaI3J1UuK3LEN3y-uMbkMNu7tLXMuDPzsjNCy97FkPT4C4uyySMmil6Azaj9Jh7beQuuhdbKZKmOHP3WFcOsWRVxI98mqFBwfoFEg5VfjmwB2Q-Wy3tgJBlRDpk9xDgRU2cMCUIOnNV1JUvuk5fWHnIZFLdjdggvnQ"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary-container uppercase tracking-widest mb-1">Starcraft 팀 매칭</h1>
+<p class="font-label-caps text-on-surface-variant text-[10px]">알파고 뺨치는 밸런스로 A팀/B팀을 찢어드립니다! 🔥</p>
+</div>
+</section>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary-container text-on-primary font-label-caps py-4 rounded-lg font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform border border-primary-container shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+<span class="material-symbols-outlined text-sm" data-icon="group_add">group_add</span>
+                팀 짜기
+            </button>
+<button class="bg-transparent border border-plasma-blue/50 text-plasma-blue font-label-caps py-4 rounded-lg font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform backdrop-blur-sm">
+<span class="material-symbols-outlined text-sm" data-icon="query_stats">query_stats</span>
+                매치 전적보기
+            </button>
+</div>
+<!-- Current Match Status -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-center px-1">
+<div class="flex items-center gap-2">
+<span class="text-orange-500 animate-pulse">🔥</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface uppercase tracking-tight">진행 중 매치</h2>
+</div>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-plasma-blue transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+<span class="font-label-caps text-[10px]">새로고침</span>
+</button>
+</div>
+<!-- Tactical Match Card -->
+<div class="glass-panel rounded-xl overflow-hidden relative">
+<div class="absolute top-0 left-0 w-full laser-line"></div>
+<div class="p-4 border-b border-laser-border flex justify-between items-center bg-surface-container-low/50">
+<span class="font-data-numeral text-xs text-on-surface-variant">2024. 7. 8.</span>
+<div class="flex gap-2">
+<span class="font-label-caps text-[9px] bg-red-900/40 text-red-400 px-2 py-1 rounded border border-red-800/50">밴스킨 (매치 취소)</span>
+<span class="font-label-caps text-[9px] bg-plasma-blue/20 text-plasma-blue px-2 py-1 rounded border border-plasma-blue/30">GG 최고 전적 확정</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-6 relative">
+<!-- Team A -->
+<div class="flex flex-col items-center text-center gap-2">
+<span class="font-label-caps text-plasma-blue tracking-[0.2em]">A팀</span>
+<div class="font-display-xl text-display-xl text-on-surface glow-text">1</div>
+<div class="w-full space-y-1">
+<div class="bg-surface-variant/40 border border-laser-border p-2 rounded flex justify-between items-center">
+<span class="font-label-caps text-[11px]">9샷레이첼 (2승 0패)</span>
+<span class="material-symbols-outlined text-xs text-green-400" data-icon="check_circle">check_circle</span>
+</div>
+<div class="bg-surface-variant/40 border border-laser-border p-2 rounded flex justify-between items-center">
+<span class="font-label-caps text-[11px]">9샷룬 (2승 0패)</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant" data-icon="circle">circle</span>
+</div>
+</div>
+</div>
+<!-- VS Divider -->
+<div class="flex items-center justify-center relative py-2">
+<div class="h-px bg-laser-border flex-1"></div>
+<div class="mx-4 bg-primary-container text-on-primary font-data-numeral text-xs px-3 py-1 rounded-sm rotate-12 skew-x-[-12deg] shadow-[0_0_10px_rgba(255,215,0,0.4)]">VS</div>
+<div class="h-px bg-laser-border flex-1"></div>
+</div>
+<!-- Team B -->
+<div class="flex flex-col items-center text-center gap-2">
+<span class="font-label-caps text-green-400 tracking-[0.2em]">B팀</span>
+<div class="font-display-xl text-display-xl text-on-surface">1</div>
+<div class="w-full space-y-1">
+<div class="bg-surface-variant/40 border border-laser-border p-2 rounded flex justify-between items-center">
+<span class="font-label-caps text-[11px]">9샷해조박 (0승 3패)</span>
+<span class="material-symbols-outlined text-xs text-red-400" data-icon="cancel">cancel</span>
+</div>
+<div class="bg-surface-variant/40 border border-laser-border p-2 rounded flex justify-between items-center">
+<span class="font-label-caps text-[11px]">컴퓨터 (ELITE)</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant" data-icon="circle">circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- BO5 Score Record -->
+<div class="bg-surface-container-lowest/80 p-4 border-t border-laser-border">
+<h3 class="font-label-caps text-[10px] text-center mb-3 text-on-surface-variant opacity-60">BO5 세트 스코어 기록</h3>
+<div class="space-y-2">
+<div class="flex justify-between items-center bg-surface-container/40 p-2 rounded border border-laser-border/50">
+<span class="font-label-caps text-[10px] opacity-70">SET 1</span>
+<div class="flex gap-2">
+<button class="bg-plasma-blue/20 text-plasma-blue font-label-caps text-[9px] px-2 py-1 rounded border border-plasma-blue/30">A승</button>
+<button class="bg-transparent text-on-surface-variant font-label-caps text-[9px] px-2 py-1 rounded border border-laser-border">-</button>
+<button class="bg-transparent text-on-surface-variant font-label-caps text-[9px] px-2 py-1 rounded border border-laser-border">B승</button>
+</div>
+</div>
+<div class="flex justify-between items-center bg-surface-container/40 p-2 rounded border border-laser-border/50">
+<span class="font-label-caps text-[10px] opacity-70">SET 2</span>
+<div class="flex gap-2">
+<button class="bg-transparent text-on-surface-variant font-label-caps text-[9px] px-2 py-1 rounded border border-laser-border">A승</button>
+<button class="bg-transparent text-on-surface-variant font-label-caps text-[9px] px-2 py-1 rounded border border-laser-border">-</button>
+<button class="bg-green-500/20 text-green-400 font-label-caps text-[9px] px-2 py-1 rounded border border-green-500/30">B승</button>
+</div>
+</div>
+<!-- Additional sets indicator -->
+<div class="text-center">
+<span class="material-symbols-outlined text-on-surface-variant/30 text-sm" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Hall of Fame Ranking -->
+<section class="flex flex-col gap-4 mt-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-primary-container" data-icon="workspace_premium">workspace_premium</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface uppercase tracking-tight">명예의 전당 (최다승 랭킹)</h2>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Rank 1 -->
+<div class="glass-panel p-4 rounded-xl flex items-center justify-between border-primary-container/30 bg-gradient-to-r from-primary-container/5 to-transparent">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 relative flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-3xl" data-icon="emoji_events" data-weight="fill">emoji_events</span>
+<span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-data-numeral text-xs text-on-primary">1</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-lg-mobile text-base text-on-surface">9샷욱고</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">승률 100% (3전)</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-data-numeral text-plasma-blue text-lg">3승 <span class="text-red-400">0패</span></div>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="glass-panel p-4 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center bg-surface-variant/50 rounded-full border border-laser-border">
+<span class="font-data-numeral text-on-surface">2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-lg-mobile text-base text-on-surface">9샷레이첼</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">승률 100% (2전)</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-data-numeral text-plasma-blue text-lg">2승 <span class="text-red-400">0패</span></div>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="glass-panel p-4 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center bg-surface-variant/50 rounded-full border border-laser-border">
+<span class="font-data-numeral text-on-surface">3</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-lg-mobile text-base text-on-surface">9샷룬</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">승률 100% (2전)</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-data-numeral text-plasma-blue text-lg">2승 <span class="text-red-400">0패</span></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-interface-surface backdrop-blur-xl border-t border-laser-border px-6 py-2 flex justify-between items-center md:hidden">
+<div class="flex flex-col items-center gap-1 text-primary-container">
+<span class="material-symbols-outlined" data-icon="grid_view" data-weight="fill">grid_view</span>
+<span class="font-label-caps text-[9px]">DASHBOARD</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-plasma-blue transition-colors">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-caps text-[9px]">BATTLE LOG</span>
+</div>
+<!-- Middle Button Overhang -->
+<div class="relative -top-6">
+<div class="absolute inset-0 bg-primary-container blur-lg opacity-40 rounded-full scale-125"></div>
+<button class="relative w-14 h-14 bg-primary-container text-on-primary rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-plasma-blue transition-colors">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-caps text-[9px]">ARMORY</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-plasma-blue transition-colors">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-caps text-[9px]">NETWORK</span>
+</div>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulated haptic feedback on buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('touchstart', () => {
+                    if (window.navigator.vibrate) window.navigator.vibrate(5);
+                });
+            });
+
+            // Smooth scroll shadow for rankings
+            const rankingList = document.querySelector('.hall-of-fame-list');
+            if (rankingList) {
+                rankingList.addEventListener('scroll', () => {
+                    // Logic to add shadow at top/bottom of scrollable list
+                });
+            }
+        });
+    </script>
+</body></html>

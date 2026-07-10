@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>매니아 당구클럽 9샷 멤버스</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Style & Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#2f3445",
+                "inverse-primary": "#0054d6",
+                "tertiary-fixed": "#d8e3fb",
+                "on-primary-fixed-variant": "#003fa4",
+                "on-error-container": "#ffdad6",
+                "on-tertiary": "#263143",
+                "on-error": "#690005",
+                "on-surface": "#dde2f7",
+                "inverse-on-surface": "#2a3040",
+                "background": "#0d1322",
+                "primary-fixed": "#dae1ff",
+                "outline-variant": "#424656",
+                "surface-dim": "#0d1322",
+                "tertiary-fixed-dim": "#bcc7de",
+                "on-secondary-fixed-variant": "#004f54",
+                "surface-container-lowest": "#080e1d",
+                "surface-container": "#191f2f",
+                "surface-variant": "#2f3445",
+                "surface-container-high": "#242a3a",
+                "primary-fixed-dim": "#b3c5ff",
+                "surface-tint": "#b3c5ff",
+                "on-primary": "#002b75",
+                "tertiary-container": "#677287",
+                "secondary-fixed": "#74f5ff",
+                "surface-bright": "#333949",
+                "on-primary-fixed": "#001849",
+                "error-container": "#93000a",
+                "secondary-container": "#00f1fe",
+                "inverse-surface": "#dde2f7",
+                "secondary-fixed-dim": "#00dbe7",
+                "on-secondary-fixed": "#002022",
+                "on-background": "#dde2f7",
+                "tertiary": "#bcc7de",
+                "primary-container": "#0066ff",
+                "outline": "#8c90a1",
+                "on-primary-container": "#f8f7ff",
+                "on-tertiary-fixed": "#111c2d",
+                "on-tertiary-fixed-variant": "#3c475a",
+                "surface": "#0d1322",
+                "on-surface-variant": "#c2c6d8",
+                "error": "#ffb4ab",
+                "secondary": "#ddfcff",
+                "primary": "#b3c5ff",
+                "surface-container-low": "#151b2b",
+                "on-tertiary-container": "#f6f7ff",
+                "on-secondary": "#00363a",
+                "on-secondary-container": "#006a70"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "8px",
+                "gutter": "24px",
+                "margin-mobile": "20px",
+                "margin-desktop": "64px",
+                "container-max": "1440px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Space Grotesk"],
+                "body-md": ["Space Grotesk"],
+                "body-lg": ["Space Grotesk"],
+                "label-sm": ["Space Grotesk"],
+                "headline-md": ["Space Grotesk"],
+                "headline-lg": ["Space Grotesk"],
+                "headline-lg-mobile": ["Space Grotesk"],
+                "label-md": ["Space Grotesk"]
+            },
+            "fontSize": {
+                "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                "headline-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #080e1d;
+            color: #dde2f7;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Ultra-transparent glassmorphism for info overlays */
+        .glass-panel {
+            background: rgba(13, 19, 34, 0.25);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Slightly more opaque for content contrast */
+        .glass-card {
+            background: rgba(13, 19, 34, 0.45);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- Background Image Layer -->
+<div class="fixed inset-0 z-0">
+<!-- Optimized overlay to show focal point -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent z-10"></div>
+<img alt="Professional Billiard Player" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzXI69lMmtKdS35RoqU7m0mGRU56I-uNgqcYpe8Z8niZKJ6af6KJKmU_1PI4j1RH7qpHV6EkHWoDR5J19EsDPBUM7o4v6DqViaoda9Lp66-M4KbrUw6RjKLmSUMvZCUu5uEixogCGXXrLiC9Zgh-LsMHTabl267K4cQVwY1f1MOO1nkOW6BzSqy7BgQ8cE8b0qyILq1CoFPeOf5ZuMpKv_z7Sk9J_fzmmftYWV9d-zUGjhmfGt_bVkxg"/>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-20 pt-12 px-margin-mobile flex flex-col gap-6">
+<!-- Header Section - Top Branded -->
+<header class="flex flex-col gap-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary drop-shadow-lg">매니아 당구클럽 <span class="text-primary-container">9샷 멤버스</span></h1>
+<p class="font-body-md text-body-md text-on-surface drop-shadow-md">안양 매니아 당구클럽 9샷 멤버들의 빌리존 랭킹 대시보드 🔥</p>
+</header>
+<!-- Stats Grid - Pushed down slightly to reveal portrait silhouette -->
+<section class="stats-grid mt-[35vh]">
+<div class="glass-panel p-4 rounded-xl flex flex-col gap-1 border-l-4 border-secondary-fixed-dim">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">전체 멤버</p>
+<p class="font-headline-sm text-headline-sm text-secondary">8명</p>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col gap-1">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">7월 기록 보유</p>
+<p class="font-headline-sm text-headline-sm text-secondary">0명</p>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col gap-1">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">기록된 총 경기</p>
+<p class="font-headline-sm text-headline-sm text-secondary">0게임</p>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col gap-1">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">최고 승률</p>
+<p class="font-headline-sm text-headline-sm text-secondary">-</p>
+</div>
+</section>
+<!-- Member List -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-end px-1">
+<h2 class="font-headline-md text-headline-md text-on-surface drop-shadow-md">멤버 랭킹</h2>
+<span class="text-on-surface-variant font-label-sm text-[10px] bg-background/40 px-2 py-0.5 rounded-full backdrop-blur-sm">7월 · 기록 0명 / 전체 8명</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Member Card: 9샷레이첼 -->
+<div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container/30 border border-primary/40 flex items-center justify-center text-secondary font-bold backdrop-blur-md">
+                            R
+                        </div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-secondary leading-tight">9샷레이첼</h3>
+<p class="font-label-sm text-on-surface-variant">아직 포럼.. (기록 없음)</p>
+</div>
+</div>
+<div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-3xl">warning</span>
+<p class="font-body-md text-on-surface">7월 공식 기록 없음 😅</p>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">빌리존 랭킹은 10경기 이상 치러야 인정해 줍니다! 7월 기준 10게임 미만이면 랭킹에 안 떠요 ㅠㅠ 분발하세요!</p>
+</div>
+</div>
+<!-- Member Card: 9샷마스웨이 -->
+<div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 border border-secondary/40 flex items-center justify-center text-secondary font-bold backdrop-blur-md">
+                            M
+                        </div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-secondary leading-tight">9샷마스웨이</h3>
+<p class="font-label-sm text-on-surface-variant">아직 포럼.. (기록 없음)</p>
+</div>
+</div>
+<div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-3xl">warning</span>
+<p class="font-body-md text-on-surface">7월 공식 기록 없음 😅</p>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">빌리존 랭킹은 10경기 이상 치러야 인정해 줍니다! 7월 기준 10게임 미만이면 랭킹에 안 떠요 ㅠㅠ 분발하세요!</p>
+</div>
+</div>
+<!-- Member Card: 9샷애호박 -->
+<div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/30 border border-tertiary/40 flex items-center justify-center text-secondary font-bold backdrop-blur-md">
+                            H
+                        </div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-secondary leading-tight">9샷애호박</h3>
+<p class="font-label-sm text-on-surface-variant">아직 포럼.. (기록 없음)</p>
+</div>
+</div>
+<div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-3xl">warning</span>
+<p class="font-body-md text-on-surface">7월 공식 기록 없음 😅</p>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">빌리존 랭킹은 10경기 이상 치러야 인정해 줍니다! 7월 기준 10게임 미만이면 랭킹에 안 떠요 ㅠㅠ 분발하세요!</p>
+</div>
+</div>
+<!-- Member Card: 9샷윽고 -->
+<div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container/30 border border-primary/40 flex items-center justify-center text-secondary font-bold backdrop-blur-md">
+                            U
+                        </div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-secondary leading-tight">9샷윽고</h3>
+<p class="font-label-sm text-on-surface-variant">아직 포럼.. (기록 없음)</p>
+</div>
+</div>
+<div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-3xl">warning</span>
+<p class="font-body-md text-on-surface">7월 공식 기록 없음 😅</p>
+</div>
+</div>
+<!-- Member Card: 9샷캐리 -->
+<div class="glass-card rounded-2xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 border border-secondary/40 flex items-center justify-center text-secondary font-bold backdrop-blur-md">
+                            K
+                        </div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-secondary leading-tight">9샷캐리</h3>
+<p class="font-label-sm text-on-surface-variant">아직 포럼.. (기록 없음)</p>
+</div>
+</div>
+<div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-3xl">warning</span>
+<p class="font-body-md text-on-surface">7월 공식 기록 없음 😅</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Component -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/60 backdrop-blur-2xl px-margin-mobile py-4 flex justify-between items-center shadow-[0_-10px_30px_rgba(0,0,0,0.5)] border-t border-white/5 md:hidden">
+<div class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-[10px] uppercase">홈</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sports_score</span>
+<span class="font-label-sm text-[10px] uppercase">매치</span>
+</div>
+<!-- Center Action Button -->
+<div class="relative -top-6">
+<button class="bg-primary-container text-white w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_25px_#0066ff] active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-label-sm text-[10px] uppercase">랭킹</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-[10px] uppercase">프로필</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for glass panels
+        document.querySelectorAll('.glass-panel, .glass-card').forEach(panel => {
+            panel.addEventListener('touchstart', () => {
+                panel.style.transform = 'scale(0.98)';
+                panel.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            panel.addEventListener('touchend', () => {
+                panel.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric parallax on scroll
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            const bg = document.querySelector('.fixed img');
+            if (bg) {
+                bg.style.transform = `translateY(${scroll * 0.12}px) scale(${1 + scroll * 0.0002})`;
+            }
+        });
+    </script>
+</body></html>
