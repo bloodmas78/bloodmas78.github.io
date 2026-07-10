@@ -40,82 +40,87 @@ function Random() {
     }, 100)
   }
 
+  const renderSidebar = (className: string) => {
+    if (activeTab !== 'match') return null
+    return (
+      <aside className={`cc-sidebar ${className}`}>
+        <h2 className="cc-sidebar-title">
+          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>groups</span>
+          오늘의 참전 용사 선택
+        </h2>
+
+        <div className="cc-member-list">
+          {memberData.map((m) => {
+            const selected = entries.find((e) => e.name === m.nickname)
+            return (
+              <div key={m.nickname} className={`cc-member-item ${selected ? 'active' : ''}`}>
+                <div
+                  className="cc-member-item-left"
+                  onClick={() => togglePrefill(m.nickname)}
+                  style={{ cursor: 'pointer', flex: 1 }}
+                >
+                  <span className="cc-member-dot" style={{ background: m.avatarColor }} />
+                  <span className="cc-member-name">{m.nickname}</span>
+                  {memberStats[m.nickname] && (
+                    <span className="cc-member-stats">
+                      ({memberStats[m.nickname].wins}승 {memberStats[m.nickname].losses}패)
+                    </span>
+                  )}
+                </div>
+                {selected && (
+                  <select
+                    value={selected.score}
+                    onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))}
+                    className={`rank-select ${selected.score === 30 ? 'plat' : selected.score === 25 ? 'gold' : 'silver'}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <option value={30}>💎 플래 (30)</option>
+                    <option value={25}>🥇 골드 (25)</option>
+                    <option value={20}>🥈 실버 (20)</option>
+                  </select>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {/* ── Entry List ── */}
+        <div className="cc-entries-section">
+          <div className="cc-entries-header">
+            <span className="cc-entries-label">출전 명단 ({count}명)</span>
+            <button onClick={resetEntries} className="cc-entries-clear">모두 삭제</button>
+          </div>
+          <div className="cc-entry-list">
+            {entries.map((e, idx) => (
+              <div key={idx} className="cc-entry-row">
+                <span>{e.name}
+                  {e.name !== '컴퓨터' && memberStats[e.name] && (
+                    <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
+                      ({memberStats[e.name].wins}승 {memberStats[e.name].losses}패)
+                    </span>
+                  )}
+                </span>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span className={`rank-badge ${e.score === 30 ? 'plat' : e.score === 25 ? 'gold' : e.score === 20 ? 'silver' : ''}`}>
+                    {e.score === 30 ? '플래' : e.score === 25 ? '골드' : e.score === 20 ? '실버' : '컴퓨터'}
+                  </span>
+                  <button onClick={() => removeEntry(idx)} className="cc-entry-remove">
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <div className="home-page random-page">
       <div className="cc-layout cc-cyber-grid">
-        {/* ═══ SIDEBAR ═══ */}
-        {activeTab === 'match' && (
-          <aside className="cc-sidebar">
-            <h2 className="cc-sidebar-title">
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>groups</span>
-              오늘의 참전 용사 선택
-            </h2>
-
-            <div className="cc-member-list">
-              {memberData.map((m) => {
-                const selected = entries.find((e) => e.name === m.nickname)
-                return (
-                  <div key={m.nickname} className={`cc-member-item ${selected ? 'active' : ''}`}>
-                    <div
-                      className="cc-member-item-left"
-                      onClick={() => togglePrefill(m.nickname)}
-                      style={{ cursor: 'pointer', flex: 1 }}
-                    >
-                      <span className="cc-member-dot" style={{ background: m.avatarColor }} />
-                      <span className="cc-member-name">{m.nickname}</span>
-                      {memberStats[m.nickname] && (
-                        <span className="cc-member-stats">
-                          ({memberStats[m.nickname].wins}승 {memberStats[m.nickname].losses}패)
-                        </span>
-                      )}
-                    </div>
-                    {selected && (
-                      <select
-                        value={selected.score}
-                        onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))}
-                        className={`rank-select ${selected.score === 30 ? 'plat' : selected.score === 25 ? 'gold' : 'silver'}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <option value={30}>💎 플래 (30)</option>
-                        <option value={25}>🥇 골드 (25)</option>
-                        <option value={20}>🥈 실버 (20)</option>
-                      </select>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* ── Entry List ── */}
-            <div className="cc-entries-section">
-              <div className="cc-entries-header">
-                <span className="cc-entries-label">출전 명단 ({count}명)</span>
-                <button onClick={resetEntries} className="cc-entries-clear">모두 삭제</button>
-              </div>
-              <div className="cc-entry-list">
-                {entries.map((e, idx) => (
-                  <div key={idx} className="cc-entry-row">
-                    <span>{e.name}
-                      {e.name !== '컴퓨터' && memberStats[e.name] && (
-                        <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
-                          ({memberStats[e.name].wins}승 {memberStats[e.name].losses}패)
-                        </span>
-                      )}
-                    </span>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      <span className={`rank-badge ${e.score === 30 ? 'plat' : e.score === 25 ? 'gold' : e.score === 20 ? 'silver' : ''}`}>
-                        {e.score === 30 ? '플래' : e.score === 25 ? '골드' : e.score === 20 ? '실버' : '컴퓨터'}
-                      </span>
-                      <button onClick={() => removeEntry(idx)} className="cc-entry-remove">
-                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </aside>
-        )}
+        {/* ═══ SIDEBAR (Desktop) ═══ */}
+        {renderSidebar('desktop-sidebar')}
 
         {/* ═══ MAIN CONTENT ═══ */}
         <main className="cc-main">
@@ -155,6 +160,9 @@ function Random() {
               <img src={heroImage} alt="Protoss energy crystal" />
             </div>
           </section>
+
+          {/* ═══ SIDEBAR (Mobile) ═══ */}
+          {renderSidebar('mobile-sidebar')}
 
           {/* Tab Content */}
           {activeTab === 'match' ? (

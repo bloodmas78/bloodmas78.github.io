@@ -1329,8 +1329,14 @@
 @media (max-width: 960px) {
   .cc-layout {
     flex-direction: column;
-    padding: 24px;
-    gap: 20px;
+  }
+
+  .desktop-sidebar {
+    display: none;
+  }
+
+  .mobile-sidebar {
+    display: flex;
   }
 
   .cc-sidebar {
@@ -1338,12 +1344,11 @@
     border-right: none;
     border-bottom: 1px solid var(--cc-laser-border);
     max-height: none;
-    padding: 0;
-    order: -1;
+    padding: 20px;
   }
 
   .cc-main {
-    display: contents;
+    padding: 24px;
   }
 
   .cc-settings-inner {
@@ -1371,7 +1376,6 @@
     text-align: center;
     padding: 24px;
     min-height: auto;
-    order: -2;
   }
 
   .cc-hero-content {
@@ -1405,13 +1409,13 @@
     font-size: 10px;
   }
 
-  .cc-layout {
+  .cc-sidebar {
     padding: 16px;
-    gap: 16px;
   }
 
-  .cc-sidebar {
-    padding: 0;
+  .cc-main {
+    padding: 16px;
+    gap: 16px;
   }
 
   .cc-hero {
