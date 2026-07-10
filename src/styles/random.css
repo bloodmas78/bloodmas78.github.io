@@ -160,6 +160,10 @@
   overflow-y: auto;
 }
 
+.mobile-sidebar {
+  display: none !important;
+}
+
 .cc-main {
   flex: 1;
   padding: 40px;
@@ -1332,11 +1336,11 @@
   }
 
   .desktop-sidebar {
-    display: none;
+    display: none !important;
   }
 
   .mobile-sidebar {
-    display: flex;
+    display: flex !important;
   }
 
   .cc-sidebar {
