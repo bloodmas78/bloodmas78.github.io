@@ -14,8 +14,8 @@ function Home() {
 
       <div className="home-content-wrapper">
         <ThreeLogo />
+        <img src="/images/dldmrrh.png" alt="9shot Player" className="home-hero-player" />
         <section className="home-hero">
-          <img src="/images/dldmrrh.png" alt="9shot Player" className="home-hero-player" />
           <header className="home-header">
             <h1>
               오늘도 꿀잼! <span className="highlight-green">9샷</span>
