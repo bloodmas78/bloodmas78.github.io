@@ -114,7 +114,7 @@
 /* Home Hero Player Image */
 .home-hero-player {
   position: absolute;
-  top: 50px;
+  bottom: -30px;
   right: -50px;
   width: 450px;
   height: auto;
