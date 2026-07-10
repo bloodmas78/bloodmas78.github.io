@@ -204,9 +204,12 @@ function AnimatedScene() {
   )
 }
 
+import heroPlayerImage from '../assets/hero_player.png'
+
 export default function ThreeLogo() {
   return (
     <div className="three-logo-container">
+      <img src={heroPlayerImage} alt="9shot Player" className="home-hero-player" />
       {/* 카메라를 더 아래로 내려서 공이 화면 위쪽에 보이게 함 */}
       <Canvas shadows camera={{ position: [0, 0, 2.8], fov: 45 }}>
         <ambientLight intensity={0.8} />
