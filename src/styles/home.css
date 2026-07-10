@@ -61,6 +61,7 @@
   animation: float 18s ease-in-out infinite 2s;
 }
 
+
 @keyframes floatBlob {
   0% {
     transform: translate(0, 0) scale(1);
@@ -109,17 +110,22 @@
   flex-direction: column;
   width: min(800px, 100%);
   margin-top: 50px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Home Hero Player Image */
 .home-hero-player {
   position: absolute;
-  right: -50px;
-  top: -300px;
+  right: 0;
+  top: -80px;
   width: 450px;
   height: auto;
   z-index: -1;
   pointer-events: none;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15)) contrast(1.05) saturate(1.1);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
 }
 
 /* Home Hero Container */
