@@ -43,6 +43,7 @@ export type Period = 'monthly' | 'allTime'
 export interface TeamEntry {
   name: string
   score: number
+  winRate?: number
 }
 
 /** 팀 매칭 결과 */

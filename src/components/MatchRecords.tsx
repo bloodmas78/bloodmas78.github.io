@@ -46,10 +46,6 @@ export default function MatchRecords() {
   }
 
   const handleCompleteMatch = async (match: MatchRecord) => {
-    if (match.scoreA === match.scoreB) {
-      alert('승부가 나지 않은 동점(무승부) 상태로는 전적을 등록할 수 없습니다.')
-      return
-    }
     const success = await completeMatch(match.id!, match.scoreA, match.scoreB, match.teamA, match.teamB)
     if (success) {
       alert('매치가 종료되어 개인 전적에 승패가 반영되었습니다!')

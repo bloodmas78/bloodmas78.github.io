@@ -80,7 +80,30 @@ export function findBestMatch(entries: TeamEntry[]): MatchResult {
     }
   }
 
-  const pick = bestPairs[Math.floor(Math.random() * bestPairs.length)]
+  let finalPairs = bestPairs
+  if (bestPairs.length > 1) {
+    let minWinRateDiff = Infinity
+    let balancedPairs: MatchResult[] = []
+
+    for (const pair of bestPairs) {
+      const winRateSumA = pair.a.reduce((sum, p) => sum + (p.winRate || 0), 0)
+      const winRateSumB = pair.b.reduce((sum, p) => sum + (p.winRate || 0), 0)
+      const winRateDiff = Math.abs(winRateSumA - winRateSumB)
+
+      if (winRateDiff < minWinRateDiff) {
+        minWinRateDiff = winRateDiff
+        balancedPairs = [pair]
+      } else if (winRateDiff === minWinRateDiff) {
+        balancedPairs.push(pair)
+      }
+    }
+
+    if (balancedPairs.length > 0) {
+      finalPairs = balancedPairs
+    }
+  }
+
+  const pick = finalPairs[Math.floor(Math.random() * finalPairs.length)]
   return {
     a: shuffleArray(pick.a),
     b: shuffleArray(pick.b),

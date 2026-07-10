@@ -10,6 +10,8 @@ function Random() {
   const [activeTab, setActiveTab] = useState<'match' | 'records'>('match')
   const [isStarting, setIsStarting] = useState(false)
   const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
+  const [draggedMember, setDraggedMember] = useState<string | null>(null)
+  const [dragOverTeam, setDragOverTeam] = useState<'a' | 'b' | null>(null)
 
   useEffect(() => {
     fetchMemberStats().then(stats => {
@@ -23,11 +25,13 @@ function Random() {
     count,
     result,
     isMatching,
+    winRates,
     toggleMember: togglePrefill,
     setMemberScore,
     removeEntry,
     resetEntries,
     matchTeams,
+    moveMember,
   } = useTeamMatch()
 
   const actionsRef = useRef<HTMLDivElement>(null)
@@ -58,7 +62,13 @@ function Random() {
               <div key={m.nickname} className={`cc-member-item ${selected ? 'active' : ''}`}>
                 <div
                   className="cc-member-item-left"
-                  onClick={() => togglePrefill(m.nickname)}
+                  onClick={() => {
+                    const stats = memberStats[m.nickname]
+                    const winRate = stats && (stats.wins + stats.losses) > 0
+                      ? Math.round((stats.wins / (stats.wins + stats.losses)) * 100)
+                      : 0
+                    togglePrefill(m.nickname, winRate)
+                  }}
                   style={{ cursor: 'pointer', flex: 1 }}
                 >
                   <span className="cc-member-dot" style={{ background: m.avatarColor }} />
@@ -254,15 +264,55 @@ function Random() {
                 ) : result ? (
                   <div className="cc-glass cc-match-active">
                     <div className="cc-teams-vs">
-                      <div className="cc-team-block">
+                      <div 
+                        className={`cc-team-block ${dragOverTeam === 'a' ? 'drag-over' : ''}`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          if (dragOverTeam !== 'a') setDragOverTeam('a');
+                        }}
+                        onDragLeave={() => {
+                          if (dragOverTeam === 'a') setDragOverTeam(null);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setDragOverTeam(null);
+                          setDraggedMember(null);
+                          const name = e.dataTransfer.getData('text/plain');
+                          if (name) moveMember(name, 'a');
+                        }}
+                      >
                         <h4 className="cc-team-label team-a">A팀</h4>
-                        <div className="cc-team-score">{0}</div>
+                        <div className="cc-team-score" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '12px', color: 'var(--cc-on-surface-variant)', fontWeight: 'normal', fontFamily: 'Noto Sans KR' }}>실력점수</span>
+                            <span>{result.sumA}</span>
+                          </div>
+                          {winRates && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '20px', color: '#4ade80' }}>
+                              <span style={{ fontSize: '12px', color: 'var(--cc-on-surface-variant)', fontWeight: 'normal', fontFamily: 'Noto Sans KR' }}>승리확률</span>
+                              <span>{winRates.a}%</span>
+                            </div>
+                          )}
+                        </div>
                         <div className="cc-team-members">
                           {result.a
                             .slice()
                             .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
                             .map((p: TeamEntry, i: number) => (
-                              <div key={i} className="cc-team-member">
+                              <div 
+                                key={i} 
+                                className={`cc-team-member ${draggedMember === p.name ? 'dragging' : ''}`}
+                                draggable={true}
+                                onDragStart={(e) => {
+                                  e.dataTransfer.setData('text/plain', p.name);
+                                  setDraggedMember(p.name);
+                                }}
+                                onDragEnd={() => {
+                                  setDraggedMember(null);
+                                  setDragOverTeam(null);
+                                }}
+                                style={{ cursor: draggedMember === p.name ? 'grabbing' : 'grab' }}
+                              >
                                 {p.name}
                                 {p.name !== '컴퓨터' && memberStats[p.name] && (
                                   <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
@@ -276,15 +326,55 @@ function Random() {
 
                       <div className="cc-vs-circle">VS</div>
 
-                      <div className="cc-team-block">
+                      <div 
+                        className={`cc-team-block ${dragOverTeam === 'b' ? 'drag-over' : ''}`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          if (dragOverTeam !== 'b') setDragOverTeam('b');
+                        }}
+                        onDragLeave={() => {
+                          if (dragOverTeam === 'b') setDragOverTeam(null);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setDragOverTeam(null);
+                          setDraggedMember(null);
+                          const name = e.dataTransfer.getData('text/plain');
+                          if (name) moveMember(name, 'b');
+                        }}
+                      >
                         <h4 className="cc-team-label team-b">B팀</h4>
-                        <div className="cc-team-score">{0}</div>
+                        <div className="cc-team-score" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '12px', color: 'var(--cc-on-surface-variant)', fontWeight: 'normal', fontFamily: 'Noto Sans KR' }}>실력점수</span>
+                            <span>{result.sumB}</span>
+                          </div>
+                          {winRates && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '20px', color: '#60a5fa' }}>
+                              <span style={{ fontSize: '12px', color: 'var(--cc-on-surface-variant)', fontWeight: 'normal', fontFamily: 'Noto Sans KR' }}>승리확률</span>
+                              <span>{winRates.b}%</span>
+                            </div>
+                          )}
+                        </div>
                         <div className="cc-team-members">
                           {result.b
                             .slice()
                             .sort((x: TeamEntry, y: TeamEntry) => (x.name === '컴퓨터' ? 1 : y.name === '컴퓨터' ? -1 : 0))
                             .map((p: TeamEntry, i: number) => (
-                              <div key={i} className="cc-team-member">
+                              <div 
+                                key={i} 
+                                className={`cc-team-member ${draggedMember === p.name ? 'dragging' : ''}`}
+                                draggable={true}
+                                onDragStart={(e) => {
+                                  e.dataTransfer.setData('text/plain', p.name);
+                                  setDraggedMember(p.name);
+                                }}
+                                onDragEnd={() => {
+                                  setDraggedMember(null);
+                                  setDragOverTeam(null);
+                                }}
+                                style={{ cursor: draggedMember === p.name ? 'grabbing' : 'grab' }}
+                              >
                                 {p.name}
                                 {p.name !== '컴퓨터' && memberStats[p.name] && (
                                   <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>

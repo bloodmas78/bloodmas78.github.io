@@ -860,7 +860,13 @@
   flex-wrap: wrap;
 }
 
-.cc-member-item:hover,
+@media (hover: hover) {
+  .cc-member-item:hover {
+    border-color: var(--cc-primary-container);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(47, 52, 69, 0.6));
+  }
+}
+
 .cc-member-item.active {
   border-color: var(--cc-primary-container);
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(47, 52, 69, 0.6));
@@ -1042,6 +1048,13 @@
   padding: 24px;
   border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cc-team-block.drag-over {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px dashed var(--cc-plasma-green);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.2) inset;
 }
 
 .cc-section-label {
@@ -1388,6 +1401,18 @@
   border-radius: 2px;
 }
 
+.cc-team-member.dragging {
+  opacity: 0.5;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(0.95);
+  border-color: var(--cc-plasma-blue);
+}
+
+.cc-team-member:hover {
+  border-color: var(--cc-primary-container);
+  color: var(--cc-primary-container);
+}
+
 .cc-vs-circle {
   width: 64px;
   height: 64px;
@@ -1480,7 +1505,7 @@
   font-family: var(--cc-font-headline);
   border-radius: 2px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: transparent;
   color: var(--cc-on-surface-variant);
@@ -1862,7 +1887,7 @@
   color: var(--cc-on-surface-variant);
   border-radius: 2px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cc-refresh-btn:hover {
