@@ -24,6 +24,7 @@ export interface Member {
   avatarColor: string
   monthly: StatDetail | null
   allTime: StatDetail | null
+  grade?: 'guest' | 'member' | 'admin' | null
 }
 
 /** 기록 보유가 확인된 멤버 (stats가 non-null) */

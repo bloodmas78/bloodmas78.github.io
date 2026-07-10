@@ -39,7 +39,9 @@ function Ranking() {
     return () => clearInterval(interval)
   }, [])
 
-  const processedMembers = sortMembers(memberData, sortBy, 'monthly')
+  const rankingMembers = memberData
+
+  const processedMembers = sortMembers(rankingMembers, sortBy, 'monthly')
   const membersWithStats = getStatsCount('monthly')
   const totalGamesCount = getTotalGames('monthly')
 
@@ -93,7 +95,7 @@ function Ranking() {
         <section className="rank-stats-grid animate-slide-up">
           <div className="rank-glass-card rank-stat-item">
             <span className="rank-stat-label">전체 멤버</span>
-            <p className="rank-stat-value">{memberData.length}명</p>
+            <p className="rank-stat-value">{rankingMembers.length}명</p>
             <div className="cue-tracker-bg">
               <div className="cue-tracker-fill" style={{ width: '100%' }}></div>
             </div>
@@ -140,7 +142,7 @@ function Ranking() {
           <div className="rank-list-header">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <h2 className="rank-list-title">멤버 랭킹</h2>
-              <p className="rank-list-subtitle">{periodLabel}·기록 {membersWithStats}명 / 전체 {memberData.length}명</p>
+              <p className="rank-list-subtitle">{periodLabel}·기록 {membersWithStats}명 / 전체 {rankingMembers.length}명</p>
             </div>
             <div className="rank-tabs">
               <button

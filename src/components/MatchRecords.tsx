@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { memberData } from '../data'
+import { guestMembers } from '../data/guestMembers'
 import { fetchMatches, updateMatchSetResult, completeMatch, deleteMatch, deleteCompletedMatch, revertMatchToOngoing, fetchMemberStats, type MatchRecord, type MemberStat } from '../utils/firebaseUtils'
 
 export default function MatchRecords() {
@@ -105,14 +107,10 @@ export default function MatchRecords() {
     }
   }
 
-  const formatMember = (name: string) => {
-    if (name === '컴퓨터') return name
-    const stat = memberStats[name]
-    if (stat) {
-      return `${name} (${stat.wins}승 ${stat.losses}패)`
-    }
-    return `${name} (0승 0패)`
-  }
+  const memberLookup = new Map(
+    [...memberData, ...guestMembers.filter((guest) => !memberData.some((member) => member.nickname === guest.nickname))]
+      .map((member) => [member.nickname, member]),
+  )
 
   if (loading) {
     return <div className="cc-empty">매치 기록을 불러오는 중...</div>
@@ -158,9 +156,38 @@ export default function MatchRecords() {
                     <h4 className="cc-team-label team-a">A팀</h4>
                     <div className="cc-team-score">{match.scoreA}</div>
                     <div className="cc-team-members">
-                      {match.teamA.map(member => (
-                        <div key={member} className="cc-team-member">{formatMember(member)}</div>
-                      ))}
+                      {match.teamA.map(memberName => {
+                        const member = memberLookup.get(memberName)
+                        const stat = memberStats[memberName]
+                        return (
+                          <div key={memberName} className="cc-team-member" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <span>
+                              {memberName === '연결' ? memberName : `${memberName} (${stat?.wins || 0}승 ${stat?.losses || 0}패)`}
+                            </span>
+                            {member?.grade === 'guest' && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  padding: '2px 6px',
+                                  borderRadius: '999px',
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  lineHeight: 1,
+                                  color: '#fef3c7',
+                                  background: 'rgba(251, 191, 36, 0.2)',
+                                  border: '1px solid rgba(251, 191, 36, 0.35)',
+                                  letterSpacing: '0.02em',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                guest
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
 
@@ -170,9 +197,38 @@ export default function MatchRecords() {
                     <h4 className="cc-team-label team-b">B팀</h4>
                     <div className="cc-team-score">{match.scoreB}</div>
                     <div className="cc-team-members">
-                      {match.teamB.map(member => (
-                        <div key={member} className="cc-team-member">{formatMember(member)}</div>
-                      ))}
+                      {match.teamB.map(memberName => {
+                        const member = memberLookup.get(memberName)
+                        const stat = memberStats[memberName]
+                        return (
+                          <div key={memberName} className="cc-team-member" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <span>
+                              {memberName === '연결' ? memberName : `${memberName} (${stat?.wins || 0}승 ${stat?.losses || 0}패)`}
+                            </span>
+                            {member?.grade === 'guest' && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  padding: '2px 6px',
+                                  borderRadius: '999px',
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  lineHeight: 1,
+                                  color: '#fef3c7',
+                                  background: 'rgba(251, 191, 36, 0.2)',
+                                  border: '1px solid rgba(251, 191, 36, 0.35)',
+                                  letterSpacing: '0.02em',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                guest
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
@@ -258,7 +314,37 @@ export default function MatchRecords() {
                   <div className="cc-completed-team">
                     <div className="cc-completed-team-label team-a">A팀</div>
                     <div className="cc-completed-score">{match.scoreA}</div>
-                    <div className="cc-completed-members">{match.teamA.join(', ')}</div>
+                    <div className="cc-completed-members" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      {match.teamA.map(memberName => {
+                        const member = memberLookup.get(memberName)
+                        return (
+                          <div key={memberName} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                            <span>{memberName}</span>
+                            {member?.grade === 'guest' && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  padding: '2px 6px',
+                                  borderRadius: '999px',
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  lineHeight: 1,
+                                  color: '#fef3c7',
+                                  background: 'rgba(251, 191, 36, 0.2)',
+                                  border: '1px solid rgba(251, 191, 36, 0.35)',
+                                  letterSpacing: '0.02em',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                guest
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
                   <div className="cc-completed-vs">
                     <span className="cc-completed-vs-badge">VS</span>
@@ -266,7 +352,37 @@ export default function MatchRecords() {
                   <div className="cc-completed-team">
                     <div className="cc-completed-team-label team-b">B팀</div>
                     <div className="cc-completed-score">{match.scoreB}</div>
-                    <div className="cc-completed-members">{match.teamB.join(', ')}</div>
+                    <div className="cc-completed-members" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      {match.teamB.map(memberName => {
+                        const member = memberLookup.get(memberName)
+                        return (
+                          <div key={memberName} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                            <span>{memberName}</span>
+                            {member?.grade === 'guest' && (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  padding: '2px 6px',
+                                  borderRadius: '999px',
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  lineHeight: 1,
+                                  color: '#fef3c7',
+                                  background: 'rgba(251, 191, 36, 0.2)',
+                                  border: '1px solid rgba(251, 191, 36, 0.35)',
+                                  letterSpacing: '0.02em',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                guest
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -320,7 +436,30 @@ export default function MatchRecords() {
                         {member.nickname.charAt(0)}
                       </div>
                       <div className="cc-hof-info">
-                        <h4>{member.nickname}</h4>
+                        <h4 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          {member.nickname}
+                          {memberLookup.get(member.nickname)?.grade === 'guest' && (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '2px 6px',
+                                borderRadius: '999px',
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                lineHeight: 1,
+                                color: '#fef3c7',
+                                background: 'rgba(251, 191, 36, 0.2)',
+                                border: '1px solid rgba(251, 191, 36, 0.35)',
+                                letterSpacing: '0.02em',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              guest
+                            </span>
+                          )}
+                        </h4>
                         {idx === 0 && <span>GRANDMASTER COMMANDER</span>}
                         {idx > 0 && <span>승률 {winRate}% ({totalGames}전)</span>}
                       </div>

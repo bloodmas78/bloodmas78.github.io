@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { memberData } from '../data'
+import { guestMembers } from '../data/guestMembers'
 import type { TeamEntry } from '../types'
 import { useTeamMatch } from '../hooks/useTeamMatch'
 import heroImage from '../assets/protoss_crystal.png'
@@ -32,6 +33,9 @@ function Random() {
   } = useTeamMatch()
 
   const actionsRef = useRef<HTMLDivElement>(null)
+  const selectableMembers = [...memberData, ...guestMembers.filter(
+    (guest) => !memberData.some((member) => member.nickname === guest.nickname),
+  )]
 
   const handleMatchTeams = () => {
     matchTeams()
@@ -50,7 +54,7 @@ function Random() {
         </h2>
 
         <div className="cc-member-list">
-          {memberData.map((m) => {
+          {selectableMembers.map((m) => {
             const selected = entries.find((e) => e.name === m.nickname)
             return (
               <div key={m.nickname} className={`cc-member-item ${selected ? 'active' : ''}`}>
@@ -60,7 +64,30 @@ function Random() {
                   style={{ cursor: 'pointer', flex: 1 }}
                 >
                   <span className="cc-member-dot" style={{ background: m.avatarColor }} />
-                  <span className="cc-member-name">{m.nickname}</span>
+                  <span className="cc-member-name" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    {m.nickname}
+                    {m.grade === 'guest' && (
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '2px 6px',
+                          borderRadius: '999px',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          lineHeight: 1,
+                          color: '#fef3c7',
+                          background: 'rgba(251, 191, 36, 0.2)',
+                          border: '1px solid rgba(251, 191, 36, 0.35)',
+                          letterSpacing: '0.02em',
+                        }}
+                        title="guest"
+                      >
+                        guest
+                      </span>
+                    )}
+                  </span>
                   {memberStats[m.nickname] && (
                     <span className="cc-member-stats">
                       ({memberStats[m.nickname].wins}승 {memberStats[m.nickname].losses}패)
