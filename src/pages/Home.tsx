@@ -20,6 +20,7 @@ function Home() {
             <h1>
               오늘도 꿀잼! <span className="highlight-green">9샷</span>
             </h1>
+            <img src="/images/dldmrrh.png" alt="9shot Player" className="home-hero-player-mini" />
           <p>
             9샷 전용 아지트! 😎<br />
             실시간 당구 랭킹부터 스타 팀 매칭, 물론 칼같은 N분의1 정산도!! 한방에 즐기자구~ 🚀
