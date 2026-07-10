@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { memberData, monthlyLabel } from '../data'
 import ThreeLogo from '../components/ThreeLogo'
+import heroPlayerImage from '../assets/hero_player.png'
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
       </div>
 
       <div className="home-content-wrapper">
+        <img src={heroPlayerImage} alt="9shot Player" className="home-hero-player" />
         <ThreeLogo />
         <section className="home-hero">
           <header className="home-header">
