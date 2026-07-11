@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { memberData } from '../data'
 import { guestMembers } from '../data/guestMembers'
 import type { TeamEntry } from '../types'
@@ -34,16 +34,28 @@ function Random() {
     moveMember,
   } = useTeamMatch()
 
-  const actionsRef = useRef<HTMLDivElement>(null)
+  const resultRef = useRef<HTMLElement>(null)
+
+  const confirmButtonRef = useCallback((node: HTMLButtonElement | null) => {
+    if (node) {
+      setTimeout(() => {
+        node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
+    }
+  }, [])
   const selectableMembers = [...memberData, ...guestMembers.filter(
     (guest) => !memberData.some((member) => member.nickname === guest.nickname),
   )]
 
   const handleMatchTeams = () => {
-    matchTeams()
-    setTimeout(() => {
-      actionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 100)
+    if (entries.length > 0) {
+      matchTeams()
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    } else {
+      matchTeams()
+    }
   }
 
   const renderSidebar = (className: string) => {
@@ -154,7 +166,7 @@ function Random() {
   }
 
   return (
-    <div className="home-page random-page">
+    <div className="random-page">
       <div className="cc-layout cc-cyber-grid">
         {/* ═══ SIDEBAR (Desktop) ═══ */}
         {activeTab === 'match' && renderSidebar('desktop-sidebar')}
@@ -254,7 +266,7 @@ function Random() {
             <>
 
               {/* Match Result */}
-              <section>
+              <section ref={resultRef} className="cc-result-section">
                 {isMatching ? (
                   <div className="cc-warping">
                     <div className="cc-warping-spinner" />
@@ -388,6 +400,7 @@ function Random() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                       <button
+                        ref={confirmButtonRef}
                         disabled={isStarting}
                         onClick={async () => {
                           setIsStarting(true)
