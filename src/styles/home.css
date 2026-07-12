@@ -115,7 +115,20 @@
 }
 
 /* Home Hero Player Image */
-.home-hero-player-mini { display: none; }
+.home-hero-player-mini,
+.home-hero-player1-mini {
+  display: none;
+}
+
+.home-hero-player1 {
+  position: absolute;
+  left: 0;
+  top: -50px;
+  width: 450px;
+  pointer-events: none;
+  filter: drop-shadow(0 15px 35px rgba(251, 191, 36, 0.4));
+}
+
 .home-hero-player {
   position: absolute;
   right: 0;
@@ -125,30 +138,48 @@
   filter: drop-shadow(0 15px 35px rgba(251, 191, 36, 0.4));
 }
 
-@media (max-width: 960px){
-  .home-hero-player { display: none; }
-  .home-hero-player-mini {
+@media (max-width: 960px) {
+
+  .home-hero-player,
+  .home-hero-player1 {
+    display: none;
+  }
+
+  .home-hero-mini-players {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: clamp(160px, 36vw, 220px);
+    margin: -20px auto 0;
+  }
+
+  .home-hero-player-mini,
+  .home-hero-player1-mini {
     display: block;
-    position: static;
-    width: min(300px, 72vw);
-    height: clamp(240px, 46vw, 300px);
+    position: absolute;
+    bottom: 0;
+    height: clamp(160px, 36vw, 220px);
     object-fit: cover;
     object-position: center top;
-    margin: 16px auto 0;
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 58%,
-      rgba(0, 0, 0, 0.3) 78%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 58%,
-      rgba(0, 0, 0, 0.3) 78%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    -webkit-mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 85%,
+        rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 85%,
+        rgba(0, 0, 0, 0) 100%);
+  }
+
+  .home-hero-player1-mini {
+    left: 0;
+    z-index: 3;
+  }
+
+  .home-hero-player-mini {
+    right: 0;
+    z-index: 2;
   }
 }
 
@@ -174,7 +205,7 @@
 .home-header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto;
+  margin: -20px auto 0 auto;
 }
 
 .home-badge {
@@ -226,6 +257,8 @@
   letter-spacing: -0.04em;
   color: var(--text-primary);
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
 }
 
 .highlight-green {
@@ -575,11 +608,20 @@
     position: static;
   }
 
+  .home-hero-player1 {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 400px;
+    margin: 0;
+    z-index: -1;
+  }
+
   .home-hero-player {
     position: absolute;
-    right: 0;
-    top: -50px;
-    width: 450px;
+    right: 10px;
+    top: -20px;
+    width: 280px;
     margin: 0;
     z-index: -1;
   }
@@ -596,7 +638,8 @@
     width: 100%;
   }
 
-  .home-hero-player {
+  .home-hero-player,
+  .home-hero-player1 {
     width: min(260px, 68vw);
     margin: 12px auto 16px;
   }
