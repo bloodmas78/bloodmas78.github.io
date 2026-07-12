@@ -1,6 +1,6 @@
-/* ─────────────────────────────────────────
+/* ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
    HOME PAGE
-   ───────────────────────────────────────── */
+   ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
 .home-page {
   min-height: 100vh;
   display: flex;
@@ -199,7 +199,6 @@
   padding-top: 95px;
   /* Space for the 3D ball overlapping */
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -297,7 +296,6 @@
   gap: 12px;
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   padding: 12px 20px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -359,7 +357,6 @@
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -382,17 +379,17 @@
 
 .ranking-card .card-badge {
   background: #8b5cf6;
-  /* 보라색 (디자인 일치) */
+  /* 보라??(?�자???�치) */
 }
 
 .settlement-card .card-badge {
   background: #f97316;
-  /* 주황색 */
+  /* 주황??*/
 }
 
 .matching-card .card-badge {
   background: #3b82f6;
-  /* 파란색 */
+  /* ?��???*/
 }
 
 .card-icon-wrapper {
@@ -526,19 +523,19 @@
   .home-hero {
     padding: 24px 20px;
     padding-top: 70px;
-    /* 공 겹침 간격 유지 */
+    /* �?겹침 간격 ?��? */
   }
 
-  /* 3D 캔버스 모바일 최적화 (높이 및 마진 축소) */
+  /* 3D 캔버??모바??최적??(?�이 �?마진 축소) */
   .three-logo-container {
     height: 320px;
     margin: -80px auto -80px;
   }
 }
 
-/* ─────────────────────────────────────────
+/* ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
    SHARED PAGE ACTIONS
-   ───────────────────────────────────────── */
+   ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
 .page-home-link {
   position: fixed;
   right: 20px;

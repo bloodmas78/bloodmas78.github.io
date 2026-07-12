@@ -1,6 +1,5 @@
-/* ═════════════════════════════════════════════════════════
-   RANKING PAGE — ELITE VISUAL EDITION
-   ═════════════════════════════════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═??   RANKING PAGE ??ELITE VISUAL EDITION
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═??*/
 
 .ranking-page {
   --rank-background: #0d1322;
@@ -82,7 +81,6 @@
 .rank-glass-card {
   background: rgba(13, 19, 34, 0.25);
   backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 12px;
@@ -513,3 +511,4 @@
   border-radius: 50%;
   opacity: 0.5;
 }
+

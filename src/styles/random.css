@@ -1,8 +1,7 @@
-/* ═════════════════════════════════════════════════════════
-   COMMAND CENTER — Stitch Design System
-   ═════════════════════════════════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═??   COMMAND CENTER ??Stitch Design System
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═??*/
 
-/* ── Design Tokens ── */
+/* ?�?� Design Tokens ?�?� */
 .random-page {
   --cc-surface: #0d1322;
   --cc-surface-container: #191f2f;
@@ -40,7 +39,7 @@
   --cc-font-data: 'JetBrains Mono', monospace;
 }
 
-/* ── Base Theme ── */
+/* ?�?� Base Theme ?�?� */
 .random-page {
   padding: 0;
   min-height: 100vh;
@@ -62,7 +61,7 @@
   color: inherit;
 }
 
-/* ── Cyber Grid Background ── */
+/* ?�?� Cyber Grid Background ?�?� */
 .cc-cyber-grid {
   background-size: 40px 40px;
   background-image:
@@ -70,13 +69,12 @@
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    TOP HEADER / NAVIGATION
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-header {
   background: var(--cc-interface-surface);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--cc-laser-border);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
   position: fixed;
@@ -171,9 +169,9 @@
   opacity: 0.8;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    LAYOUT: SIDEBAR + MAIN
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-layout {
   display: flex;
   min-height: 100vh;
@@ -188,7 +186,6 @@
   border-right: 1px solid var(--cc-laser-border);
   background: rgba(21, 27, 43, 0.8);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -208,12 +205,11 @@
   gap: 24px;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    GLASS PANEL
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-glass {
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   background: rgba(30, 41, 59, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
@@ -286,9 +282,9 @@
   }
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    HERO SECTION
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-hero {
   position: relative;
   min-height: 400px;
@@ -317,11 +313,11 @@
   object-position: center 20%;
 }
 
-/* 글리치(지직 거리는) 효과 이미지 */
+/* 글리치(지�?거리?? ?�과 ?��?지 */
 .cc-hero-bg-glitch {
   position: absolute;
   inset: -150px;
-  /* 큰 폭의 이동 시 테두리가 잘리지 않도록 여유 공간 확보 */
+  /* ????�� ?�동 ???�두리�? ?�리지 ?�도�??�유 공간 ?�보 */
   width: calc(100% + 300px);
   height: calc(100% + 300px);
   object-fit: cover;
@@ -331,7 +327,7 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0;
-  /* 평소에는 완전히 숨김 */
+  /* ?�소?�는 ?�전???��? */
 }
 
 @keyframes cc-glitch-visual {
@@ -396,7 +392,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  /* 사이버 틱한 격자 무늬(Tactical Grid)와 어두운 비네팅 그라데이션 조합 */
+  /* ?�이�??�한 격자 무늬(Tactical Grid)?� ?�두??비네??그라?�이??조합 */
   background-image:
     linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px),
@@ -558,9 +554,9 @@
   animation-delay: 400ms;
 }
 
-/* ══════════════════════════════
-   HERO ACTIONS — RUNE STYLES
-   ══════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
+   HERO ACTIONS ??RUNE STYLES
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 
 .cc-hero-actions {
   display: flex;
@@ -758,15 +754,15 @@
   height: calc(100% + 10%);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    MOBILE RESPONSIVE
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 768px) {
 
   .cc-hero-bg-base,
   .cc-hero-bg-glitch {
     object-position: top center;
-    /* 얼굴이 잘리지 않도록 완전히 상단 고정 */
+    /* ?�굴???�리지 ?�도�??�전???�단 고정 */
   }
 
   .cc-hero-actions {
@@ -807,9 +803,9 @@
   }
 }
 
-/* ══════════════════════════════
-   SIDEBAR — MEMBER SELECTION
-   ══════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
+   SIDEBAR ??MEMBER SELECTION
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-sidebar-title {
   font-family: var(--cc-font-headline);
   font-size: 18px;
@@ -940,7 +936,7 @@
   background: linear-gradient(180deg, rgba(45, 45, 50, 0.95), rgba(4, 10, 30, 0.95));
 }
 
-/* ── Entry List (선택된 멤버) ── */
+/* ?�?� Entry List (?�택??멤버) ?�?� */
 .cc-entries-section {
   margin-top: auto;
   padding-top: 20px;
@@ -1030,9 +1026,9 @@
   color: var(--cc-error);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    MATCH SETTINGS + POWER RATIO
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-settings-panel {
   padding: 24px;
 }
@@ -1084,7 +1080,7 @@
   color: #fff;
 }
 
-/* ── Buttons ── */
+/* ?�?� Buttons ?�?� */
 .cc-btn-row {
   display: flex;
   flex-wrap: wrap;
@@ -1161,7 +1157,7 @@
   background: rgba(0, 255, 255, 0.3);
 }
 
-/* ── Power Bar ── */
+/* ?�?� Power Bar ?�?� */
 .cc-power-header {
   display: flex;
   justify-content: space-between;
@@ -1245,9 +1241,9 @@
   scroll-margin-top: 80px;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    TEAM MATCH RESULT
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-match-active {
   padding: 12px 16px;
   border-left: 2px solid var(--cc-plasma-blue);
@@ -1464,7 +1460,7 @@
   }
 }
 
-/* ── BO5 Scores ── */
+/* ?�?� BO5 Scores ?�?� */
 .cc-bo5 {
   max-width: 400px;
   margin: 0 auto;
@@ -1540,9 +1536,9 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    COMPLETED MATCHES
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-match-completed {
   padding: 8px 12px;
   background: linear-gradient(90deg, rgba(30, 35, 45, 0.9) 0%, rgba(20, 25, 30, 0.95) 100%);
@@ -1623,9 +1619,9 @@
   transform: skewX(-10deg);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    HALL OF FAME
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-hof-list {
   overflow: hidden;
   display: flex;
@@ -1751,9 +1747,9 @@
   letter-spacing: 0.05em;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    RECORDS LAYOUT
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-records-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -1778,9 +1774,9 @@
   }
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    SECTION TITLES
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-section-title {
   font-family: var(--cc-font-label);
   font-size: 14px;
@@ -1791,9 +1787,9 @@
   margin-bottom: 16px;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    WARPING / LOADING STATE
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-warping {
   display: flex;
   flex-direction: column;
@@ -1843,9 +1839,9 @@
   margin: 0;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    EMPTY STATE
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-empty {
   padding: 30px;
   border: 1px solid rgba(255, 215, 0, 0.16);
@@ -1855,9 +1851,9 @@
   text-align: center;
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    FLOATING ACTION BUTTON
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-fab {
   position: fixed;
   bottom: 24px;
@@ -1882,9 +1878,9 @@
   transform: scale(1.1);
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    REFRESH BUTTON (MATCH RECORDS)
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-refresh-btn {
   font-family: var(--cc-font-headline);
   font-size: 13px;
@@ -1903,9 +1899,9 @@
   color: var(--cc-primary-container);
 }
 
-/* ══════════════════════════════
-   RESPONSIVE — TABLET
-   ══════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
+   RESPONSIVE ??TABLET
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 960px) {
   .cc-layout {
     flex-direction: column;
@@ -1970,9 +1966,9 @@
   }
 }
 
-/* ══════════════════════════════
-   RESPONSIVE — MOBILE
-   ══════════════════════════════ */
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
+   RESPONSIVE ??MOBILE
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 640px) {
   .cc-hero {
     min-height: 360px;
@@ -2100,9 +2096,9 @@
   }
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    EXTRA SMALL MOBILE
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 400px) {
   .cc-header {
     padding: 0 12px;
@@ -2139,10 +2135,10 @@
   }
 }
 
-/* ══════════════════════════════
+/* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
    LEGACY OVERRIDES
    (keep existing classes working)
-   ══════════════════════════════ */
+   ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .protoss-theme {
   background: transparent !important;
 }
@@ -2159,6 +2155,6 @@
 .protoss-visual-title,
 .protoss-visual-desc,
 .protoss-badge {
-  /* Reset legacy styles — these elements are no longer used */
+  /* Reset legacy styles ??these elements are no longer used */
   display: none !important;
 }
