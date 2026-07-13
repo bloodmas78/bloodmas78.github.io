@@ -164,29 +164,34 @@ export default function MatchRecords() {
                         const member = memberLookup.get(memberName)
                         const stat = memberStats[memberName]
                         return (
-                          <div key={memberName} className="cc-team-member" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <span>
-                              {memberName === '연결' ? memberName : `${memberName} (${stat?.wins || 0}승 ${stat?.losses || 0}패)`}
-                            </span>
-                            {member?.grade === 'guest' && (
-                              <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  padding: '2px 6px',
-                                  borderRadius: '999px',
-                                  fontSize: '10px',
-                                  fontWeight: 700,
-                                  lineHeight: 1,
-                                  color: '#fef3c7',
-                                  background: 'rgba(251, 191, 36, 0.2)',
-                                  border: '1px solid rgba(251, 191, 36, 0.35)',
-                                  letterSpacing: '0.02em',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                guest
+                          <div key={memberName} className="cc-team-member" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginBottom: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <span style={{ fontWeight: 600 }}>{memberName}</span>
+                              {member?.grade === 'guest' && (
+                                <span
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '2px 6px',
+                                    borderRadius: '999px',
+                                    fontSize: '10px',
+                                    fontWeight: 700,
+                                    lineHeight: 1,
+                                    color: '#fef3c7',
+                                    background: 'rgba(251, 191, 36, 0.2)',
+                                    border: '1px solid rgba(251, 191, 36, 0.35)',
+                                    letterSpacing: '0.02em',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  guest
+                                </span>
+                              )}
+                            </div>
+                            {memberName !== '연결' && (
+                              <span style={{ fontSize: '0.85em', opacity: 0.7 }}>
+                                ({stat?.wins || 0}승 {stat?.losses || 0}패)
                               </span>
                             )}
                           </div>
@@ -205,29 +210,34 @@ export default function MatchRecords() {
                         const member = memberLookup.get(memberName)
                         const stat = memberStats[memberName]
                         return (
-                          <div key={memberName} className="cc-team-member" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <span>
-                              {memberName === '연결' ? memberName : `${memberName} (${stat?.wins || 0}승 ${stat?.losses || 0}패)`}
-                            </span>
-                            {member?.grade === 'guest' && (
-                              <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  padding: '2px 6px',
-                                  borderRadius: '999px',
-                                  fontSize: '10px',
-                                  fontWeight: 700,
-                                  lineHeight: 1,
-                                  color: '#fef3c7',
-                                  background: 'rgba(251, 191, 36, 0.2)',
-                                  border: '1px solid rgba(251, 191, 36, 0.35)',
-                                  letterSpacing: '0.02em',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                guest
+                          <div key={memberName} className="cc-team-member" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginBottom: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <span style={{ fontWeight: 600 }}>{memberName}</span>
+                              {member?.grade === 'guest' && (
+                                <span
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '2px 6px',
+                                    borderRadius: '999px',
+                                    fontSize: '10px',
+                                    fontWeight: 700,
+                                    lineHeight: 1,
+                                    color: '#fef3c7',
+                                    background: 'rgba(251, 191, 36, 0.2)',
+                                    border: '1px solid rgba(251, 191, 36, 0.35)',
+                                    letterSpacing: '0.02em',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  guest
+                                </span>
+                              )}
+                            </div>
+                            {memberName !== '연결' && (
+                              <span style={{ fontSize: '0.85em', opacity: 0.7 }}>
+                                ({stat?.wins || 0}승 {stat?.losses || 0}패)
                               </span>
                             )}
                           </div>
@@ -294,7 +304,7 @@ export default function MatchRecords() {
                 onClick={() => setSelectedCompletedMatchId(prev => prev === match.id ? null : match.id!)}
                 style={{ cursor: 'pointer' }}
               >
-                <div className="cc-match-header" style={{ marginBottom: '12px' }}>
+                <div className="cc-match-header" style={{ marginBottom: '8px' }}>
                   <span className="cc-match-date" style={{ fontStyle: 'italic' }}>
                     {new Date(match.createdAt).toLocaleDateString()}
                   </span>
@@ -315,79 +325,33 @@ export default function MatchRecords() {
                     </div>
                   )}
                 </div>
-                <div className="cc-completed-grid">
-                  <div className="cc-completed-team">
-                    <div className="cc-completed-team-label team-a">A팀</div>
-                    <div className="cc-completed-score">{match.scoreA}</div>
-                    <div className="cc-completed-members" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {match.teamA.map(memberName => {
-                        const member = memberLookup.get(memberName)
-                        return (
-                          <div key={memberName} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-                            <span>{memberName}</span>
-                            {member?.grade === 'guest' && (
-                              <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  padding: '2px 6px',
-                                  borderRadius: '999px',
-                                  fontSize: '10px',
-                                  fontWeight: 700,
-                                  lineHeight: 1,
-                                  color: '#fef3c7',
-                                  background: 'rgba(251, 191, 36, 0.2)',
-                                  border: '1px solid rgba(251, 191, 36, 0.35)',
-                                  letterSpacing: '0.02em',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                guest
-                              </span>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
+                <div className="cc-completed-compact" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div className="cc-compact-teams" style={{ fontSize: '13px', color: '#e2e8f0', wordBreak: 'keep-all', lineHeight: 1.4 }}>
+                    <span style={{ color: 'var(--cc-plasma-blue)', fontWeight: 700 }}>A팀</span>
+                    <span style={{ opacity: 0.85 }}>({match.teamA.map(m => {
+                      const isGuest = memberLookup.get(m)?.grade === 'guest';
+                      return isGuest ? `${m}(guest)` : m;
+                    }).join(', ')})</span>
+                    
+                    <span style={{ margin: '0 8px', color: 'var(--cc-laser-border)', fontWeight: 900, fontStyle: 'italic', fontSize: '11px' }}>vs</span>
+                    
+                    <span style={{ color: 'var(--cc-primary-fixed)', fontWeight: 700 }}>B팀</span>
+                    <span style={{ opacity: 0.85 }}>({match.teamB.map(m => {
+                      const isGuest = memberLookup.get(m)?.grade === 'guest';
+                      return isGuest ? `${m}(guest)` : m;
+                    }).join(', ')})</span>
                   </div>
-                  <div className="cc-completed-vs">
-                    <span className="cc-completed-vs-badge">VS</span>
-                  </div>
-                  <div className="cc-completed-team">
-                    <div className="cc-completed-team-label team-b">B팀</div>
-                    <div className="cc-completed-score">{match.scoreB}</div>
-                    <div className="cc-completed-members" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {match.teamB.map(memberName => {
-                        const member = memberLookup.get(memberName)
-                        return (
-                          <div key={memberName} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-                            <span>{memberName}</span>
-                            {member?.grade === 'guest' && (
-                              <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  padding: '2px 6px',
-                                  borderRadius: '999px',
-                                  fontSize: '10px',
-                                  fontWeight: 700,
-                                  lineHeight: 1,
-                                  color: '#fef3c7',
-                                  background: 'rgba(251, 191, 36, 0.2)',
-                                  border: '1px solid rgba(251, 191, 36, 0.35)',
-                                  letterSpacing: '0.02em',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                guest
-                              </span>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
+
+                  <div className="cc-compact-score" style={{ fontFamily: 'var(--cc-font-data)', fontSize: '28px', fontWeight: 800, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                    <span style={{ color: match.winner === 'A' ? '#4ade80' : '#fff' }}>
+                      {match.winner === 'A' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginRight: '6px' }}>🏆</span>}
+                      {match.scoreA}
+                    </span>
+                    <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '22px', position: 'relative', top: '-2px' }}>:</span>
+                    <span style={{ color: match.winner === 'B' ? '#4ade80' : '#fff' }}>
+                      {match.scoreB}
+                      {match.winner === 'B' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginLeft: '6px' }}>🏆</span>}
+                    </span>
                   </div>
                 </div>
               </div>
