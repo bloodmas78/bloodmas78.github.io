@@ -48,14 +48,11 @@ function Random() {
   )]
 
   const handleMatchTeams = () => {
-    if (entries.length > 0) {
-      matchTeams()
-      setTimeout(() => {
-        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    } else {
-      matchTeams()
-    }
+    if (entries.length < 3) return
+    matchTeams()
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const renderSidebar = (className: string) => {
@@ -190,7 +187,7 @@ function Random() {
               {activeTab === 'match' && (
                 <div className="cc-hero-actions animate-tactical-master delay-300">
                   {/* Ancient Rune: Match Button */}
-                <div className="cc-rune-btn-wrapper" onClick={handleMatchTeams}>
+                <div className={`cc-rune-btn-wrapper match-btn ${entries.length >= 3 ? 'ready' : 'disabled'}`} onClick={entries.length >= 3 ? handleMatchTeams : undefined}>
                   <button className="cc-rune-match-btn">
                     <svg className="cc-rune-match-rings" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" fill="none" r="48" stroke="url(#fireGradient)" strokeDasharray="1, 4" strokeWidth="0.5"></circle>
@@ -216,7 +213,7 @@ function Random() {
                 </div>
 
                 {/* Silver Rune: Reset Button */}
-                <div className="cc-rune-btn-wrapper" onClick={resetEntries}>
+                <div className={`cc-rune-btn-wrapper reset-btn ${entries.length > 0 ? '' : 'disabled'}`} onClick={entries.length > 0 ? resetEntries : undefined}>
                   <button className="cc-rune-reset-btn">
                     <div className="cc-rune-reset-bg">
                       <div className="cc-rune-reset-texture"></div>

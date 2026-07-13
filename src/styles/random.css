@@ -658,6 +658,31 @@
   transform: scale(0.95);
 }
 
+.cc-rune-btn-wrapper.disabled {
+  opacity: 0.2;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+.cc-rune-btn-wrapper.match-btn.ready {
+  opacity: 1;
+  transform: scale(1.25);
+  animation: cc-pulse-ready-wrapper 2s infinite ease-in-out;
+}
+
+.cc-rune-btn-wrapper.match-btn.ready:hover {
+  transform: scale(1.35);
+}
+
+.cc-rune-btn-wrapper.match-btn.ready:active {
+  transform: scale(1.15);
+}
+
+@keyframes cc-pulse-ready-wrapper {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.2)); }
+  50% { filter: drop-shadow(0 0 40px rgba(255, 140, 0, 0.8)); }
+}
+
 /* Match Button */
 .cc-rune-match-btn {
   position: relative;
@@ -786,8 +811,8 @@
 }
 
 .cc-hero-bg-wrapper {
-  top: -10%;
-  height: calc(100% + 10%);
+  top: -30%;
+  height: calc(100% + 30%);
 }
 
 /* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
@@ -2087,7 +2112,7 @@
    ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 640px) {
   .cc-hero {
-    min-height: 240px;
+    min-height: 280px;
   }
 }
 
