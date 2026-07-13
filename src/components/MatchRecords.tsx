@@ -328,21 +328,21 @@ export default function MatchRecords() {
                 <div className="cc-completed-compact" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <div className="cc-compact-teams" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '13px', color: '#e2e8f0', wordBreak: 'keep-all', lineHeight: 1.4 }}>
                     <div style={{ flex: 1, textAlign: 'left' }}>
-                      <span style={{ color: 'var(--cc-plasma-blue)', fontWeight: 700 }}>A팀</span>
-                      <span style={{ opacity: 0.85 }}>({match.teamA.map(m => {
+                      <div style={{ color: 'var(--cc-plasma-blue)', fontWeight: 700, marginBottom: '2px' }}>A팀</div>
+                      <div style={{ opacity: 0.85, fontSize: '11.5px', wordBreak: 'keep-all', lineHeight: 1.3 }}>({match.teamA.map(m => {
                         const isGuest = memberLookup.get(m)?.grade === 'guest';
                         return isGuest ? `${m}(guest)` : m;
-                      }).join(', ')})</span>
+                      }).join(', ')})</div>
                     </div>
                     
                     <div style={{ margin: '0 8px', color: 'var(--cc-laser-border)', fontWeight: 900, fontStyle: 'italic', fontSize: '11px', alignSelf: 'center' }}>vs</div>
                     
                     <div style={{ flex: 1, textAlign: 'right' }}>
-                      <span style={{ color: 'var(--cc-primary-fixed)', fontWeight: 700 }}>B팀</span>
-                      <span style={{ opacity: 0.85 }}>({match.teamB.map(m => {
+                      <div style={{ color: 'var(--cc-primary-fixed)', fontWeight: 700, marginBottom: '2px' }}>B팀</div>
+                      <div style={{ opacity: 0.85, fontSize: '11.5px', wordBreak: 'keep-all', lineHeight: 1.3 }}>({match.teamB.map(m => {
                         const isGuest = memberLookup.get(m)?.grade === 'guest';
                         return isGuest ? `${m}(guest)` : m;
-                      }).join(', ')})</span>
+                      }).join(', ')})</div>
                     </div>
                   </div>
 
