@@ -304,13 +304,38 @@
   overflow: hidden;
   z-index: 0;
   border-radius: inherit;
+  /* 프리미엄 사이버펑크 느낌을 위한 내부 그림자/글로우 */
+  box-shadow: inset 0 0 60px rgba(0, 255, 255, 0.05);
+}
+
+/* 중앙 콘텐츠에 집중도를 높이고 가장자리를 어둡게 하는 비네트 오버레이 */
+.cc-hero-bg-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 15%, rgba(9, 14, 23, 0.95) 100%);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .cc-hero-bg-base {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center 50%;
+  /* 생동감을 주는 천천히 숨쉬는 줌 애니메이션 (Ken Burns 효과) */
+  animation: cc-hero-breathe 20s ease-in-out infinite alternate;
+  /* 사이버 에스테틱에 맞는 대비와 채도 조정 */
+  filter: brightness(0.85) contrast(1.15) saturate(1.1);
+}
+
+@keyframes cc-hero-breathe {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 /* 글리치(지�?거리?? ?�과 ?��?지 */
@@ -610,15 +635,18 @@
   cursor: pointer;
   /* Ensure wrappers stretch to same height if one is somehow larger */
   justify-content: flex-end;
+  /* 평소에는 투명도와 크기를 줄여 배경 비주얼을 방해하지 않음 */
+  opacity: 0.45;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.cc-rune-btn-wrapper:hover .cc-rune-match-btn,
-.cc-rune-btn-wrapper:hover .cc-rune-reset-btn {
-  transform: scale(1.1);
+.cc-rune-btn-wrapper:hover {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
-.cc-rune-btn-wrapper:active .cc-rune-match-btn,
-.cc-rune-btn-wrapper:active .cc-rune-reset-btn {
+.cc-rune-btn-wrapper:active {
   transform: scale(0.95);
 }
 
