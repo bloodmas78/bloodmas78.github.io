@@ -346,17 +346,22 @@ export default function MatchRecords() {
                     </div>
                   </div>
 
-                  <div className="cc-compact-score" style={{ fontFamily: 'var(--cc-font-data)', fontSize: '28px', fontWeight: 800, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                    <span style={{ color: match.winner === 'A' ? 'var(--cc-plasma-blue)' : '#fff' }}>
-                      {match.winner === 'A' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginRight: '6px' }}>🏆</span>}
-                      {match.scoreA}
-                    </span>
-                    <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '22px', position: 'relative', top: '-2px' }}>:</span>
-                    <span style={{ color: match.winner === 'B' ? 'var(--cc-primary-fixed)' : '#fff' }}>
-                      {match.scoreB}
-                      {match.winner === 'B' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginLeft: '6px' }}>🏆</span>}
-                    </span>
-                  </div>
+                  {(() => {
+                    const winner = match.scoreA > match.scoreB ? 'A' : match.scoreB > match.scoreA ? 'B' : null;
+                    return (
+                      <div className="cc-compact-score" style={{ fontFamily: 'var(--cc-font-data)', fontSize: '28px', fontWeight: 800, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                        <span style={{ color: winner === 'A' ? 'var(--cc-plasma-blue)' : '#fff' }}>
+                          {winner === 'A' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginRight: '6px' }}>🏆</span>}
+                          {match.scoreA}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '22px', position: 'relative', top: '-2px' }}>:</span>
+                        <span style={{ color: winner === 'B' ? 'var(--cc-primary-fixed)' : '#fff' }}>
+                          {match.scoreB}
+                          {winner === 'B' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginLeft: '6px' }}>🏆</span>}
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             ))}
