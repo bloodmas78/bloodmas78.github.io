@@ -325,30 +325,34 @@ export default function MatchRecords() {
                     </div>
                   )}
                 </div>
-                <div className="cc-completed-compact" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div className="cc-compact-teams" style={{ fontSize: '13px', color: '#e2e8f0', wordBreak: 'keep-all', lineHeight: 1.4 }}>
-                    <span style={{ color: 'var(--cc-plasma-blue)', fontWeight: 700 }}>A팀</span>
-                    <span style={{ opacity: 0.85 }}>({match.teamA.map(m => {
-                      const isGuest = memberLookup.get(m)?.grade === 'guest';
-                      return isGuest ? `${m}(guest)` : m;
-                    }).join(', ')})</span>
+                <div className="cc-completed-compact" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div className="cc-compact-teams" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '13px', color: '#e2e8f0', wordBreak: 'keep-all', lineHeight: 1.4 }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <span style={{ color: 'var(--cc-plasma-blue)', fontWeight: 700 }}>A팀</span>
+                      <span style={{ opacity: 0.85 }}>({match.teamA.map(m => {
+                        const isGuest = memberLookup.get(m)?.grade === 'guest';
+                        return isGuest ? `${m}(guest)` : m;
+                      }).join(', ')})</span>
+                    </div>
                     
-                    <span style={{ margin: '0 8px', color: 'var(--cc-laser-border)', fontWeight: 900, fontStyle: 'italic', fontSize: '11px' }}>vs</span>
+                    <div style={{ margin: '0 8px', color: 'var(--cc-laser-border)', fontWeight: 900, fontStyle: 'italic', fontSize: '11px', alignSelf: 'center' }}>vs</div>
                     
-                    <span style={{ color: 'var(--cc-primary-fixed)', fontWeight: 700 }}>B팀</span>
-                    <span style={{ opacity: 0.85 }}>({match.teamB.map(m => {
-                      const isGuest = memberLookup.get(m)?.grade === 'guest';
-                      return isGuest ? `${m}(guest)` : m;
-                    }).join(', ')})</span>
+                    <div style={{ flex: 1, textAlign: 'right' }}>
+                      <span style={{ color: 'var(--cc-primary-fixed)', fontWeight: 700 }}>B팀</span>
+                      <span style={{ opacity: 0.85 }}>({match.teamB.map(m => {
+                        const isGuest = memberLookup.get(m)?.grade === 'guest';
+                        return isGuest ? `${m}(guest)` : m;
+                      }).join(', ')})</span>
+                    </div>
                   </div>
 
                   <div className="cc-compact-score" style={{ fontFamily: 'var(--cc-font-data)', fontSize: '28px', fontWeight: 800, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                    <span style={{ color: match.winner === 'A' ? '#4ade80' : '#fff' }}>
+                    <span style={{ color: match.winner === 'A' ? 'var(--cc-plasma-blue)' : '#fff' }}>
                       {match.winner === 'A' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginRight: '6px' }}>🏆</span>}
                       {match.scoreA}
                     </span>
                     <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '22px', position: 'relative', top: '-2px' }}>:</span>
-                    <span style={{ color: match.winner === 'B' ? '#4ade80' : '#fff' }}>
+                    <span style={{ color: match.winner === 'B' ? 'var(--cc-primary-fixed)' : '#fff' }}>
                       {match.scoreB}
                       {match.winner === 'B' && <span style={{ fontSize: '16px', verticalAlign: 'middle', marginLeft: '6px' }}>🏆</span>}
                     </span>
