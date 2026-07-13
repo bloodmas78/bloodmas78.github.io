@@ -175,18 +175,21 @@
 .cc-layout {
   display: flex;
   min-height: 100vh;
-  max-width: 1600px; /* 큰 모니터 화면을 꽉 채우도록 1200px -> 1600px 확장 */
+  max-width: 1600px;
+  /* 큰 모니터 화면을 꽉 채우도록 1200px -> 1600px 확장 */
   margin: 0 auto;
   width: 100%;
 }
 
 .cc-sidebar {
-  width: 360px; /* 전체 레이아웃 확장에 맞춰 사이드바 너비 비례 확대 (320 -> 360) */
+  width: 360px;
+  /* 전체 레이아웃 확장에 맞춰 사이드바 너비 비례 확대 (320 -> 360) */
   flex-shrink: 0;
   border-right: 1px solid var(--cc-laser-border);
   background: rgba(21, 27, 43, 0.8);
   backdrop-filter: blur(20px);
-  padding: 32px; /* 답답하지 않도록 패딩 여유 추가 */
+  padding: 32px;
+  /* 답답하지 않도록 패딩 여유 추가 */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -198,11 +201,13 @@
 
 .cc-main {
   flex: 1;
-  padding: 40px 56px; /* 메인 영역 양옆 여백을 늘려 탁 트인 느낌 부여 */
+  padding: 40px 56px;
+  /* 메인 영역 양옆 여백을 늘려 탁 트인 느낌 부여 */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 32px; /* 섹션 간 간격 확대 */
+  gap: 32px;
+  /* 섹션 간 간격 확대 */
 }
 
 /* ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═
@@ -333,6 +338,7 @@
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(1.1);
   }
@@ -428,7 +434,8 @@
 
 .cc-hero-content {
   position: relative;
-  max-width: 1000px; /* 레이아웃 확장에 맞춰 히어로 영역 콘텐츠 허용폭 넓힘 */
+  max-width: 1000px;
+  /* 레이아웃 확장에 맞춰 히어로 영역 콘텐츠 허용폭 넓힘 */
   width: 100%;
   z-index: 10;
   display: flex;
@@ -1315,7 +1322,7 @@
 
 .cc-matches-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 450px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
   gap: 16px;
 }
 
@@ -1400,7 +1407,7 @@
 
 .cc-team-block {
   flex: 1;
-  max-width: 240px;
+  max-width: 100%;
   text-align: center;
 }
 
@@ -1576,7 +1583,8 @@
    COMPLETED MATCHES
    ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 .cc-match-completed {
-  padding: 10px 14px; /* 더 타이트하게 압축 (기존 12px 16px) */
+  padding: 10px 14px;
+  /* 더 타이트하게 압축 (기존 12px 16px) */
   background: linear-gradient(90deg, rgba(20, 24, 32, 0.6) 0%, rgba(10, 14, 20, 0.8) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 3px solid rgba(255, 255, 255, 0.2);
@@ -1966,9 +1974,11 @@
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--cc-laser-border);
-    max-height: 45vh; /* 세로로 너무 길어지지 않도록 화면 높이의 45%로 제한 */
+    max-height: 45vh;
+    /* 세로로 너무 길어지지 않도록 화면 높이의 45%로 제한 */
     padding: 16px;
-    overflow-y: auto; /* 내용이 길면 내부에서 스크롤되도록 */
+    overflow-y: auto;
+    /* 내용이 길면 내부에서 스크롤되도록 */
   }
 
   /* 모바일 뷰에서 멤버 리스트와 출전 명단을 다단(Grid)으로 배치하여 세로 공간 절약 */
@@ -1993,7 +2003,8 @@
   }
 
   .cc-teams-vs {
-    flex-direction: row; /* 모바일에서도 A팀 B팀을 양옆으로 배치하여 극적으로 세로 공간 절약 */
+    flex-direction: row;
+    /* 모바일에서도 A팀 B팀을 양옆으로 배치하여 극적으로 세로 공간 절약 */
     gap: 8px;
     align-items: flex-start;
     justify-content: space-between;
@@ -2013,7 +2024,8 @@
   }
 
   .cc-team-member {
-    font-size: 11px; /* 폰트 축소로 한 줄에 잘 들어가게 */
+    font-size: 11px;
+    /* 폰트 축소로 한 줄에 잘 들어가게 */
   }
 
   .cc-team-block {
@@ -2034,13 +2046,15 @@
     scroll-snap-type: x mandatory;
     gap: 16px;
     padding-bottom: 16px;
-    -webkit-overflow-scrolling: touch; /* 부드러운 터치 스크롤 지원 */
+    -webkit-overflow-scrolling: touch;
+    /* 부드러운 터치 스크롤 지원 */
   }
 
   /* 스크롤바 커스텀 (모바일에서 깔끔하게 표시) */
   .cc-matches-grid::-webkit-scrollbar {
     height: 4px;
   }
+
   .cc-matches-grid::-webkit-scrollbar-thumb {
     background: rgba(0, 191, 255, 0.3);
     border-radius: 4px;
@@ -2048,7 +2062,8 @@
 
   .cc-match-active,
   .cc-match-completed {
-    flex: 0 0 88%; /* 카드가 화면 가로의 88% 차지 (다음 카드가 살짝 보이게) */
+    flex: 0 0 100%;
+    /* 카드가 화면 가로 전체를 꽉 채우도록 변경 */
     scroll-snap-align: center;
   }
 
@@ -2072,7 +2087,7 @@
    ?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═?�═ */
 @media (max-width: 640px) {
   .cc-hero {
-    min-height: 360px;
+    min-height: 240px;
   }
 }
 
@@ -2181,7 +2196,8 @@
   }
 
   .cc-bo5-row {
-    flex-direction: row; /* 세트 스코어도 세로로 쌓지 않고 가로 배치 유지 */
+    flex-direction: row;
+    /* 세트 스코어도 세로로 쌓지 않고 가로 배치 유지 */
     gap: 6px;
     align-items: center;
   }
