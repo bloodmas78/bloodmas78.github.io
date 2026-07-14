@@ -30,7 +30,9 @@ function Home() {
               <img src="/images/dldmrrh.png" alt="9shot Player2" className="home-hero-player-mini" />
             </div>
             <p className="home-subtitle">
-              실시간 당구 랭킹부터 스타 팀 매칭, 물론 칼같은 N분의1 정산도!!<br />한방에 즐기자구~ 🚀
+              실시간 <strong>당구 랭킹</strong>부터 짜릿한 <strong>스타 팀 매칭</strong>,<br className="mobile-break" />
+              물론 칼같은 <strong>N분의 1 정산</strong>까지! 🎱<br />
+              <span className="highlight-text">이 모든 걸 한방에 즐기자구~ 🚀</span>
             </p>
           </header>
 
