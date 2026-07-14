@@ -81,7 +81,7 @@ function Home() {
                 <p>이번 달 에버리지, 하이런, 승률 랭킹과 개인 전적을 확인하세요.</p>
               </div>
               <Link className="home-card-link ranking-btn" to="/9shot">
-                <span>랭킹 구경가기</span>
+                <span>랭킹 보기</span>
                 <span className="material-symbols-outlined arrow-icon">arrow_forward</span>
               </Link>
             </article>
