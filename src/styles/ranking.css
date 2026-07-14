@@ -14,6 +14,10 @@
   --rank-font-body: 'Space Grotesk', sans-serif;
   
   background-color: var(--rank-background);
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(0, 241, 254, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(0, 102, 255, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
   color: var(--rank-on-surface);
   font-family: var(--rank-font-body);
   min-height: 100vh;
@@ -21,31 +25,48 @@
   overflow-x: hidden;
 }
 
-/* Background Image and Overlays */
+/* Background Image and Overlays - Hero Banner Style */
 .rank-bg-wrapper {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  height: 60vh;
+  min-height: 500px;
   z-index: 0;
   overflow: hidden;
+  mask-image: 
+    linear-gradient(to right, transparent, black 15%, black 85%, transparent),
+    linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image: 
+    linear-gradient(to right, transparent, black 15%, black 85%, transparent),
+    linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
 }
 .rank-bg-overlay-1 {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(13,19,34,0.9), rgba(13,19,34,0.2), rgba(13,19,34,0.9));
+  background: radial-gradient(circle at center 30%, transparent 20%, rgba(13,19,34,0.8) 100%);
   z-index: 10;
 }
 .rank-bg-overlay-2 {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(13,19,34,0.4), transparent, rgba(13,19,34,0.9));
-  z-index: 10;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  z-index: 11;
 }
 .rank-bg-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transform: scale(1.05);
+  object-position: center 30%;
+  transform: scale(1.1);
+  filter: brightness(0.65) saturate(1.1) contrast(1.1);
 }
 
 /* Typography Helpers */
@@ -145,7 +166,7 @@
 
 /* Main Layout */
 .rank-container {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 64px 24px;
   position: relative;
@@ -393,7 +414,7 @@
 
 /* Footer */
 .rank-footer {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 48px 24px;
   border-top: 1px solid rgba(255,255,255,0.1);
@@ -493,6 +514,13 @@
   pointer-events: none;
   z-index: -2;
 }
+
+@keyframes float-glow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
 .rank-atm-glow-1 {
   position: absolute;
   top: 10%; left: 5%;
@@ -500,7 +528,8 @@
   background: rgba(179, 197, 255, 0.1);
   filter: blur(150px);
   border-radius: 50%;
-  opacity: 0.5;
+  opacity: 0.6;
+  animation: float-glow 20s ease-in-out infinite;
 }
 .rank-atm-glow-2 {
   position: absolute;
@@ -509,6 +538,7 @@
   background: rgba(0, 241, 254, 0.1);
   filter: blur(180px);
   border-radius: 50%;
-  opacity: 0.5;
+  opacity: 0.6;
+  animation: float-glow 25s ease-in-out infinite reverse;
 }
 
