@@ -191,8 +191,8 @@
 .home-hero {
   position: relative;
   z-index: 2;
-  /* The inside of the table (kept light to match content) */
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 249, 255, 0.4) 100%);
+  /* Tournament Blue Cloth Background */
+  background: radial-gradient(circle at center, #1e40af 0%, #172554 100%);
   
   /* 1. Wooden Frame */
   border: 14px solid #4e342e; /* Dark wood color */
@@ -200,9 +200,9 @@
   
   /* 2. Blue Cushion (Inset Shadow) + Outer Shadow */
   box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.3), /* Floating shadow */
-    inset 0 0 0 16px #1d4ed8, /* Tournament blue cushion */
-    inset 0 16px 20px 16px rgba(0, 0, 0, 0.5); /* Cushion depth */
+    0 25px 50px -12px rgba(0, 0, 0, 0.4), /* Floating shadow */
+    inset 0 0 0 16px #2563eb, /* Brighter blue cushion */
+    inset 0 16px 20px 16px rgba(0, 0, 0, 0.6); /* Cushion depth */
     
   padding: clamp(24px, 5vw, 48px);
   padding-top: 95px;
@@ -246,9 +246,9 @@
 .home-hero:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 35px 60px -15px rgba(0, 0, 0, 0.4),
-    inset 0 0 0 16px #1e40af, /* Slightly darker blue cushion on hover */
-    inset 0 16px 20px 16px rgba(0, 0, 0, 0.5);
+    0 35px 60px -15px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 16px #3b82f6, /* Slightly brighter blue cushion on hover */
+    inset 0 16px 20px 16px rgba(0, 0, 0, 0.6);
 }
 
 /* Home Header */
@@ -264,9 +264,9 @@
   gap: 8px;
   padding: 6px 16px;
   border-radius: 999px;
-  background: rgba(6, 47, 28, 0.04);
-  border: 1px solid rgba(6, 47, 28, 0.06);
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 20px;
@@ -276,8 +276,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
   animation: pulseDot 2s infinite;
 }
 
@@ -290,7 +290,7 @@
   50% {
     transform: scale(1.15);
     opacity: 1;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.8);
   }
 
   100% {
@@ -305,12 +305,12 @@
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.04em;
-  background: linear-gradient(135deg, #0f172a 0%, #475569 50%, #0f172a 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #ffffff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  text-shadow: 0 10px 20px rgba(0,0,0,0.3);
   position: relative;
   z-index: 10;
   animation: shineText 5s linear infinite;
@@ -323,16 +323,17 @@
 }
 
 .highlight-green {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   white-space: nowrap;
+  filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.4));
 }
 
 .home-subtitle {
   margin: 0 auto;
-  color: #4b5563;
+  color: #cbd5e1;
   font-size: clamp(1.05rem, 2.5vw, 1.2rem);
   line-height: 1.6;
   font-weight: 500;
