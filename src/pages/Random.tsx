@@ -12,6 +12,7 @@ function Random() {
   const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
   const [draggedMember, setDraggedMember] = useState<string | null>(null)
   const [dragOverTeam, setDragOverTeam] = useState<'a' | 'b' | null>(null)
+  const [rankModalMember, setRankModalMember] = useState<{ nickname: string, winRate: number } | null>(null)
 
   useEffect(() => {
     fetchMemberStats().then(stats => {
@@ -33,6 +34,28 @@ function Random() {
     matchTeams,
     moveMember,
   } = useTeamMatch()
+
+  const handleRankSelect = (score: number) => {
+    if (rankModalMember) {
+      const existing = entries.find(e => e.name === rankModalMember.nickname)
+      if (existing) {
+        setMemberScore(rankModalMember.nickname, score)
+      } else {
+        togglePrefill(rankModalMember.nickname, rankModalMember.winRate, score)
+      }
+      setRankModalMember(null)
+    }
+  }
+
+  const handleRemoveMember = () => {
+    if (rankModalMember) {
+      const existing = entries.find(e => e.name === rankModalMember.nickname)
+      if (existing) {
+        togglePrefill(rankModalMember.nickname, rankModalMember.winRate)
+      }
+      setRankModalMember(null)
+    }
+  }
 
   const resultRef = useRef<HTMLElement>(null)
 
@@ -76,52 +99,48 @@ function Random() {
                     const winRate = stats && (stats.wins + stats.losses) > 0
                       ? Math.round((stats.wins / (stats.wins + stats.losses)) * 100)
                       : 0
-                    togglePrefill(m.nickname, winRate)
+                    setRankModalMember({ nickname: m.nickname, winRate })
                   }}
-                  style={{ cursor: 'pointer', flex: 1 }}
+                  style={{ cursor: 'pointer', flex: 1, flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}
                 >
-                  <span className="cc-member-dot" style={{ background: m.avatarColor }} />
-                  <span className="cc-member-name" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    {m.nickname}
-                    {m.grade === 'guest' && (
-                      <span
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          padding: '2px 6px',
-                          borderRadius: '999px',
-                          fontSize: '10px',
-                          fontWeight: 700,
-                          lineHeight: 1,
-                          color: '#fef3c7',
-                          background: 'rgba(251, 191, 36, 0.2)',
-                          border: '1px solid rgba(251, 191, 36, 0.35)',
-                          letterSpacing: '0.02em',
-                        }}
-                        title="guest"
-                      >
-                        guest
-                      </span>
-                    )}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span className="cc-member-dot" style={{ background: m.avatarColor }} />
+                    <span className="cc-member-name" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1, flexWrap: 'wrap' }}>
+                      <span>{m.nickname}</span>
+                      {m.grade === 'guest' && (
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '2px 6px',
+                            borderRadius: '999px',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            lineHeight: 1,
+                            color: '#fef3c7',
+                            background: 'rgba(251, 191, 36, 0.2)',
+                            border: '1px solid rgba(251, 191, 36, 0.35)',
+                            letterSpacing: '0.02em',
+                            flexShrink: 0
+                          }}
+                          title="guest"
+                        >
+                          guest
+                        </span>
+                      )}
+                    </span>
+                  </div>
                   {memberStats[m.nickname] && (
-                    <span className="cc-member-stats">
+                    <span className="cc-member-stats" style={{ marginLeft: '16px', marginTop: '2px' }}>
                       ({memberStats[m.nickname].wins}승 {memberStats[m.nickname].losses}패)
                     </span>
                   )}
                 </div>
                 {selected && (
-                  <select
-                    value={selected.score}
-                    onChange={(e) => setMemberScore(m.nickname, Number(e.target.value))}
-                    className={`rank-select ${selected.score === 30 ? 'plat' : selected.score === 25 ? 'gold' : 'silver'}`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <option value={30}>💎 플래 (30)</option>
-                    <option value={25}>🥇 골드 (25)</option>
-                    <option value={20}>🥈 실버 (20)</option>
-                  </select>
+                  <span className={`rank-badge ${selected.score === 30 ? 'plat' : selected.score === 25 ? 'gold' : 'silver'}`}>
+                    {selected.score === 30 ? '💎 플래' : selected.score === 25 ? '🥇 골드' : '🥈 실버'}
+                  </span>
                 )}
               </div>
             )
@@ -138,15 +157,16 @@ function Random() {
           </div>
           <div className="cc-entry-list">
             {entries.map((e, idx) => (
-              <div key={idx} className="cc-entry-row">
-                <span>{e.name}
+              <div key={idx} className="cc-entry-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', minWidth: 0, flex: 1, flexWrap: 'wrap' }}>
+                  <span>{e.name}</span>
                   {e.name !== '컴퓨터' && memberStats[e.name] && (
-                    <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px' }}>
+                    <span style={{ fontSize: '11px', opacity: 0.7, marginLeft: '4px', flexShrink: 0 }}>
                       ({memberStats[e.name].wins}승 {memberStats[e.name].losses}패)
                     </span>
                   )}
-                </span>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
                   <span className={`rank-badge ${e.score === 30 ? 'plat' : e.score === 25 ? 'gold' : e.score === 20 ? 'silver' : ''}`}>
                     {e.score === 30 ? '플래' : e.score === 25 ? '골드' : e.score === 20 ? '실버' : '컴퓨터'}
                   </span>
@@ -434,6 +454,25 @@ function Random() {
           )}
         </main>
       </div>
+
+      {/* Rank Selection Modal */}
+      {rankModalMember && (
+        <div className="cc-modal-overlay animate-fade-in" onClick={() => setRankModalMember(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <div className="cc-modal-content rank-modal animate-slide-up" onClick={e => e.stopPropagation()} style={{ padding: '32px 24px', borderRadius: '12px', width: '90%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h3 style={{ marginBottom: '12px', color: '#fff', textAlign: 'center', fontSize: '20px', fontWeight: 800, textShadow: '0 0 10px rgba(0,255,255,0.5)', letterSpacing: '0.05em' }}>{rankModalMember.nickname} 님의 티어 선택</h3>
+            <button className="rank-modal-btn plat" onClick={() => handleRankSelect(30)}>💎 플래티넘 (30점)</button>
+            <button className="rank-modal-btn gold" onClick={() => handleRankSelect(25)}>🥇 골드 (25점)</button>
+            <button className="rank-modal-btn silver" onClick={() => handleRankSelect(20)}>🥈 실버 (20점)</button>
+            
+            {entries.find(e => e.name === rankModalMember.nickname) && (
+              <button className="cc-btn cc-btn-danger" style={{ marginTop: '16px', padding: '12px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.5)' }} onClick={handleRemoveMember}>출전 명단에서 제외</button>
+            )}
+            
+            <button className="cc-btn" style={{ marginTop: '4px', padding: '12px', background: 'rgba(255,255,255,0.1)' }} onClick={() => setRankModalMember(null)}>취소</button>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

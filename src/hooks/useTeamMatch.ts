@@ -15,7 +15,7 @@ export function useTeamMatch() {
 
   const count = entries.length
 
-  const toggleMember = useCallback((nickname: string, winRate: number = 0) => {
+  const toggleMember = useCallback((nickname: string, winRate: number = 0, score: number = 25) => {
     const idx = entries.findIndex((e) => e.name === nickname)
     if (idx >= 0) {
       setEntries((prev) => prev.filter((e) => e.name !== nickname))
@@ -25,7 +25,7 @@ export function useTeamMatch() {
       alert(`오늘의 참전 용사는 최대 ${MAX_PARTICIPANTS}명까지만 선택 가능합니다!`)
       return
     }
-    setEntries((prev) => [...prev, { name: nickname, score: 25, winRate }])
+    setEntries((prev) => [...prev, { name: nickname, score, winRate }])
   }, [entries])
 
   const setMemberScore = useCallback((nickname: string, newScore: number) => {

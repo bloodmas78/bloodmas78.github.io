@@ -938,6 +938,7 @@
   gap: 10px;
   flex-wrap: wrap;
   min-width: 0;
+  flex: 1;
 }
 
 .cc-member-dot {
@@ -958,43 +959,47 @@
   font-size: 10px;
   color: var(--cc-on-surface-variant);
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-.cc-member-item .rank-select {
-  min-width: 80px;
-  padding: 6px 8px;
-  border-radius: 2px;
-  border: 1px solid rgba(0, 255, 255, 0.16);
-  background: rgba(4, 10, 30, 0.95);
-  color: var(--cc-on-surface);
-  outline: none;
-  font-size: 12px;
-  font-weight: 700;
-  font-family: 'Noto Sans KR', var(--cc-font-body);
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--cc-font-headline);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  background: rgba(13, 19, 34, 0.9);
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-.cc-member-item .rank-select option {
-  background-color: #081028;
-  color: var(--cc-on-surface);
+.rank-badge.plat {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.15);
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.2), rgba(13, 19, 34, 0.9));
 }
 
-/* Rank badge colors */
-.cc-member-item .rank-select.plat {
-  color: #a0d8e6;
-  border-color: rgba(160, 216, 230, 0.4);
-  background: linear-gradient(180deg, rgba(16, 40, 60, 0.95), rgba(4, 10, 30, 0.95));
+.rank-badge.gold {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.2), inset 0 0 10px rgba(251, 191, 36, 0.15);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.2), rgba(13, 19, 34, 0.9));
 }
 
-.cc-member-item .rank-select.gold {
-  color: #ffd700;
-  border-color: rgba(255, 215, 0, 0.4);
-  background: linear-gradient(180deg, rgba(55, 45, 10, 0.95), rgba(4, 10, 30, 0.95));
-}
-
-.cc-member-item .rank-select.silver {
-  color: #e2e8f0;
-  border-color: rgba(226, 232, 240, 0.4);
-  background: linear-gradient(180deg, rgba(45, 45, 50, 0.95), rgba(4, 10, 30, 0.95));
+.rank-badge.silver {
+  color: #f3f4f6;
+  border-color: rgba(156, 163, 175, 0.4);
+  box-shadow: 0 0 8px rgba(156, 163, 175, 0.2), inset 0 0 10px rgba(156, 163, 175, 0.15);
+  background: linear-gradient(180deg, rgba(107, 114, 128, 0.2), rgba(13, 19, 34, 0.9));
 }
 
 /* ?�?� Entry List (?�택??멤버) ?�?� */
@@ -2282,10 +2287,10 @@
     padding: 8px 10px;
   }
 
-  .cc-member-item .rank-select {
-    min-width: 70px;
+  .rank-badge {
+    min-width: 50px;
     font-size: 10px;
-    padding: 4px 6px;
+    padding: 3px 6px;
   }
 }
 
@@ -2311,4 +2316,108 @@
 .protoss-badge {
   /* Reset legacy styles ??these elements are no longer used */
   display: none !important;
+}
+
+/* ?═?═?═?═?═?═?═?═?═?═?═?═?═?═?═
+   STARCRAFT INSPIRED RANK MODAL
+   ?═?═?═?═?═?═?═?═?═?═?═?═?═?═?═ */
+
+.rank-modal {
+  background: linear-gradient(180deg, #0f1423 0%, #06080e 100%) !important;
+  border: 2px solid #2a334d !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 255, 255, 0.05) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.rank-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rank-modal > * {
+  position: relative;
+  z-index: 10;
+}
+
+.rank-modal-btn {
+  position: relative;
+  width: 100%;
+  padding: 14px 20px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  font-family: var(--cc-font-headline) !important;
+  letter-spacing: 0.1em;
+  border: 2px solid transparent !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(13, 19, 34, 0.8) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.rank-modal-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%, rgba(0,0,0,0.4));
+  pointer-events: none;
+}
+
+.rank-modal-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.rank-modal-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Platinum */
+.rank-modal-btn.plat {
+  border-color: #38bdf8 !important;
+  color: #e0f2fe !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3), inset 0 0 15px rgba(56, 189, 248, 0.2) !important;
+}
+.rank-modal-btn.plat:hover {
+  border-color: #7dd3fc !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6), inset 0 0 30px rgba(56, 189, 248, 0.4) !important;
+  background: rgba(14, 165, 233, 0.2) !important;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.8) !important;
+}
+
+/* Gold */
+.rank-modal-btn.gold {
+  border-color: #fbbf24 !important;
+  color: #fef3c7 !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.3), inset 0 0 15px rgba(251, 191, 36, 0.2) !important;
+}
+.rank-modal-btn.gold:hover {
+  border-color: #fde68a !important;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), inset 0 0 30px rgba(251, 191, 36, 0.4) !important;
+  background: rgba(245, 158, 11, 0.2) !important;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.8) !important;
+}
+
+/* Silver */
+.rank-modal-btn.silver {
+  border-color: #9ca3af !important;
+  color: #f3f4f6 !important;
+  box-shadow: 0 0 10px rgba(156, 163, 175, 0.3), inset 0 0 15px rgba(156, 163, 175, 0.2) !important;
+}
+.rank-modal-btn.silver:hover {
+  border-color: #e5e7eb !important;
+  box-shadow: 0 0 20px rgba(156, 163, 175, 0.6), inset 0 0 30px rgba(156, 163, 175, 0.4) !important;
+  background: rgba(107, 114, 128, 0.2) !important;
+  text-shadow: 0 0 8px rgba(156, 163, 175, 0.8) !important;
 }
