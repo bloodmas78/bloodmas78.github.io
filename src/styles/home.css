@@ -9,7 +9,7 @@
   padding: clamp(24px, 4vw, 48px);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to bottom, #d4d4d8 0%, #fef08a 100%);
+  background: radial-gradient(circle at top, #1e293b 0%, #020617 100%);
 }
 
 /* Floating Ambient Blobs */
@@ -194,8 +194,8 @@
   /* Tournament Blue Cloth Background */
   background: radial-gradient(circle at center, #1e40af 0%, #172554 100%);
   
-  /* 1. Wooden Frame */
-  border: 14px solid #4e342e; /* Dark wood color */
+  /* 1. Sleek Graphite/Steel Frame (Matches dark slate background) */
+  border: 14px solid #0f172a; 
   border-radius: 40px;
   
   /* 2. Blue Cushion (Inset Shadow) + Outer Shadow */
@@ -637,10 +637,25 @@
   .home-hero {
     padding: 24px 20px;
     padding-top: 70px;
-    /* �?겹침 간격 ?��? */
+    border-width: 8px; /* Thinner wood frame for mobile */
+    box-shadow: 
+      0 15px 30px -10px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 8px #2563eb, /* Thinner cushion for mobile */
+      inset 0 8px 12px 8px rgba(0, 0, 0, 0.6);
   }
 
-  /* 3D 캔버??모바??최적??(?�이 �?마진 축소) */
+  .home-hero:hover {
+    box-shadow: 
+      0 20px 40px -10px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 8px #3b82f6,
+      inset 0 8px 12px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Adjust diamonds for thinner frame */
+  .home-hero::before { top: -6px; }
+  .home-hero::after { bottom: -6px; }
+
+  /* 3D 캔버??모바??최적??(?이 ?마진 축소) */
   .three-logo-container {
     height: 320px;
     margin: -80px auto -80px;
