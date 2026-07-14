@@ -194,15 +194,19 @@
   /* Tournament Blue Cloth Background */
   background: radial-gradient(circle at center, #1e40af 0%, #172554 100%);
   
-  /* 1. Sleek Graphite/Steel Frame (Matches dark slate background) */
-  border: 14px solid #0f172a; 
+  /* 1. 3D Beveled Wooden Outer Frame (Rich Walnut/Mahogany tones) */
+  border-width: 14px;
+  border-style: solid;
+  border-color: #925833 #5c351c #381e0d #5c351c; /* Top (light), Right, Bottom (dark), Left */
   border-radius: 40px;
   
-  /* 2. Blue Cushion (Inset Shadow) + Outer Shadow */
+  /* 2. Premium Layered Cushion System */
   box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.4), /* Floating shadow */
-    inset 0 0 0 16px #2563eb, /* Brighter blue cushion */
-    inset 0 16px 20px 16px rgba(0, 0, 0, 0.6); /* Cushion depth */
+    0 30px 60px -12px rgba(0, 0, 0, 0.6), /* Ambient floating shadow */
+    inset 0 0 0 2px #64748b, /* Inner metallic silver trim */
+    inset 0 0 10px 2px rgba(0, 0, 0, 0.8), /* Trim shadow */
+    inset 0 0 0 18px #2563eb, /* Tournament Blue Cushion */
+    inset 0 18px 25px 18px rgba(0, 0, 0, 0.8); /* Depth from cushion down to the table cloth */
     
   padding: clamp(24px, 5vw, 48px);
   padding-top: 95px;
@@ -214,19 +218,19 @@
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
 }
 
-/* 3. Billiard Table Diamonds (White markers on the wood frame) */
+/* 3. Billiard Table Diamonds (Mother of pearl embedded in the frame) */
 .home-hero::before,
 .home-hero::after {
   content: '';
   position: absolute;
   left: 0; right: 0;
-  height: 8px;
+  height: 6px;
   pointer-events: none;
   background-image: 
-    radial-gradient(circle, rgba(255,255,255,0.8) 40%, transparent 50%),
-    radial-gradient(circle, rgba(255,255,255,0.8) 40%, transparent 50%),
-    radial-gradient(circle, rgba(255,255,255,0.8) 40%, transparent 50%);
-  background-size: 8px 8px;
+    radial-gradient(circle, #f8fafc 40%, rgba(0,0,0,0.4) 80%, transparent 100%),
+    radial-gradient(circle, #f8fafc 40%, rgba(0,0,0,0.4) 80%, transparent 100%),
+    radial-gradient(circle, #f8fafc 40%, rgba(0,0,0,0.4) 80%, transparent 100%);
+  background-size: 6px 6px;
   background-repeat: no-repeat;
   background-position: 
     calc(50% - 120px) center,
@@ -236,19 +240,21 @@
 }
 
 .home-hero::before {
-  top: -11px; /* Position on top wood frame */
+  top: -10px; /* Centered in 14px top frame */
 }
 
 .home-hero::after {
-  bottom: -11px; /* Position on bottom wood frame */
+  bottom: -10px; /* Centered in 14px bottom frame */
 }
 
 .home-hero:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 35px 60px -15px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 16px #3b82f6, /* Slightly brighter blue cushion on hover */
-    inset 0 16px 20px 16px rgba(0, 0, 0, 0.6);
+    0 40px 70px -15px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 2px #94a3b8, /* Brighter silver trim on hover */
+    inset 0 0 10px 2px rgba(0, 0, 0, 0.8),
+    inset 0 0 0 18px #3b82f6, /* Brighter blue cushion on hover */
+    inset 0 18px 25px 18px rgba(0, 0, 0, 0.8);
 }
 
 /* Home Header */
@@ -637,18 +643,22 @@
   .home-hero {
     padding: 24px 20px;
     padding-top: 70px;
-    border-width: 8px; /* Thinner wood frame for mobile */
+    border-width: 8px; /* Thinner frame for mobile */
     box-shadow: 
       0 15px 30px -10px rgba(0, 0, 0, 0.4),
-      inset 0 0 0 8px #2563eb, /* Thinner cushion for mobile */
-      inset 0 8px 12px 8px rgba(0, 0, 0, 0.6);
+      inset 0 0 0 1px #64748b, /* Thinner silver trim */
+      inset 0 0 4px 1px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 10px #2563eb, /* Thinner blue cushion */
+      inset 0 10px 15px 10px rgba(0, 0, 0, 0.7);
   }
 
   .home-hero:hover {
     box-shadow: 
       0 20px 40px -10px rgba(0, 0, 0, 0.5),
-      inset 0 0 0 8px #3b82f6,
-      inset 0 8px 12px 8px rgba(0, 0, 0, 0.6);
+      inset 0 0 0 1px #94a3b8,
+      inset 0 0 4px 1px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 10px #3b82f6,
+      inset 0 10px 15px 10px rgba(0, 0, 0, 0.7);
   }
 
   /* Adjust diamonds for thinner frame */
