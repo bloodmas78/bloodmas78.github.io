@@ -10,7 +10,7 @@ export default function MatchRecords() {
   const [loading, setLoading] = useState(true)
   const [selectedCompletedMatchId, setSelectedCompletedMatchId] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+  const itemsPerPage = 5
 
   const loadData = async () => {
     setLoading(true)
@@ -296,7 +296,7 @@ export default function MatchRecords() {
           <div className="cc-empty">아직 끝난 매치가 없어요. 언능 한 겜 GOGO!</div>
         ) : (
           <>
-            <div className="cc-matches-grid">
+            <div className="cc-matches-grid cc-completed-matches-grid">
               {paginatedCompletedMatches.map(match => (
               <div
                 key={match.id}

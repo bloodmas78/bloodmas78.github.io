@@ -2080,6 +2080,13 @@
     /* 부드러운 터치 스크롤 지원 */
   }
 
+  /* 종료된 매치는 5개씩 페이징하므로 가로 스와이프 대신 세로 나열 */
+  .cc-matches-grid.cc-completed-matches-grid {
+    display: grid;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+
   /* 스크롤바 커스텀 (모바일에서 깔끔하게 표시) */
   .cc-matches-grid::-webkit-scrollbar {
     height: 4px;

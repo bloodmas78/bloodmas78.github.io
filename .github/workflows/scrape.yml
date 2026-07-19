@@ -2,8 +2,8 @@ name: Scrape Billizone Data
 
 on:
   schedule:
-    # KST 03:00 = UTC 18:00 (previous day)
-    - cron: '0 18 * * *'
+    # KST 08:00 = UTC 23:00 (previous day)
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:
