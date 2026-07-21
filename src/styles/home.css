@@ -1,6 +1,5 @@
-/* ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-   HOME PAGE
-   ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
+/* ?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?   HOME PAGE
+   ?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?*/
 .home-page {
   min-height: 100vh;
   display: flex;
@@ -211,7 +210,6 @@
   padding: clamp(24px, 5vw, 48px);
   padding-top: 95px;
   backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -223,9 +221,7 @@
 .home-hero::after {
   content: '';
   position: absolute;
-  left: 50%;
-  margin-left: -123px; /* (120px * 2) + 6px = 246px -> half is 123px */
-  width: 246px;
+  left: 0; right: 0;
   height: 6px;
   pointer-events: none;
   background-image: 
@@ -234,10 +230,11 @@
     radial-gradient(circle, #f8fafc 40%, rgba(0,0,0,0.4) 80%, transparent 100%);
   background-size: 6px 6px;
   background-repeat: no-repeat;
+  /* 화면 크기에 비례하여 다이아몬드 간격이 줄어들도록 30%, 50%, 70% 비율 적용 */
   background-position: 
-    left center,
-    center,
-    right center;
+    30% center,
+    50% center,
+    70% center;
   z-index: 10;
 }
 
@@ -253,7 +250,7 @@
   position: relative;
 }
 
-.home-hero-wrapper:hover .home-hero {
+@media (hover: hover) and (pointer: fine) { .home-hero-wrapper:hover .home-hero {
   transform: translateY(-4px);
   box-shadow: 
     0 40px 70px -15px rgba(0, 0, 0, 0.7),
@@ -261,7 +258,7 @@
     inset 0 0 10px 2px rgba(0, 0, 0, 0.8),
     inset 0 0 0 18px #3b82f6, /* Brighter blue cushion on hover */
     inset 0 18px 25px 18px rgba(0, 0, 0, 0.8);
-}
+} }
 
 /* Home Header */
 .home-header {
@@ -621,7 +618,6 @@
 .settlement-card {
   background: linear-gradient(180deg, rgba(254, 229, 0, 0.95) 0%, rgba(250, 214, 29, 0.9) 100%);
   backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
   border-color: rgba(255, 255, 255, 0.6);
 }
 .settlement-card h2 { color: #3a1d1d; }
@@ -683,29 +679,28 @@
   
   .mobile-break { display: block; }
 
-  .home-hero-wrapper:hover .home-hero {
+  @media (hover: hover) and (pointer: fine) { @media (hover: hover) and (pointer: fine) { .home-hero-wrapper:hover .home-hero {
     box-shadow: 
       0 20px 40px -10px rgba(0, 0, 0, 0.5),
       inset 0 0 0 1px #94a3b8,
       inset 0 0 4px 1px rgba(0, 0, 0, 0.6),
       inset 0 0 0 10px #3b82f6,
       inset 0 10px 15px 10px rgba(0, 0, 0, 0.7);
-  }
+  } } }
 
-  /* Adjust diamonds for thinner frame */
-  .home-hero::before { top: -6px; }
-  .home-hero::after { bottom: -6px; }
+  /* Adjust diamonds for thinner frame (8px border -> center is at -4px. dot is 6px height -> top/bottom should be -7px) */
+  .home-hero::before { top: -7px; }
+  .home-hero::after { bottom: -7px; }
 
-  /* 3D 캔버??모바??최적??(?이 ?마진 축소) */
+  /* 3D 罹踰??紐⑤�??理�??(????留吏 異�) */
   .three-logo-container {
     height: 320px;
     margin: -80px auto -80px;
   }
 }
 
-/* ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-   SHARED PAGE ACTIONS
-   ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
+/* ?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?   SHARED PAGE ACTIONS
+   ?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?占?*/
 .page-home-link {
   position: fixed;
   right: 20px;
