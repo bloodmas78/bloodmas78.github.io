@@ -223,7 +223,9 @@
 .home-hero::after {
   content: '';
   position: absolute;
-  left: 0; right: 0;
+  left: 50%;
+  margin-left: -123px; /* (120px * 2) + 6px = 246px -> half is 123px */
+  width: 246px;
   height: 6px;
   pointer-events: none;
   background-image: 
@@ -233,9 +235,9 @@
   background-size: 6px 6px;
   background-repeat: no-repeat;
   background-position: 
-    calc(50% - 120px) center,
-    50% center,
-    calc(50% + 120px) center;
+    left center,
+    center,
+    right center;
   z-index: 10;
 }
 
@@ -247,7 +249,11 @@
   bottom: -10px; /* Centered in 14px bottom frame */
 }
 
-.home-hero:hover {
+.home-hero-wrapper {
+  position: relative;
+}
+
+.home-hero-wrapper:hover .home-hero {
   transform: translateY(-4px);
   box-shadow: 
     0 40px 70px -15px rgba(0, 0, 0, 0.7),
@@ -677,7 +683,7 @@
   
   .mobile-break { display: block; }
 
-  .home-hero:hover {
+  .home-hero-wrapper:hover .home-hero {
     box-shadow: 
       0 20px 40px -10px rgba(0, 0, 0, 0.5),
       inset 0 0 0 1px #94a3b8,
