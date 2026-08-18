@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { memberData } from '../data'
 import { guestMembers } from '../data/guestMembers'
 import { fetchMatches, updateMatchSetResult, completeMatch, deleteMatch, deleteCompletedMatch, revertMatchToOngoing, fetchMemberStats, type MatchRecord, type MemberStat } from '../utils/firebaseUtils'
+import { useAuth } from '../hooks/useAuth'
 
 export default function MatchRecords() {
+  const { user, login, logout } = useAuth()
   const [ongoingMatches, setOngoingMatches] = useState<MatchRecord[]>([])
   const [completedMatches, setCompletedMatches] = useState<MatchRecord[]>([])
   const [memberStats, setMemberStats] = useState<Record<string, MemberStat>>({})
@@ -32,6 +34,24 @@ export default function MatchRecords() {
   useEffect(() => {
     loadData()
   }, [])
+
+  // 관리자 권한 확인 (Google 로그인 및 이메일 화이트리스트 체크)
+  const requireAdminAuth = async (): Promise<boolean> => {
+    let currentUser = user
+    if (!currentUser) {
+      currentUser = await login()
+      if (!currentUser) return false
+    }
+
+    const adminEmails = import.meta.env.VITE_ADMIN_EMAILS || 'bloodmas78@gmail.com'
+    const allowedList = adminEmails.split(',').map((e: string) => e.trim().toLowerCase())
+    if (currentUser.email && !allowedList.includes(currentUser.email.toLowerCase())) {
+      alert(`Google 계정(${currentUser.email})은 관리자 권한이 없습니다.`)
+      return false
+    }
+
+    return true
+  }
 
   const handleSetResult = async (match: MatchRecord, setIndex: number, winner: 'A' | 'B' | null) => {
     const newSetResults = [...(match.setResults || [null, null, null, null, null])]
@@ -68,12 +88,8 @@ export default function MatchRecords() {
   }
 
   const handleDeleteCompletedMatch = async (match: MatchRecord) => {
-    const password = window.prompt('관리자 비밀번호를 입력하세요:')
-    if (password === null) return // 취소 버튼 클릭 시
-    if (password !== (import.meta.env.VITE_ADMIN_PASSWORD || '1220')) {
-      alert('비밀번호가 일치하지 않습니다. 삭제할 수 없습니다.')
-      return
-    }
+    const isAuthed = await requireAdminAuth()
+    if (!isAuthed) return
 
     if (!window.confirm('정말 이 종료된 매치를 삭제하시겠습니까?\n해당 매치에 참여했던 멤버들의 전적(승/패)도 함께 복구(차감)됩니다.')) return;
 
@@ -87,12 +103,8 @@ export default function MatchRecords() {
   }
 
   const handleEditCompletedMatch = async (match: MatchRecord) => {
-    const password = window.prompt('관리자 비밀번호를 입력하세요:')
-    if (password === null) return
-    if (password !== (import.meta.env.VITE_ADMIN_PASSWORD || '1220')) {
-      alert('비밀번호가 일치하지 않습니다. 수정할 수 없습니다.')
-      return
-    }
+    const isAuthed = await requireAdminAuth()
+    if (!isAuthed) return
 
     if (!window.confirm('이 매치를 진행 중 상태로 되돌리시겠습니까?\n해당 매치로 누적되었던 전적은 롤백되며, 스코어 수정 후 다시 종료해야 합니다.')) return;
 
@@ -122,6 +134,80 @@ export default function MatchRecords() {
 
   return (
     <div className="cc-records-layout">
+      {/* ═══ 관리자 Auth 인증 바 ═══ */}
+      <div
+        className="cc-auth-bar"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '12px 16px',
+          marginBottom: '16px',
+          borderRadius: '12px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          gridColumn: '1 / -1',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#cbd5e1' }}>
+          <span style={{ fontSize: '16px' }}>🔐</span>
+          {user ? (
+            <span>
+              관리자 인증됨: <strong style={{ color: '#38bdf8' }}>{user.displayName || user.email}</strong>
+            </span>
+          ) : (
+            <span>종료 매치 수정/삭제 시 <strong>Google 로그인</strong> 인증이 필요합니다.</span>
+          )}
+        </div>
+        <div>
+          {user ? (
+            <button
+              onClick={logout}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                color: '#f87171',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: 600
+              }}
+            >
+              로그아웃
+            </button>
+          ) : (
+            <button
+              onClick={login}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                background: 'rgba(66, 133, 244, 0.2)',
+                border: '1px solid rgba(66, 133, 244, 0.4)',
+                color: '#60a5fa',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              Google 로그인
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="cc-records-left">
       {/* ═══ 진행 중 매치 ═══ */}
       <section>
