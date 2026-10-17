@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Ranking from './pages/Ranking'
 import Settlement from './pages/Settlement'
 import Random from './pages/Random'
+import Voice from './pages/Voice'
 import './App.css'
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
       case '/random':
         document.title = '9샷 | 스타 매칭'
         break
+      case '/voice':
+        document.title = '물방울 음성 대화기'
+        break
       default:
         document.title = '9샷 놀이터'
     }
@@ -37,6 +41,7 @@ function App() {
         <Route path="/9shot" element={<Ranking />} />
         <Route path="/n1" element={<Settlement />} />
         <Route path="/random" element={<Random />} />
+        <Route path="/voice" element={<Voice />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

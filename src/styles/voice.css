@@ -1,0 +1,628 @@
+.voice-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 50%, #020617 100%);
+  color: #f8fafc;
+  padding: 24px 16px 80px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Pretendard', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Ambient Glows */
+.voice-bg-glow-1,
+.voice-bg-glow-2 {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+.voice-bg-glow-1 {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #38bdf8 0%, rgba(56, 189, 248, 0) 70%);
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.voice-bg-glow-2 {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #818cf8 0%, rgba(129, 140, 248, 0) 70%);
+  bottom: 40px;
+  right: -60px;
+}
+
+/* Header */
+.voice-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 580px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.voice-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #38bdf8;
+  backdrop-filter: blur(8px);
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+}
+
+.voice-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.voice-setting-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+
+.voice-setting-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.voice-speaking-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4ade80;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+  animation: pulse-dot 1s infinite alternate;
+}
+
+.voice-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  background: linear-gradient(180deg, #ffffff 20%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.voice-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Settings Card (Glassmorphism) */
+.voice-settings-card {
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.voice-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.voice-settings-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-speaking-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.voice-soundwave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.voice-soundwave-bar {
+  width: 2px;
+  background: #4ade80;
+  border-radius: 2px;
+  animation: soundwave-jump 0.6s infinite ease-in-out alternate;
+}
+
+.voice-soundwave-bar:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+.voice-soundwave-bar:nth-child(2) { height: 10px; animation-delay: 0.25s; }
+.voice-soundwave-bar:nth-child(3) { height: 6px; animation-delay: 0.4s; }
+
+@keyframes soundwave-jump {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1.2); }
+}
+
+.voice-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.voice-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.voice-control-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  display: flex;
+  justify-content: space-between;
+}
+
+.voice-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: all 0.2s;
+}
+
+.voice-select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.voice-sliders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.voice-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+
+.voice-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.voice-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Quick Input Card */
+.voice-quick-input-card {
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.voice-quick-input {
+  flex: 1;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.voice-quick-input:focus {
+  border-color: #38bdf8;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.voice-quick-btn {
+  padding: 0 20px;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.voice-quick-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.voice-quick-btn:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================
+   APPLE LIQUID WATER DROP BUTTONS (Main Core Style)
+   ========================================================== */
+.voice-grid-section {
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+  width: 100%;
+}
+
+.voice-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  padding-left: 4px;
+}
+
+.voice-drops-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Apple Water Drop Button Styling */
+.drop-btn {
+  position: relative;
+  height: 98px;
+  border: none;
+  outline: none;
+  border-radius: 32px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px;
+  color: #ffffff;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, filter 0.2s;
+  overflow: hidden;
+
+  /* Glass Base & Water Volume Reflection */
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+}
+
+/* Top Curved Glass Reflection Highlight (Apple Liquid Specular Highlight) */
+.drop-btn::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 10%;
+  width: 80%;
+  height: 44%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.1) 80%, transparent 100%);
+  border-radius: 9999px 9999px 60% 60% / 9999px 9999px 30% 30%;
+  pointer-events: none;
+  opacity: 0.9;
+  filter: blur(0.3px);
+  z-index: 2;
+}
+
+/* Bottom Caustic Glow reflection */
+.drop-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 20%;
+  width: 60%;
+  height: 25%;
+  background: radial-gradient(ellipse at bottom, rgba(255, 255, 255, 0.35) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.drop-text {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.drop-sub {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.85;
+  position: relative;
+  z-index: 3;
+}
+
+/* Button Active / Pressing Effect (Liquid Squish) */
+.drop-btn:active {
+  transform: scale(0.92) translateY(2px);
+  filter: brightness(1.15);
+}
+
+.drop-btn.is-active-speaker {
+  transform: scale(0.95);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5) !important;
+  animation: drop-pulse 0.8s infinite ease-in-out alternate;
+}
+
+@keyframes drop-pulse {
+  0% { transform: scale(0.95); }
+  100% { transform: scale(1.02); }
+}
+
+/* --- Color Variants with Liquid Drops --- */
+
+/* 1. Aqua Cyan (맞아 / 그래 / 알았어 - 긍정) */
+.drop-cyan {
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.65) 0%, rgba(2, 132, 199, 0.35) 100%);
+  border: 1px solid rgba(125, 211, 252, 0.45);
+  box-shadow: 
+    0 12px 28px -6px rgba(2, 132, 199, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(3, 105, 161, 0.6);
+}
+
+.drop-cyan:hover {
+  box-shadow: 
+    0 16px 32px -4px rgba(2, 132, 199, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 8px rgba(3, 105, 161, 0.7);
+}
+
+/* 2. Emerald Green (좋아 / 나이스 - 기쁨/찬성) */
+.drop-emerald {
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.65) 0%, rgba(5, 150, 105, 0.35) 100%);
+  border: 1px solid rgba(110, 231, 183, 0.45);
+  box-shadow: 
+    0 12px 28px -6px rgba(5, 150, 105, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(4, 120, 87, 0.6);
+}
+
+.drop-emerald:hover {
+  box-shadow: 
+    0 16px 32px -4px rgba(5, 150, 105, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 8px rgba(4, 120, 87, 0.7);
+}
+
+/* 3. Rose / Ruby (싫어 / 안돼 - 거절/부정) */
+.drop-rose {
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.65) 0%, rgba(225, 29, 72, 0.35) 100%);
+  border: 1px solid rgba(253, 164, 175, 0.45);
+  box-shadow: 
+    0 12px 28px -6px rgba(225, 29, 72, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(190, 18, 60, 0.6);
+}
+
+.drop-rose:hover {
+  box-shadow: 
+    0 16px 32px -4px rgba(225, 29, 72, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 8px rgba(190, 18, 60, 0.7);
+}
+
+/* 4. Violet / Indigo (나도 / 뭐래 - 공감 / 위트) */
+.drop-indigo {
+  background: linear-gradient(145deg, rgba(99, 102, 241, 0.65) 0%, rgba(79, 70, 229, 0.35) 100%);
+  border: 1px solid rgba(199, 210, 254, 0.45);
+  box-shadow: 
+    0 12px 28px -6px rgba(79, 70, 229, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(67, 56, 202, 0.6);
+}
+
+.drop-indigo:hover {
+  box-shadow: 
+    0 16px 32px -4px rgba(79, 70, 229, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 8px rgba(67, 56, 202, 0.7);
+}
+
+/* 5. Amber / Coral (뭐래 / 위트) */
+.drop-amber {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.65) 0%, rgba(217, 119, 6, 0.35) 100%);
+  border: 1px solid rgba(253, 230, 138, 0.45);
+  box-shadow: 
+    0 12px 28px -6px rgba(217, 119, 6, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(180, 83, 9, 0.6);
+}
+
+.drop-amber:hover {
+  box-shadow: 
+    0 16px 32px -4px rgba(217, 119, 6, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.85),
+    inset 0 -3px 8px rgba(180, 83, 9, 0.7);
+}
+
+/* Custom Saved Words Section */
+.voice-custom-section {
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.voice-custom-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.voice-custom-pill {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  color: #f1f5f9;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.voice-custom-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.voice-custom-pill:active {
+  transform: scale(0.96);
+}
+
+.voice-custom-del {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  font-size: 12px;
+  margin-left: 2px;
+  transition: all 0.15s;
+}
+
+.voice-custom-del:hover {
+  background: rgba(239, 68, 68, 0.8);
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .voice-container {
+    padding: 16px 12px 70px;
+  }
+  
+  .voice-title {
+    font-size: 24px;
+  }
+  
+  .voice-drops-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .drop-btn {
+    height: 86px;
+    border-radius: 26px;
+    padding: 8px;
+  }
+
+  .drop-text {
+    font-size: 18px;
+  }
+
+  .voice-sliders {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
