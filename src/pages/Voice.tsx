@@ -118,28 +118,21 @@ export default function Voice() {
       }
     }
 
-    // Chrome bug fix 1: Unpause if stuck
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+    // Unpause if stuck
     if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume()
     }
 
-    // Chrome bug fix 2: cancel() drops next speak if called synchronously.
-    // We cancel and use a 60ms delay before speak()
-    window.speechSynthesis.cancel()
-
-    setTimeout(() => {
-      // Resume again before speak
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume()
-      }
-
+    const createAndSpeak = () => {
       const utterance = new SpeechSynthesisUtterance(text)
       utterance.volume = 1.0
       utterance.rate = rate
       utterance.pitch = pitch
       utterance.lang = 'ko-KR'
 
-      // Set voice if specifically chosen
+      // Check if chosen voice actually exists on this device
       if (selectedVoiceURI) {
         const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
         if (target && target.voice) {
@@ -148,7 +141,7 @@ export default function Voice() {
         }
       }
 
-      // Chrome bug fix 3: Utterance GC protection (window ref)
+      // GC Protection
       utteranceRef.current = utterance
       ;(window as any).__voiceUtterance = utterance
 
@@ -166,7 +159,25 @@ export default function Voice() {
       }
 
       window.speechSynthesis.speak(utterance)
-    }, 60)
+    }
+
+    if (isMobile) {
+      // Mobile Safari / Chrome REQUIRE synchronous speak() directly within the touch event stack!
+      // Any setTimeout will lose the user gesture token and block playback.
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel()
+      }
+      createAndSpeak()
+    } else {
+      // Desktop Chrome fix: cancel followed by short microtask
+      window.speechSynthesis.cancel()
+      setTimeout(() => {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume()
+        }
+        createAndSpeak()
+      }, 50)
+    }
   }
 
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -388,6 +399,11 @@ export default function Voice() {
           </div>
         </section>
       )}
+
+      {/* Mobile Audio Tip */}
+      <footer className="voice-mobile-tip">
+        <span>💡 <strong>모바일 사운드 팁</strong>: 아이폰은 측면 <strong>무음 스위치(진동 모드)</strong>가 켜져 있으면 웹 오디오가 무음 처리됩니다. 무음 모드를 해제하고 미디어 볼륨을 확인해 주세요.</span>
+      </footer>
     </div>
   )
 }
