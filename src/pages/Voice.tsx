@@ -105,22 +105,18 @@ export default function Voice() {
     }
   }, [customWords])
 
-  // Audio Mode: 'auto' | 'stream' (online audio - 100% mobile compatible) | 'synth' (device native TTS)
-  const [engineMode, setEngineMode] = useState<'stream' | 'synth'>(() => {
-    // Default to 'stream' on mobile devices for 100% guaranteed playback
-    if (typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      return 'stream'
-    }
-    return (localStorage.getItem('voice_engine_mode') as 'stream' | 'synth') || 'stream'
-  })
+  const [debugLog, setDebugLog] = useState<string>('')
 
-  const audioPlayerRef = useRef<HTMLAudioElement | null>(null)
-
-  // Play Speech with Dual-Engine (Stream Audio vs SpeechSynthesis)
+  // Bulletproof Speech Playback for Android (Fold 5) & iOS
   const speak = (text: string) => {
     if (!text) return
 
-    // Haptic feedback if supported on mobile
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      setDebugLog('❌ 이 브라우저는 음성 합성을 지원하지 않습니다.')
+      return
+    }
+
+    // 1. Haptic feedback
     if (navigator.vibrate) {
       try {
         navigator.vibrate(25)
@@ -129,66 +125,36 @@ export default function Voice() {
       }
     }
 
-    // Engine 1: Online Audio Stream (Guaranteed to play on 100% of mobile phones)
-    if (engineMode === 'stream') {
+    const isAndroid = /Android/i.test(navigator.userAgent)
+
+    // 2. Unpause synthesis
+    try {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume()
+      }
+    } catch (e) {
+      console.warn(e)
+    }
+
+    // 3. Android Fix: DO NOT call cancel() if idle, as cancel() can crash Android Samsung TTS IPC!
+    // Only cancel if actively speaking.
+    if (!isAndroid && window.speechSynthesis.speaking) {
       try {
-        if (audioPlayerRef.current) {
-          audioPlayerRef.current.pause()
-          audioPlayerRef.current.currentTime = 0
-        }
-
-        const encodedText = encodeURIComponent(text)
-        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodedText}`
-        const audio = new Audio(audioUrl)
-        audioPlayerRef.current = audio
-        audio.playbackRate = Math.min(Math.max(rate, 0.8), 1.3)
-
-        setSpeakingText(text)
-
-        audio.onended = () => {
-          setSpeakingText(null)
-        }
-
-        audio.onerror = () => {
-          console.warn('Audio stream failed, fallback to native synth')
-          playSynth(text)
-        }
-
-        const playPromise = audio.play()
-        if (playPromise !== undefined) {
-          playPromise.catch((err) => {
-            console.warn('Audio play rejected, falling back to synth:', err)
-            playSynth(text)
-          })
-        }
-        return
+        window.speechSynthesis.cancel()
       } catch (e) {
-        console.warn('Stream play error, using synth:', e)
-        playSynth(text)
-        return
+        console.warn(e)
       }
     }
 
-    // Engine 2: Native Device SpeechSynthesis
-    playSynth(text)
-  }
-
-  const playSynth = (text: string) => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume()
-    }
-
-    const createAndSpeak = () => {
+    try {
       const utterance = new SpeechSynthesisUtterance(text)
       utterance.volume = 1.0
       utterance.rate = rate
       utterance.pitch = pitch
       utterance.lang = 'ko-KR'
 
+      // Android Fix: Do NOT force utterance.voice on Android unless selected by user
+      // Mismatched voice objects in Samsung Chrome silently drop speech!
       if (selectedVoiceURI) {
         const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
         if (target && target.voice) {
@@ -197,44 +163,31 @@ export default function Voice() {
         }
       }
 
+      // Keep strong reference against Chrome GC
       utteranceRef.current = utterance
       ;(window as any).__voiceUtterance = utterance
 
       utterance.onstart = () => {
         setSpeakingText(text)
+        setDebugLog(`🔊 소리 재생 중: "${text}"`)
       }
 
       utterance.onend = () => {
         setSpeakingText(null)
+        setDebugLog(`✅ 재생 완료: "${text}"`)
       }
 
-      utterance.onerror = (err) => {
-        console.warn('TTS playback error:', err)
+      utterance.onerror = (event: any) => {
+        const errorMsg = event.error || '알 수 없는 오류'
+        console.warn('Speech error:', errorMsg)
         setSpeakingText(null)
+        setDebugLog(`⚠️ 음성 오류 발생: ${errorMsg} (기기 볼륨 및 TTS 설정 확인)`)
       }
 
       window.speechSynthesis.speak(utterance)
+    } catch (err: any) {
+      setDebugLog(`❌ 실행 실패: ${err.message || err}`)
     }
-
-    if (isMobile) {
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel()
-      }
-      createAndSpeak()
-    } else {
-      window.speechSynthesis.cancel()
-      setTimeout(() => {
-        if (window.speechSynthesis.paused) {
-          window.speechSynthesis.resume()
-        }
-        createAndSpeak()
-      }, 50)
-    }
-  }
-
-  const handleEngineModeChange = (mode: 'stream' | 'synth') => {
-    setEngineMode(mode)
-    localStorage.setItem('voice_engine_mode', mode)
   }
 
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -309,6 +262,11 @@ export default function Voice() {
               <span className="voice-soundwave-bar" />
             </span>
             <span>재생 중: "{speakingText}"</span>
+          </div>
+        )}
+        {debugLog && (
+          <div className="voice-debug-banner">
+            <span>{debugLog}</span>
           </div>
         )}
       </header>
@@ -401,50 +359,24 @@ export default function Voice() {
           </div>
 
           <div className="voice-controls-grid">
-            {/* Audio Engine Selector */}
             <div className="voice-control-group">
               <label className="voice-control-label">
-                <span>사운드 출력 모드 (모바일 호환)</span>
-                <span>{engineMode === 'stream' ? '📱 모바일 전용 오디오' : '💻 기기 내장 음성'}</span>
+                <span>목소리 종류 선택</span>
+                <span>{voices.filter((v) => v.lang.includes('ko')).length}개 한국어 음성 감지됨</span>
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <button
-                  type="button"
-                  className={`voice-mode-tab-btn ${engineMode === 'stream' ? 'is-active' : ''}`}
-                  onClick={() => handleEngineModeChange('stream')}
-                >
-                  📱 모바일 호환 (추천)
-                </button>
-                <button
-                  type="button"
-                  className={`voice-mode-tab-btn ${engineMode === 'synth' ? 'is-active' : ''}`}
-                  onClick={() => handleEngineModeChange('synth')}
-                >
-                  💻 기기 내장 TTS
-                </button>
-              </div>
+              <select
+                className="voice-select"
+                value={selectedVoiceURI}
+                onChange={handleVoiceChange}
+              >
+                <option value="">기본 한국어 음성 (시스템 권장)</option>
+                {voices.map((v) => (
+                  <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
+                    {v.name}
+                  </option>
+                ))}
+              </select>
             </div>
-
-            {engineMode === 'synth' && (
-              <div className="voice-control-group">
-                <label className="voice-control-label">
-                  <span>목소리 종류 선택</span>
-                  <span>{voices.filter((v) => v.lang.includes('ko')).length}개 한국어 음성</span>
-                </label>
-                <select
-                  className="voice-select"
-                  value={selectedVoiceURI}
-                  onChange={handleVoiceChange}
-                >
-                  <option value="">기본 한국어 음성 (시스템 권장)</option>
-                  {voices.map((v) => (
-                    <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
-                      {v.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
 
             <div className="voice-sliders">
               <div className="voice-control-group">
@@ -485,7 +417,9 @@ export default function Voice() {
 
       {/* Mobile Audio Tip */}
       <footer className="voice-mobile-tip">
-        <span>💡 <strong>모바일 사운드 팁</strong>: 아이폰은 측면 <strong>무음 스위치(진동 모드)</strong>가 켜져 있으면 웹 오디오가 무음 처리됩니다. 무음 모드를 해제하고 미디어 볼륨을 확인해 주세요.</span>
+        <span>💡 <strong>모바일 사운드 가이드</strong>: <br />
+        • <strong>갤럭시/폴드</strong>: 측면 볼륨 버튼 누른 뒤 <strong>[⋯]</strong>을 눌러 <strong>미디어 및 시스템/알림 음량</strong>을 켜주세요.<br />
+        • <strong>아이폰</strong>: 측면 <strong>무음 스위치(진동 모드)</strong>를 올려 벨소리 모드로 변경해 주세요.</span>
       </footer>
     </div>
   )
