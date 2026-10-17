@@ -111,42 +111,62 @@ export default function Voice() {
 
     // Haptic feedback if supported on mobile
     if (navigator.vibrate) {
-      navigator.vibrate(25)
+      try {
+        navigator.vibrate(25)
+      } catch (e) {
+        console.warn(e)
+      }
     }
 
-    // Cancel currently speaking
+    // Chrome bug fix 1: Unpause if stuck
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume()
+    }
+
+    // Chrome bug fix 2: cancel() drops next speak if called synchronously.
+    // We cancel and use a 60ms delay before speak()
     window.speechSynthesis.cancel()
 
-    const utterance = new SpeechSynthesisUtterance(text)
-    utteranceRef.current = utterance
-
-    // Set voice
-    if (selectedVoiceURI) {
-      const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
-      if (target) {
-        utterance.voice = target.voice
-        utterance.lang = target.lang
+    setTimeout(() => {
+      // Resume again before speak
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume()
       }
-    } else {
+
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.volume = 1.0
+      utterance.rate = rate
+      utterance.pitch = pitch
       utterance.lang = 'ko-KR'
-    }
 
-    utterance.rate = rate
-    utterance.pitch = pitch
+      // Set voice if specifically chosen
+      if (selectedVoiceURI) {
+        const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
+        if (target && target.voice) {
+          utterance.voice = target.voice
+          utterance.lang = target.voice.lang || 'ko-KR'
+        }
+      }
 
-    utterance.onstart = () => {
-      setSpeakingText(text)
-    }
+      // Chrome bug fix 3: Utterance GC protection (window ref)
+      utteranceRef.current = utterance
+      ;(window as any).__voiceUtterance = utterance
 
-    utterance.onend = () => {
-      setSpeakingText(null)
-    }
+      utterance.onstart = () => {
+        setSpeakingText(text)
+      }
 
-    utterance.onerror = () => {
-      setSpeakingText(null)
-    }
+      utterance.onend = () => {
+        setSpeakingText(null)
+      }
 
-    window.speechSynthesis.speak(utterance)
+      utterance.onerror = (err) => {
+        console.warn('TTS playback note:', err)
+        setSpeakingText(null)
+      }
+
+      window.speechSynthesis.speak(utterance)
+    }, 60)
   }
 
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -323,6 +343,7 @@ export default function Voice() {
                 value={selectedVoiceURI}
                 onChange={handleVoiceChange}
               >
+                <option value="">기본 한국어 음성 (시스템 권장)</option>
                 {voices.map((v) => (
                   <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
                     {v.name}
