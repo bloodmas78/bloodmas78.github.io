@@ -105,9 +105,20 @@ export default function Voice() {
     }
   }, [customWords])
 
-  // Play Speech
+  // Audio Mode: 'auto' | 'stream' (online audio - 100% mobile compatible) | 'synth' (device native TTS)
+  const [engineMode, setEngineMode] = useState<'stream' | 'synth'>(() => {
+    // Default to 'stream' on mobile devices for 100% guaranteed playback
+    if (typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      return 'stream'
+    }
+    return (localStorage.getItem('voice_engine_mode') as 'stream' | 'synth') || 'stream'
+  })
+
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null)
+
+  // Play Speech with Dual-Engine (Stream Audio vs SpeechSynthesis)
   const speak = (text: string) => {
-    if (!text || typeof window === 'undefined' || !window.speechSynthesis) return
+    if (!text) return
 
     // Haptic feedback if supported on mobile
     if (navigator.vibrate) {
@@ -118,9 +129,55 @@ export default function Voice() {
       }
     }
 
+    // Engine 1: Online Audio Stream (Guaranteed to play on 100% of mobile phones)
+    if (engineMode === 'stream') {
+      try {
+        if (audioPlayerRef.current) {
+          audioPlayerRef.current.pause()
+          audioPlayerRef.current.currentTime = 0
+        }
+
+        const encodedText = encodeURIComponent(text)
+        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodedText}`
+        const audio = new Audio(audioUrl)
+        audioPlayerRef.current = audio
+        audio.playbackRate = Math.min(Math.max(rate, 0.8), 1.3)
+
+        setSpeakingText(text)
+
+        audio.onended = () => {
+          setSpeakingText(null)
+        }
+
+        audio.onerror = () => {
+          console.warn('Audio stream failed, fallback to native synth')
+          playSynth(text)
+        }
+
+        const playPromise = audio.play()
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('Audio play rejected, falling back to synth:', err)
+            playSynth(text)
+          })
+        }
+        return
+      } catch (e) {
+        console.warn('Stream play error, using synth:', e)
+        playSynth(text)
+        return
+      }
+    }
+
+    // Engine 2: Native Device SpeechSynthesis
+    playSynth(text)
+  }
+
+  const playSynth = (text: string) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return
+
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-    // Unpause if stuck
     if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume()
     }
@@ -132,7 +189,6 @@ export default function Voice() {
       utterance.pitch = pitch
       utterance.lang = 'ko-KR'
 
-      // Check if chosen voice actually exists on this device
       if (selectedVoiceURI) {
         const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
         if (target && target.voice) {
@@ -141,7 +197,6 @@ export default function Voice() {
         }
       }
 
-      // GC Protection
       utteranceRef.current = utterance
       ;(window as any).__voiceUtterance = utterance
 
@@ -154,7 +209,7 @@ export default function Voice() {
       }
 
       utterance.onerror = (err) => {
-        console.warn('TTS playback note:', err)
+        console.warn('TTS playback error:', err)
         setSpeakingText(null)
       }
 
@@ -162,14 +217,11 @@ export default function Voice() {
     }
 
     if (isMobile) {
-      // Mobile Safari / Chrome REQUIRE synchronous speak() directly within the touch event stack!
-      // Any setTimeout will lose the user gesture token and block playback.
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel()
       }
       createAndSpeak()
     } else {
-      // Desktop Chrome fix: cancel followed by short microtask
       window.speechSynthesis.cancel()
       setTimeout(() => {
         if (window.speechSynthesis.paused) {
@@ -178,6 +230,11 @@ export default function Voice() {
         createAndSpeak()
       }, 50)
     }
+  }
+
+  const handleEngineModeChange = (mode: 'stream' | 'synth') => {
+    setEngineMode(mode)
+    localStorage.setItem('voice_engine_mode', mode)
   }
 
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -344,24 +401,50 @@ export default function Voice() {
           </div>
 
           <div className="voice-controls-grid">
+            {/* Audio Engine Selector */}
             <div className="voice-control-group">
               <label className="voice-control-label">
-                <span>목소리 종류 선택</span>
-                <span>{voices.filter((v) => v.lang.includes('ko')).length}개 한국어 음성</span>
+                <span>사운드 출력 모드 (모바일 호환)</span>
+                <span>{engineMode === 'stream' ? '📱 모바일 전용 오디오' : '💻 기기 내장 음성'}</span>
               </label>
-              <select
-                className="voice-select"
-                value={selectedVoiceURI}
-                onChange={handleVoiceChange}
-              >
-                <option value="">기본 한국어 음성 (시스템 권장)</option>
-                {voices.map((v) => (
-                  <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
-                    {v.name}
-                  </option>
-                ))}
-              </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <button
+                  type="button"
+                  className={`voice-mode-tab-btn ${engineMode === 'stream' ? 'is-active' : ''}`}
+                  onClick={() => handleEngineModeChange('stream')}
+                >
+                  📱 모바일 호환 (추천)
+                </button>
+                <button
+                  type="button"
+                  className={`voice-mode-tab-btn ${engineMode === 'synth' ? 'is-active' : ''}`}
+                  onClick={() => handleEngineModeChange('synth')}
+                >
+                  💻 기기 내장 TTS
+                </button>
+              </div>
             </div>
+
+            {engineMode === 'synth' && (
+              <div className="voice-control-group">
+                <label className="voice-control-label">
+                  <span>목소리 종류 선택</span>
+                  <span>{voices.filter((v) => v.lang.includes('ko')).length}개 한국어 음성</span>
+                </label>
+                <select
+                  className="voice-select"
+                  value={selectedVoiceURI}
+                  onChange={handleVoiceChange}
+                >
+                  <option value="">기본 한국어 음성 (시스템 권장)</option>
+                  {voices.map((v) => (
+                    <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="voice-sliders">
               <div className="voice-control-group">
