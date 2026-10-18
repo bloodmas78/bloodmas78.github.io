@@ -1,44 +1,65 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../styles/voice.css'
 
-interface WordItem {
-  id: string
-  text: string
-  sub?: string
-  color: 'cyan' | 'emerald' | 'rose' | 'indigo' | 'amber'
-}
-
-const DEFAULT_WORDS: WordItem[] = [
-  { id: '1', text: '맞아', sub: '동의', color: 'cyan' },
-  { id: '2', text: '좋아', sub: '찬성', color: 'emerald' },
-  { id: '3', text: '그래', sub: '긍정', color: 'cyan' },
-  { id: '4', text: '알았어', sub: '이해', color: 'cyan' },
-  { id: '5', text: '나이스', sub: '칭찬', color: 'emerald' },
-  { id: '6', text: '나도', sub: '공감', color: 'indigo' },
-  { id: '7', text: '싫어', sub: '거절', color: 'rose' },
-  { id: '8', text: '안돼', sub: '부정', color: 'rose' },
-  { id: '9', text: '뭐래', sub: '장난/의아', color: 'amber' },
-]
+const MAX_SLOTS = 9
 
 export default function Voice() {
   const [rate, setRate] = useState<number>(1.0)
   const [pitch, setPitch] = useState<number>(1.0)
   const [speakingText, setSpeakingText] = useState<string | null>(null)
   const [customText, setCustomText] = useState<string>('')
-  const [customWords, setCustomWords] = useState<string[]>(() => {
+  const [words, setWords] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('voice_custom_words')
-      return saved ? JSON.parse(saved) : ['물 주세요', '잠깐만요', '고마워요', '배고파요']
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        // 기존 4개/9개 기본 문구 등 레거시 데이터는 0개로 깔끔히 초기화
+        const isLegacy =
+          Array.isArray(parsed) &&
+          ((parsed.length === 4 && parsed.includes('물 주세요')) ||
+            (parsed.length === 9 && parsed.includes('맞아')))
+        if (isLegacy) return []
+        return Array.isArray(parsed) ? parsed.slice(0, MAX_SLOTS) : []
+      }
+      return []
     } catch {
-      return ['물 주세요', '잠깐만요', '고마워요', '배고파요']
+      return []
     }
   })
 
+  // 단어 목록 변경 시 로컬 스토리지에 자동 저장
+  useEffect(() => {
+    try {
+      localStorage.setItem('voice_custom_words', JSON.stringify(words))
+    } catch {
+      // ignore
+    }
+  }, [words])
+
   const [showSettings, setShowSettings] = useState<boolean>(false)
   const [showInfo, setShowInfo] = useState<boolean>(false)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   const isFirstSpeakRef = useRef<boolean>(true)
   const bestVoiceRef = useRef<SpeechSynthesisVoice | null>(null)
+
+  // 텍스트 길이에 따라 1줄, 2줄, 3줄... 최대 5줄까지 자연스럽게 높이 자동 조절 (5줄 이상은 스크롤)
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    const newHeight = Math.min(el.scrollHeight, 152)
+    el.style.height = `${Math.max(56, newHeight)}px`
+  }, [customText])
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      if (customText.trim()) {
+        speak(customText.trim())
+      }
+    }
+  }
 
   // 데스크톱 Chrome(Windows SAPI 버그) 및 모바일 환경 최적 한국어 음성 탐색
   const findBestKoreanVoice = (): SpeechSynthesisVoice | null => {
@@ -120,14 +141,6 @@ export default function Voice() {
     }
   }, [])
 
-  // Save custom words to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('voice_custom_words', JSON.stringify(customWords))
-    } catch (e) {
-      console.error(e)
-    }
-  }, [customWords])
 
   const [debugLog, setDebugLog] = useState<string>('')
 
@@ -217,7 +230,7 @@ export default function Voice() {
 
         // Keep strong reference against Chrome GC
         utteranceRef.current = utterance
-        ;(window as any).__voiceUtterance = utterance
+          ; (window as any).__voiceUtterance = utterance
 
         utterance.onstart = () => {
           setSpeakingText(text)
@@ -282,18 +295,25 @@ export default function Voice() {
     speak(customText.trim())
   }
 
-  const handleAddCustomWord = () => {
+  const handleAddWord = () => {
     if (!customText.trim()) return
     const trimmed = customText.trim()
-    if (!customWords.includes(trimmed)) {
-      setCustomWords([...customWords, trimmed])
+    if (words.includes(trimmed)) {
+      speak(trimmed)
+      setCustomText('')
+      return
     }
+    if (words.length >= MAX_SLOTS) {
+      alert('9개 자리가 모두 채워졌습니다. 기존 단어를 삭제 후 등록해 주세요.')
+      return
+    }
+    setWords([...words, trimmed])
     setCustomText('')
   }
 
-  const handleDeleteCustomWord = (wordToDelete: string, e: React.MouseEvent) => {
+  const handleDeleteWord = (indexToDelete: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    setCustomWords(customWords.filter((w) => w !== wordToDelete))
+    setWords(words.filter((_, idx) => idx !== indexToDelete))
   }
 
   return (
@@ -309,9 +329,7 @@ export default function Voice() {
           onClick={() => setShowInfo((prev) => !prev)}
           title="안내 및 로그 토글"
         >
-          <span className="voice-brand-logo">💧</span>
-          <span className="voice-brand-name">물방울</span>
-          <span className="voice-brand-sub">대화기</span>
+          <span className="voice-brand-sub">Voice Assist</span>
         </div>
 
         {/* Dynamic Island Voice Status (Only visible while actively speaking) */}
@@ -361,7 +379,7 @@ export default function Voice() {
       {showInfo && (
         <section className="voice-info-card">
           <div className="voice-info-card-header">
-            <h4>💧 물방울 음성 대화기</h4>
+            <h4>Voice Assist</h4>
             <button
               type="button"
               className="voice-custom-del"
@@ -371,7 +389,7 @@ export default function Voice() {
             </button>
           </div>
           <p className="voice-info-card-desc">
-            버튼을 누르면 상대방에게 선명하고 자연스러운 음성이 스피커로 즉시 재생됩니다.
+            버튼을 누르면 상대방에게 선명하고 자연스러운 음성이 스피커로 즉시 재생되는 의사소통 보조 도구입니다.
           </p>
           {debugLog && (
             <div className="voice-info-log">
@@ -381,74 +399,116 @@ export default function Voice() {
         </section>
       )}
 
-      {/* Main 9 Water Drop Buttons */}
+      {/* 9-Slot Unified Neumorphic Grid (0개에서 시작, + 등록 시 1개씩 슬롯에 채워짐) */}
       <section className="voice-grid-section">
+        <div className="voice-grid-header">
+          <span className="voice-grid-title">자주 쓰는 표현</span>
+          <span className="voice-grid-badge">
+            {words.length} / {MAX_SLOTS}
+          </span>
+        </div>
+
         <div className="voice-drops-grid">
-          {DEFAULT_WORDS.map((item) => {
-            const isActive = speakingText === item.text
+          {Array.from({ length: MAX_SLOTS }).map((_, index) => {
+            const word = words[index]
+            if (word) {
+              const isActive = speakingText === word
+              return (
+                <div key={index} className="drop-btn-slot">
+                  <button
+                    type="button"
+                    className={`drop-btn ${isActive ? 'is-active-speaker' : ''}`}
+                    onClick={() => speak(word)}
+                  >
+                    <span
+                      className="drop-text"
+                      style={{
+                        fontSize:
+                          word.length > 8 ? '13px' : word.length > 5 ? '16px' : '20px',
+                      }}
+                    >
+                      {word}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="drop-btn-del"
+                    onClick={(e) => handleDeleteWord(index, e)}
+                    title={`"${word}" 삭제`}
+                    aria-label={`"${word}" 삭제`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              )
+            }
+
+            const isNext = index === words.length
             return (
-              <button
-                key={item.id}
-                type="button"
-                className={`drop-btn drop-${item.color} ${isActive ? 'is-active-speaker' : ''}`}
-                onClick={() => speak(item.text)}
+              <div
+                key={index}
+                className={`drop-empty-slot ${isNext ? 'is-next' : ''}`}
+                onClick={() => textareaRef.current?.focus()}
+                title={isNext ? '아래에서 단어 입력 후 [+ 등록]을 눌러 추가' : '빈 자리'}
               >
-                <span className="drop-text">{item.text}</span>
-                {item.sub && <span className="drop-sub">{item.sub}</span>}
-              </button>
+                {isNext && <span className="drop-empty-plus">+</span>}
+              </div>
             )
           })}
         </div>
+
+        {words.length === 0 && (
+          <div className="voice-empty-hint">
+            아래 입력창에 자주 쓰는 말을 쓰고 <strong>+ 등록</strong>을 누르면 위의 9개 자리에 순서대로 원형 버튼이 채워집니다.
+          </div>
+        )}
       </section>
 
-      {/* Quick Input Bar */}
+      {/* Quick Input Bar (Auto-expanding Multiline Neumorphic Suite) */}
       <form className="voice-quick-input-card" onSubmit={handleQuickSubmit}>
-        <input
-          type="text"
-          className="voice-quick-input"
-          placeholder="직접 입력하여 말하기 (예: 물 좀 주세요)"
-          value={customText}
-          onChange={(e) => setCustomText(e.target.value)}
-        />
-        <button type="submit" className="voice-quick-btn">
-          🔊 말하기
-        </button>
-        {customText.trim() && (
+        <div className="voice-quick-input-wrap">
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            className="voice-quick-input"
+            placeholder="..."
+            value={customText}
+            onChange={(e) => setCustomText(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          {customText.trim() && (
+            <button
+              type="button"
+              className="voice-quick-clear-btn"
+              onClick={() => setCustomText('')}
+              title="입력 지우기"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+        <div className="voice-quick-actions">
           <button
-            type="button"
-            className="voice-quick-btn voice-quick-add-btn"
-            onClick={handleAddCustomWord}
-            title="자주 쓰는 말로 등록"
+            type="submit"
+            className="voice-quick-btn voice-quick-speak-btn"
+            disabled={!customText.trim()}
           >
-            + 등록
+            <span className="voice-speak-icon">🔊</span>
+            <span className="voice-speak-text">말하기</span>
           </button>
-        )}
+          {customText.trim() && (
+            <button
+              type="button"
+              className="voice-quick-btn voice-quick-add-btn"
+              onClick={handleAddWord}
+              disabled={words.length >= MAX_SLOTS}
+              title={words.length >= MAX_SLOTS ? '9개 자리가 모두 찼습니다' : '9개 자리에 등록'}
+            >
+              + 등록 {words.length >= MAX_SLOTS ? '(가득참)' : ''}
+            </button>
+          )}
+        </div>
       </form>
-
-      {/* Custom Registered Phrases */}
-      {customWords.length > 0 && (
-        <section className="voice-custom-section">
-          <div className="voice-section-title">자주 쓰는 말</div>
-          <div className="voice-custom-tags">
-            {customWords.map((word) => (
-              <div
-                key={word}
-                className="voice-custom-pill"
-                onClick={() => speak(word)}
-              >
-                <span>💬 {word}</span>
-                <span
-                  className="voice-custom-del"
-                  onClick={(e) => handleDeleteCustomWord(word, e)}
-                  title="삭제"
-                >
-                  ✕
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Settings Card (Collapsible) */}
       {showSettings && (

@@ -1,15 +1,44 @@
 /* ==========================================================
-   Apple Liquid Water Drop Communicator (물방울 음성 대화기)
-   Ultra Modern & Sleek Minimalist Skin - 320px Responsive
+   Monochromatic Neumorphism (Soft UI / Sculpted Clay)
+   Palette: Black, Light Gray, White + Transparency ONLY
+   Zero Other Colors.
    ========================================================== */
+
+:root {
+  /* Strictly Monochrome Tokens */
+  --nm-canvas: #ebebeb;
+  --nm-canvas-light: #f5f5f5;
+  --nm-canvas-dark: #dfdfdf;
+  
+  --nm-shadow-light: #ffffff;
+  --nm-shadow-dark: rgba(0, 0, 0, 0.14);
+  --nm-shadow-dark-deep: rgba(0, 0, 0, 0.22);
+
+  --c-black: #000000;
+  --c-black-90: rgba(0, 0, 0, 0.90);
+  --c-black-75: rgba(0, 0, 0, 0.75);
+  --c-black-50: rgba(0, 0, 0, 0.50);
+  --c-black-25: rgba(0, 0, 0, 0.25);
+  --c-black-10: rgba(0, 0, 0, 0.10);
+  --c-black-05: rgba(0, 0, 0, 0.05);
+
+  --c-white: #ffffff;
+  --c-white-90: rgba(255, 255, 255, 0.90);
+  --c-white-70: rgba(255, 255, 255, 0.70);
+  --c-white-40: rgba(255, 255, 255, 0.40);
+  --c-white-15: rgba(255, 255, 255, 0.15);
+
+  --c-gray-inset: #e0e0e0;
+  --c-gray-mid: #cccccc;
+}
 
 .voice-container {
   min-height: 100vh;
   min-height: 100dvh;
-  /* Luminous, clean, airy frosted daylight gradient */
-  background: radial-gradient(circle at 50% -10%, #e0f2fe 0%, #f0fdf4 30%, #f8fafc 75%, #f1f5f9 100%);
-  color: #0f172a;
-  padding: 16px 14px 60px;
+  /* Matte Architectural Light Gray Canvas */
+  background: linear-gradient(145deg, #f2f2f2 0%, #ebebeb 50%, #e2e2e2 100%);
+  color: var(--c-black);
+  padding: 18px 14px 60px;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Pretendard', sans-serif;
   display: flex;
@@ -19,7 +48,7 @@
   overflow-x: hidden;
 }
 
-/* Ambient Background Glows */
+/* Subtle Monochromatic Light Spots (Only White & Black translucent blur) */
 .voice-bg-glow-1,
 .voice-bg-glow-2 {
   position: fixed;
@@ -27,28 +56,26 @@
   filter: blur(90px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.5;
 }
 
 .voice-bg-glow-1 {
   width: 340px;
   height: 340px;
-  background: radial-gradient(circle, #7dd3fc 0%, rgba(186, 230, 253, 0) 70%);
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--c-white-70) 0%, rgba(255, 255, 255, 0) 70%);
+  top: -50px;
+  left: 15%;
 }
 
 .voice-bg-glow-2 {
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, #a7f3d0 0%, rgba(167, 243, 208, 0) 70%);
-  bottom: 20px;
-  right: -50px;
+  background: radial-gradient(circle, var(--c-black-05) 0%, rgba(0, 0, 0, 0) 70%);
+  bottom: 0px;
+  right: 15%;
 }
 
 /* ==========================================================
-   TOP FLOATING APP BAR (Ultra-sleek Dynamic Navigation)
+   TOP BAR (Extruded Monochromatic Pill)
    ========================================================== */
 .voice-top-bar {
   position: relative;
@@ -59,21 +86,22 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 6px 14px;
-  margin-bottom: 16px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  background: var(--nm-canvas);
   border-radius: 9999px;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  /* Dual Neumorphic Extrusion: Pure White Light + Soft Dark Shadow */
+  box-shadow: 
+    -6px -6px 14px var(--nm-shadow-light),
+    6px 6px 14px var(--nm-shadow-dark);
+  border: 1px solid var(--c-white-90);
   box-sizing: border-box;
 }
 
 .voice-brand {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   cursor: pointer;
   user-select: none;
   padding: 4px 6px;
@@ -87,42 +115,48 @@
 }
 
 .voice-brand-logo {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
+  filter: drop-shadow(0 2px 4px var(--c-black-10));
 }
 
 .voice-brand-name {
   font-size: 15px;
   font-weight: 900;
-  color: #0f172a;
+  color: var(--c-black);
   letter-spacing: -0.4px;
 }
 
 .voice-brand-sub {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0284c7;
-  background: rgba(2, 132, 199, 0.1);
-  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-white);
+  background: var(--c-black);
+  box-shadow: 0 2px 5px var(--c-black-25);
+  padding: 2.5px 8px;
   border-radius: 9999px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
 }
 
-/* Dynamic Island Speech Status Capsule */
+/* Monochromatic Dynamic Island (Speech Status) */
 .voice-island-capsule {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 8px 4px 12px;
-  background: rgba(240, 253, 244, 0.95);
-  border: 1px solid rgba(34, 197, 94, 0.5);
+  padding: 5px 10px 5px 14px;
+  background: var(--c-black);
+  color: var(--c-white);
   border-radius: 9999px;
-  box-shadow: 0 2px 10px rgba(34, 197, 94, 0.2);
-  animation: capsule-pulse 1.2s infinite alternate ease-in-out;
+  box-shadow: 
+    0 4px 14px var(--c-black-25),
+    inset 0 1px 1px var(--c-white-40);
+  border: 1px solid var(--c-black-90);
+  animation: nm-pulse 1.3s infinite alternate ease-in-out;
   min-width: 0;
 }
 
-@keyframes capsule-pulse {
+@keyframes nm-pulse {
   0% { transform: scale(0.98); }
   100% { transform: scale(1.02); }
 }
@@ -130,14 +164,14 @@
 .voice-soundwave-bars {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
+  gap: 2.5px;
   height: 12px;
   flex-shrink: 0;
 }
 
 .voice-soundwave-bar {
   width: 2.5px;
-  background: #16a34a;
+  background: var(--c-white);
   border-radius: 2px;
   animation: soundwave-jump 0.6s infinite ease-in-out alternate;
 }
@@ -154,7 +188,7 @@
 .voice-island-text {
   font-size: 12.5px;
   font-weight: 800;
-  color: #15803d;
+  color: var(--c-white);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -165,9 +199,9 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #ef4444;
-  border: none;
-  color: #ffffff;
+  background: var(--c-white-15);
+  border: 1px solid var(--c-white-40);
+  color: var(--c-white);
   font-size: 10px;
   font-weight: 900;
   cursor: pointer;
@@ -175,317 +209,438 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
-  transition: transform 0.15s;
+  transition: all 0.15s;
 }
 
 .voice-island-stop:hover {
-  transform: scale(1.1);
-  background: #dc2626;
+  background: var(--c-white);
+  color: var(--c-black);
 }
 
 .voice-island-stop:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
-/* Top Action Buttons */
+/* Top Action Icon Buttons */
 .voice-top-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .voice-icon-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  color: #475569;
+  background: var(--nm-canvas);
+  border: 1px solid var(--c-white-90);
+  color: var(--c-black-75);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 
+    -3px -3px 7px var(--nm-shadow-light),
+    3px 3px 7px var(--nm-shadow-dark);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .voice-icon-btn:hover {
-  background: #ffffff;
-  border-color: #0284c7;
-  color: #0284c7;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+  color: var(--c-black);
+  box-shadow: 
+    -4px -4px 9px var(--nm-shadow-light),
+    4px 4px 9px var(--nm-shadow-dark);
 }
 
+.voice-icon-btn:active,
 .voice-icon-btn.is-active {
-  background: #0284c7;
-  border-color: #0284c7;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+  background: var(--c-gray-inset);
+  color: var(--c-black);
+  box-shadow: 
+    inset 2px 2px 5px var(--nm-shadow-dark),
+    inset -2px -2px 5px var(--nm-shadow-light);
+  transform: scale(0.95);
 }
 
 /* ==========================================================
-   INFO / LOG DROP-DOWN CARD (Toggle Only)
+   INFO / LOG DROP-DOWN (Extruded Neumorphic Card)
    ========================================================== */
 .voice-info-card {
   position: relative;
   z-index: 10;
   max-width: 580px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: 14px 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
-  animation: slide-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--nm-canvas);
+  border: 1px solid var(--c-white-90);
+  border-radius: 24px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 
+    -8px -8px 20px var(--nm-shadow-light),
+    8px 8px 20px var(--nm-shadow-dark);
+  animation: nm-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
 }
 
-@keyframes slide-down {
-  0% { opacity: 0; transform: translateY(-8px); }
-  100% { opacity: 1; transform: translateY(0); }
+@keyframes nm-slide-down {
+  0% { opacity: 0; transform: translateY(-10px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .voice-info-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .voice-info-card-header h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  color: #0f172a;
+  color: var(--c-black);
 }
 
 .voice-info-card-desc {
-  font-size: 12.5px;
-  color: #64748b;
-  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--c-black-75);
+  margin: 0 0 10px;
   line-height: 1.5;
 }
 
 .voice-info-log {
-  padding: 6px 10px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 11px;
+  padding: 8px 12px;
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 2px 2px 5px var(--nm-shadow-dark),
+    inset -2px -2px 5px var(--nm-shadow-light);
+  border-radius: 12px;
+  font-size: 11.5px;
   font-family: monospace;
-  color: #475569;
+  color: var(--c-black-90);
   word-break: break-all;
 }
 
 /* ==========================================================
-   PERFECT CIRCULAR WATER DROP BUTTONS (완전 원형 물방울 구체)
+   NEUMORPHIC 3D EXTRUDED CIRCULAR BUTTONS
+   배경 표면을 뚫고 튀어나오는 100% 원형 조각
+   Strictly Monochrome: Black, Light Gray, White
    ========================================================== */
 .voice-grid-section {
   position: relative;
   z-index: 1;
   max-width: 580px;
   width: 100%;
+  margin-bottom: 26px;
+}
+
+.voice-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+
+.voice-grid-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--c-black-50);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.voice-grid-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--c-black-75);
+  background: var(--c-white-70);
+  padding: 2.5px 10px;
+  border-radius: 9999px;
+  box-shadow: 
+    1px 1px 3px var(--nm-shadow-dark),
+    -1px -1px 3px var(--nm-shadow-light);
+  border: 1px solid var(--c-white-40);
 }
 
 .voice-drops-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 22px;
+  gap: 18px;
   width: 100%;
 }
 
-/* 100% Perfect Spherical Water Drop Button */
+.drop-btn-slot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-btn-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--nm-canvas);
+  border: 1px solid var(--c-white-90);
+  color: var(--c-black-50);
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 
+    1px 1px 4px var(--nm-shadow-dark),
+    -1px -1px 4px var(--nm-shadow-light);
+  transition: all 0.15s;
+}
+
+.drop-btn-del:hover {
+  background: var(--c-black);
+  color: var(--c-white);
+  transform: scale(1.15);
+}
+
+.drop-btn-del:active {
+  transform: scale(0.95);
+}
+
+/* Concave Recessed Socket for Empty Slots (Carved in) */
+.drop-empty-slot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 4px 4px 8px var(--nm-shadow-dark),
+    inset -4px -4px 8px var(--nm-shadow-light);
+  border: 1.5px dashed var(--c-black-10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.drop-empty-slot:hover {
+  border-color: var(--c-black-25);
+  background: var(--nm-canvas-light);
+  transform: scale(1.02);
+}
+
+.drop-empty-slot.is-next {
+  border: 1.5px dashed var(--c-black-25);
+  background: var(--nm-canvas);
+}
+
+.drop-empty-plus {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--c-black-25);
+  line-height: 1;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+.drop-empty-slot:hover .drop-empty-plus {
+  color: var(--c-black-75);
+  transform: scale(1.15);
+}
+
+.voice-empty-hint {
+  margin-top: 16px;
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--c-black-50);
+  background: var(--nm-canvas);
+  border: 1px dashed var(--c-black-10);
+  border-radius: 18px;
+  box-shadow: 
+    inset 2px 2px 5px var(--nm-shadow-dark),
+    inset -2px -2px 5px var(--nm-shadow-light);
+  line-height: 1.6;
+}
+
+.voice-empty-hint strong {
+  color: var(--c-black);
+}
+
+/* 100% Circular 3D Extruded Neumorphic Button */
 .drop-btn {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* 완전 원형 보장 */
+  aspect-ratio: 1 / 1; /* 완전 원형 */
   height: auto;
-  border-radius: 50% !important; /* 완전 원형 */
-  border: none;
+  border-radius: 50% !important;
+  background: linear-gradient(145deg, #f3f3f3, #e5e5e5);
+  border: 1px solid var(--c-white-90);
   outline: none;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 8px;
-  color: #ffffff;
+  gap: 3px;
+  padding: 10px;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, filter 0.2s;
-  overflow: hidden;
-  box-sizing: border-box;
 
-  /* 3D Glass/Liquid Refraction */
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  /* The Signature Neumorphic 3D Extrusion */
+  box-shadow: 
+    -9px -9px 20px var(--nm-shadow-light),
+    9px 9px 20px var(--nm-shadow-dark),
+    inset 1px 1px 2px var(--c-white-90);
+
+  /* Spring Physics Rebound */
+  transition: 
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.15s ease;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
-/* 3D Spherical Specular Highlight (원형 물방울 상단 반사광) */
+/* Subtle Specular Top Reflection */
 .drop-btn::before {
   content: '';
   position: absolute;
-  top: 7%;
+  top: 8%;
   left: 20%;
   width: 60%;
-  height: 38%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.2) 65%, transparent 100%);
+  height: 40%;
+  background: linear-gradient(180deg, var(--c-white-90) 0%, var(--c-white-15) 70%, transparent 100%);
   border-radius: 50%;
   pointer-events: none;
-  opacity: 0.95;
-  filter: blur(0.2px);
+  opacity: 0.9;
+  filter: blur(0.5px);
   z-index: 2;
 }
 
-/* 3D Spherical Bottom Caustic Glow (원형 물방울 하단 빛 굴절) */
+/* Subtle Specular Bottom Bounce */
 .drop-btn::after {
   content: '';
   position: absolute;
   bottom: 8%;
   left: 25%;
   width: 50%;
-  height: 22%;
-  background: radial-gradient(ellipse at bottom, rgba(255, 255, 255, 0.55) 0%, transparent 75%);
+  height: 20%;
+  background: radial-gradient(ellipse at bottom, var(--c-white-70) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
 }
 
+/* Main Text: Deep Black with Tactile Chiseled Depth */
 .drop-text {
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 900;
   letter-spacing: -0.6px;
+  color: var(--c-black);
   position: relative;
   z-index: 3;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   line-height: 1.1;
+  text-shadow: 0 1px 1px var(--c-white), 0 2px 4px var(--c-black-10);
 }
 
+/* Subtitle Tag: Translucent Inset Badge */
 .drop-sub {
-  font-size: 11px;
-  font-weight: 700;
-  opacity: 0.92;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--c-black-75);
   position: relative;
   z-index: 3;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  padding: 1.5px 8px;
+  border-radius: 9999px;
   letter-spacing: -0.2px;
+  background: var(--c-white-70);
+  box-shadow: 
+    1px 1px 3px var(--nm-shadow-dark),
+    -1px -1px 3px var(--nm-shadow-light);
+  border: 1px solid var(--c-white-40);
 }
 
-/* Button Active / Pressing Effect (Liquid Squish) */
+/* Pressed State: Sinks into the surface (Concave Inset) */
 .drop-btn:active {
-  transform: scale(0.92) translateY(2px);
-  filter: brightness(1.12);
-}
-
-.drop-btn.is-active-speaker {
   transform: scale(0.96);
-  box-shadow: 0 0 24px rgba(2, 132, 199, 0.7) !important;
-  animation: drop-pulse 0.75s infinite ease-in-out alternate;
-}
-
-@keyframes drop-pulse {
-  0% { transform: scale(0.96); }
-  100% { transform: scale(1.04); }
-}
-
-/* --- Color Variants for Circular Drops (Clean & Vibrant Jewel Water) --- */
-
-/* 1. Aqua Cyan (맞아 / 그래 / 알았어 - 긍정) */
-.drop-cyan {
-  background: radial-gradient(circle at 35% 30%, #38bdf8 0%, #0284c7 65%, #0369a1 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  background: var(--c-gray-inset);
   box-shadow: 
-    0 10px 24px -4px rgba(2, 132, 199, 0.45),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -4px 8px rgba(3, 105, 161, 0.5);
-}
-
-.drop-cyan:hover {
-  box-shadow: 
-    0 14px 28px -3px rgba(2, 132, 199, 0.6),
-    inset 0 3px 5px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(3, 105, 161, 0.6);
-}
-
-/* 2. Emerald Green (좋아 / 나이스 - 기쁨/찬성) */
-.drop-emerald {
-  background: radial-gradient(circle at 35% 30%, #34d399 0%, #059669 65%, #047857 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 
-    0 10px 24px -4px rgba(5, 150, 105, 0.45),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -4px 8px rgba(4, 120, 87, 0.5);
-}
-
-.drop-emerald:hover {
-  box-shadow: 
-    0 14px 28px -3px rgba(5, 150, 105, 0.6),
-    inset 0 3px 5px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(4, 120, 87, 0.6);
-}
-
-/* 3. Rose / Ruby (싫어 / 안돼 - 거절/부정) */
-.drop-rose {
-  background: radial-gradient(circle at 35% 30%, #fb7185 0%, #e11d48 65%, #be123c 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 
-    0 10px 24px -4px rgba(225, 29, 72, 0.45),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -4px 8px rgba(190, 18, 60, 0.5);
-}
-
-.drop-rose:hover {
-  box-shadow: 
-    0 14px 28px -3px rgba(225, 29, 72, 0.6),
-    inset 0 3px 5px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(190, 18, 60, 0.6);
-}
-
-/* 4. Violet / Indigo (나도 - 공감) */
-.drop-indigo {
-  background: radial-gradient(circle at 35% 30%, #818cf8 0%, #4f46e5 65%, #3730a3 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 
-    0 10px 24px -4px rgba(79, 70, 229, 0.45),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -4px 8px rgba(67, 56, 202, 0.5);
-}
-
-.drop-indigo:hover {
-  box-shadow: 
-    0 14px 28px -3px rgba(79, 70, 229, 0.6),
-    inset 0 3px 5px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(67, 56, 202, 0.6);
-}
-
-/* 5. Amber / Coral (뭐래 - 위트) */
-.drop-amber {
-  background: radial-gradient(circle at 35% 30%, #fcd34d 0%, #d97706 65%, #b45309 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 
-    0 10px 24px -4px rgba(217, 119, 6, 0.45),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -4px 8px rgba(180, 83, 9, 0.5);
-}
-
-.drop-amber:hover {
-  box-shadow: 
-    0 14px 28px -3px rgba(217, 119, 6, 0.6),
-    inset 0 3px 5px rgba(255, 255, 255, 0.9),
-    inset 0 -4px 8px rgba(180, 83, 9, 0.6);
+    inset 6px 6px 12px var(--nm-shadow-dark-deep),
+    inset -6px -6px 12px var(--nm-shadow-light),
+    0 2px 4px var(--c-black-05);
+  filter: brightness(0.98);
 }
 
 /* ==========================================================
-   QUICK INPUT BAR
+   NEUMORPHIC ELASTIC PULSE & RIPPLE (Monochrome Waves)
+   재생 중 팽창 & 튕겨져 나오며 잔잔한 모노크롬 음파 파동
+   ========================================================== */
+/* ==========================================================
+   NEUMORPHIC ACOUSTIC SOUNDWAVE RIPPLE (No Oversize Enlargement)
+   버튼 자체는 원래 사이즈보다 확대되지 않고, 음파 링 파동만 부드럽게 방출
+   ========================================================== */
+.drop-btn.is-active-speaker {
+  z-index: 5;
+  animation: nm-sound-ripple 1.4s infinite ease-in-out;
+}
+
+@keyframes nm-sound-ripple {
+  0% {
+    transform: scale(1);
+    box-shadow: 
+      -9px -9px 20px var(--nm-shadow-light),
+      9px 9px 20px var(--nm-shadow-dark),
+      0 0 0 0 rgba(0, 0, 0, 0.12);
+  }
+  35% {
+    transform: scale(0.985);
+    box-shadow: 
+      -7px -7px 16px var(--nm-shadow-light),
+      7px 7px 16px var(--nm-shadow-dark-deep),
+      0 0 0 8px rgba(0, 0, 0, 0.05),
+      0 0 12px rgba(0, 0, 0, 0.08);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 
+      -9px -9px 20px var(--nm-shadow-light),
+      9px 9px 20px var(--nm-shadow-dark),
+      0 0 0 16px rgba(0, 0, 0, 0),
+      0 0 6px rgba(0, 0, 0, 0.03);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 
+      -9px -9px 20px var(--nm-shadow-light),
+      9px 9px 20px var(--nm-shadow-dark),
+      0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* Neutral Monochrome Variants (Ensures complete removal of colored accents) */
+.drop-cyan,
+.drop-emerald,
+.drop-rose,
+.drop-indigo,
+.drop-amber {
+  background: linear-gradient(145deg, #f4f4f4, #e4e4e4);
+}
+
+/* ==========================================================
+   QUICK INPUT BAR (Tactile Sculpted Pill Suite)
+   부드러운 조각 세라믹 필(Pill) 형태로 전체 디자인과 완벽 조화
    ========================================================== */
 .voice-quick-input-card {
   position: relative;
@@ -493,169 +648,219 @@
   max-width: 580px;
   width: 100%;
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 26px;
+  box-sizing: border-box;
+}
+
+/* Wide & Deep Carved Inset Trench */
+.voice-quick-input-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .voice-quick-input {
-  flex: 1;
-  min-width: 0;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1.5px solid #cbd5e1;
-  border-radius: 9999px;
-  color: #0f172a;
-  font-size: 14px;
+  width: 100%;
+  min-height: 56px;
+  max-height: 152px; /* 5줄 이상일 때 스크롤바 표시 */
+  padding: 16px 48px 16px 20px;
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 4px 4px 8px var(--nm-shadow-dark),
+    inset -4px -4px 8px var(--nm-shadow-light);
+  border: 1px solid var(--c-white-40);
+  border-radius: 24px;
+  color: var(--c-black);
+  font-size: 16px;
   font-weight: 600;
+  font-family: inherit;
+  line-height: 1.5;
   outline: none;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s;
+  resize: none;
+  overflow-y: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+
+  /* Invisible Scrollbar (스크롤바 숨김 및 스크롤 동작 유지) */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.voice-quick-input::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .voice-quick-input::placeholder {
-  color: #94a3b8;
+  color: var(--c-black-50);
   font-weight: 500;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .voice-quick-input:focus {
-  border-color: #0284c7;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  background: var(--nm-canvas);
+  box-shadow: 
+    inset 4px 4px 8px var(--nm-shadow-dark-deep),
+    inset -4px -4px 8px var(--nm-shadow-light),
+    0 0 0 2px var(--c-black-25);
 }
 
-.voice-quick-btn {
-  padding: 0 16px;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
+.voice-quick-clear-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   border: none;
-  border-radius: 9999px;
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 13.5px;
+  background: var(--c-black-10);
+  color: var(--c-black-75);
+  font-size: 12px;
+  font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  z-index: 2;
 }
 
-.voice-quick-btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+.voice-quick-clear-btn:hover {
+  background: var(--c-black);
+  color: var(--c-white);
 }
 
-.voice-quick-btn:active {
-  transform: translateY(1px);
-}
-
-.voice-quick-add-btn {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1.5px solid #0284c7;
-  color: #0284c7;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12);
-}
-
-.voice-quick-add-btn:hover {
-  background: #0284c7;
-  color: #ffffff;
-}
-
-/* ==========================================================
-   CUSTOM PHRASES SECTION
-   ========================================================== */
-.voice-custom-section {
-  position: relative;
-  z-index: 1;
-  max-width: 580px;
+/* Big Tactile Action Buttons Row */
+.voice-quick-actions {
+  display: flex;
+  gap: 12px;
   width: 100%;
 }
 
-.voice-section-title {
-  font-size: 12px;
-  font-weight: 800;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 10px;
-  padding-left: 2px;
-}
-
-.voice-custom-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.voice-custom-pill {
-  position: relative;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(203, 213, 225, 0.9);
+/* Tactile Extruded Speak Button (Sculpted Pill Tone) */
+.voice-quick-speak-btn {
+  flex: 2;
+  min-height: 54px;
+  padding: 0 22px;
+  background: linear-gradient(145deg, #f7f7f7, #e4e4e4);
+  border: 1.5px solid var(--c-white-90);
   border-radius: 9999px;
-  padding: 7px 14px;
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  color: var(--c-black);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
   cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 
+    -5px -5px 12px var(--nm-shadow-light),
+    5px 5px 14px var(--nm-shadow-dark),
+    inset 1px 1px 2px var(--c-white-90);
+  text-shadow: 0 1px 1px var(--c-white);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
 }
 
-.voice-custom-pill:hover {
-  background: #ffffff;
-  color: #0284c7;
-  border-color: #0284c7;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
-}
-
-.voice-custom-pill:active {
-  transform: scale(0.96);
-}
-
-.voice-custom-del {
+.voice-speak-icon {
+  font-size: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 17px;
-  height: 17px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: #e2e8f0;
-  color: #64748b;
-  font-size: 10px;
-  border: none;
-  cursor: pointer;
-  margin-left: 2px;
-  transition: all 0.15s;
+  background: var(--c-black-05);
 }
 
-.voice-custom-del:hover {
-  background: #ef4444;
-  color: #ffffff;
+.voice-quick-speak-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: 
+    -2px -2px 6px var(--nm-shadow-light),
+    2px 2px 6px var(--nm-shadow-dark);
+}
+
+.voice-quick-speak-btn:not(:disabled):hover {
+  background: linear-gradient(145deg, #ffffff, #ebebeb);
+  box-shadow: 
+    -6px -6px 15px var(--nm-shadow-light),
+    6px 6px 16px var(--nm-shadow-dark);
+}
+
+.voice-quick-speak-btn:not(:disabled):active {
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 3px 3px 7px var(--nm-shadow-dark-deep),
+    inset -3px -3px 7px var(--nm-shadow-light);
+}
+
+/* Prominent Add/Register Button (Dashed Pill to match Slots) */
+.voice-quick-add-btn {
+  flex: 1;
+  min-height: 54px;
+  padding: 0 16px;
+  background: var(--nm-canvas);
+  border: 1.5px dashed var(--c-black-25);
+  border-radius: 9999px;
+  color: var(--c-black-75);
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 
+    -3px -3px 8px var(--nm-shadow-light),
+    3px 3px 8px var(--nm-shadow-dark);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
+.voice-quick-add-btn:hover {
+  background: var(--nm-canvas-light);
+  border-color: var(--c-black-50);
+  color: var(--c-black);
+  box-shadow: 
+    -5px -5px 12px var(--nm-shadow-light),
+    5px 5px 12px var(--nm-shadow-dark);
+}
+
+.voice-quick-add-btn:active {
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 3px 3px 6px var(--nm-shadow-dark),
+    inset -3px -3px 6px var(--nm-shadow-light);
+}
+
+.voice-quick-add-btn:active {
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 3px 3px 6px var(--nm-shadow-dark),
+    inset -3px -3px 6px var(--nm-shadow-light);
+  transform: scale(0.97);
 }
 
 /* ==========================================================
-   SETTINGS CARD (Collapsible Clean Glass)
+   SETTINGS CARD (Extruded Soft Panel)
    ========================================================== */
 .voice-settings-card {
   position: relative;
   z-index: 10;
   max-width: 580px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: 16px 20px;
-  margin-top: 16px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff;
-  animation: slide-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--nm-canvas);
+  border: 1px solid var(--c-white-90);
+  border-radius: 24px;
+  padding: 18px 22px;
+  margin-top: 18px;
+  box-shadow: 
+    -8px -8px 20px var(--nm-shadow-light),
+    8px 8px 20px var(--nm-shadow-dark);
+  animation: nm-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
 }
 
@@ -663,31 +868,31 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .voice-settings-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--c-black);
 }
 
 .voice-controls-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 14px;
 }
 
 .voice-control-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .voice-control-label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
-  color: #475569;
+  color: var(--c-black-75);
   display: flex;
   justify-content: space-between;
 }
@@ -698,31 +903,40 @@
   gap: 16px;
 }
 
+/* Carved Neumorphic Slider Track */
 .voice-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 6px;
-  border-radius: 3px;
-  background: #cbd5e1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 2px 2px 4px var(--nm-shadow-dark),
+    inset -2px -2px 4px var(--nm-shadow-light);
   outline: none;
   cursor: pointer;
 }
 
+/* Extruded 3D Slider Thumb */
 .voice-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #0284c7;
-  box-shadow: 0 0 8px rgba(2, 132, 199, 0.4);
+  background: var(--c-white);
+  border: 2px solid var(--c-black);
+  box-shadow: 
+    -2px -2px 6px var(--nm-shadow-light),
+    2px 2px 6px var(--nm-shadow-dark);
   cursor: pointer;
   transition: transform 0.15s;
 }
 
 .voice-slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+  background: var(--nm-canvas-light);
 }
 
 /* ==========================================================
@@ -731,36 +945,42 @@
 
 @media (max-width: 480px) {
   .voice-container {
-    padding: 12px 10px 50px;
+    padding: 14px 10px 50px;
   }
 
   .voice-top-bar {
-    padding: 5px 10px;
-    margin-bottom: 12px;
+    padding: 6px 12px;
+    margin-bottom: 16px;
   }
 
   .voice-drops-grid {
-    gap: 10px;
-    margin-bottom: 18px;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .drop-btn {
+    box-shadow: 
+      -6px -6px 14px var(--nm-shadow-light),
+      6px 6px 14px var(--nm-shadow-dark);
   }
 
   .drop-text {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .drop-sub {
-    font-size: 10px;
+    font-size: 10.5px;
   }
 
   .voice-sliders {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 12px;
   }
 }
 
 @media (max-width: 360px) {
   .voice-container {
-    padding: 10px 8px 40px;
+    padding: 12px 8px 40px;
   }
 
   .voice-brand-sub {
@@ -776,38 +996,56 @@
     margin-bottom: 16px;
   }
 
+  .drop-btn {
+    box-shadow: 
+      -5px -5px 10px var(--nm-shadow-light),
+      5px 5px 10px var(--nm-shadow-dark);
+  }
+
   .drop-text {
-    font-size: 16.5px;
+    font-size: 17px;
   }
 
   .drop-sub {
-    font-size: 9.5px;
+    font-size: 10px;
   }
 
   .voice-quick-input-card {
-    gap: 6px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .voice-quick-input {
-    padding: 10px 12px;
-    font-size: 12.5px;
+    min-height: 52px;
+    max-height: 145px;
+    padding: 13px 40px 13px 18px;
+    font-size: 15px;
+    border-radius: 20px;
   }
 
-  .voice-quick-btn {
-    padding: 0 12px;
-    font-size: 12.5px;
+  .voice-quick-speak-btn {
+    min-height: 50px;
+    font-size: 15px;
+    padding: 0 16px;
+    border-radius: 9999px;
+  }
+
+  .voice-quick-add-btn {
+    min-height: 50px;
+    font-size: 13.5px;
+    padding: 0 14px;
+    border-radius: 9999px;
   }
 }
 
 @media (max-width: 320px) {
   .voice-container {
-    padding: 8px 6px 36px;
+    padding: 10px 6px 36px;
   }
 
   .voice-top-bar {
-    padding: 4px 8px;
-    margin-bottom: 10px;
+    padding: 5px 8px;
+    margin-bottom: 12px;
   }
 
   .voice-brand-logo {
@@ -836,10 +1074,13 @@
 
   .drop-btn {
     padding: 4px;
+    box-shadow: 
+      -4px -4px 8px var(--nm-shadow-light),
+      4px 4px 8px var(--nm-shadow-dark);
   }
 
   .drop-text {
-    font-size: 15px;
+    font-size: 15.5px;
   }
 
   .drop-sub {
@@ -847,21 +1088,37 @@
   }
 
   .voice-quick-input-card {
-    gap: 4px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 
   .voice-quick-input {
-    padding: 9px 10px;
-    font-size: 12px;
+    min-height: 48px;
+    max-height: 135px;
+    padding: 11px 34px 11px 14px;
+    font-size: 14px;
+    border-radius: 18px;
   }
 
-  .voice-quick-btn {
+  .voice-quick-clear-btn {
+    top: 12px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .voice-quick-speak-btn {
+    min-height: 46px;
+    font-size: 14px;
+    padding: 0 14px;
+    border-radius: 9999px;
+  }
+
+  .voice-quick-add-btn {
+    min-height: 46px;
+    font-size: 12.5px;
     padding: 0 10px;
-    font-size: 12px;
-  }
-
-  .voice-custom-pill {
-    padding: 5px 10px;
-    font-size: 11.5px;
+    border-radius: 9999px;
   }
 }

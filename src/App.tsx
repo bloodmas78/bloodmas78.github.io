@@ -1,4 +1,4 @@
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import Home from './pages/Home'
 import Ranking from './pages/Ranking'
@@ -10,7 +10,6 @@ import './App.css'
 
 function App() {
   const location = useLocation()
-  const showHomeLink = location.pathname !== '/'
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -31,7 +30,7 @@ function App() {
         document.title = '9샷 | 관심사 레이더'
         break
       case '/voice':
-        document.title = '물방울 음성 대화기'
+        document.title = '대화 보조'
         break
       default:
         document.title = '9샷 놀이터'
@@ -49,13 +48,6 @@ function App() {
         <Route path="/voice" element={<Voice />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
-      {showHomeLink && (
-        <Link className="page-home-link" to="/">
-          <span className="page-home-link-icon">⌂</span>
-          <span>9샷 홈</span>
-        </Link>
-      )}
     </>
   )
 }
