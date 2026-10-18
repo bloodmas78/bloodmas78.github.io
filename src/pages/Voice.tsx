@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../styles/voice.css'
 
-interface VoiceOption {
-  voice: SpeechSynthesisVoice
-  name: string
-  lang: string
-}
-
 interface WordItem {
   id: string
   text: string
@@ -27,8 +21,6 @@ const DEFAULT_WORDS: WordItem[] = [
 ]
 
 export default function Voice() {
-  const [voices, setVoices] = useState<VoiceOption[]>([])
-  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>('')
   const [rate, setRate] = useState<number>(1.0)
   const [pitch, setPitch] = useState<number>(1.0)
   const [speakingText, setSpeakingText] = useState<string | null>(null)
@@ -44,56 +36,87 @@ export default function Voice() {
 
   const [showSettings, setShowSettings] = useState<boolean>(false)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
+  const isFirstSpeakRef = useRef<boolean>(true)
+  const bestVoiceRef = useRef<SpeechSynthesisVoice | null>(null)
 
-  // Load available voices
+  // 데스크톱 Chrome(Windows SAPI 버그) 및 모바일 환경 최적 한국어 음성 탐색
+  const findBestKoreanVoice = (): SpeechSynthesisVoice | null => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return null
+    const voices = window.speechSynthesis.getVoices()
+    if (!voices || voices.length === 0) return null
+
+    const koVoices = voices.filter((v) => v.lang.toLowerCase().includes('ko'))
+    if (koVoices.length === 0) return null
+
+    // 1순위: Windows 데스크톱 크롬에서 첫 글자 씹힘이 전혀 없는 'Google 한국어'
+    const googleVoice = koVoices.find(
+      (v) => v.name.includes('Google') || v.voiceURI.includes('Google')
+    )
+    if (googleVoice) return googleVoice
+
+    // 2순위: 엣지(Edge)의 고품질 Natural/Online 음성
+    const naturalVoice = koVoices.find(
+      (v) => v.name.includes('Natural') || v.name.includes('Online')
+    )
+    if (naturalVoice) return naturalVoice
+
+    // 3순위: 시스템 기본 한국어 음성
+    return koVoices[0]
+  }
+
+  // 페이지 마운트 시 TTS 엔진 사전 예열 (Pre-warm) & 설정 로드
   useEffect(() => {
-    const updateVoices = () => {
-      if (typeof window === 'undefined' || !window.speechSynthesis) return
-
-      const allVoices = window.speechSynthesis.getVoices()
-      if (!allVoices || allVoices.length === 0) return
-
-      // Sort: Korean voices first, then others
-      const formatted = allVoices.map((v) => ({
-        voice: v,
-        name: `${v.name} (${v.lang})`,
-        lang: v.lang,
-      }))
-
-      formatted.sort((a, b) => {
-        const aIsKo = a.lang.toLowerCase().includes('ko')
-        const bIsKo = b.lang.toLowerCase().includes('ko')
-        if (aIsKo && !bIsKo) return -1
-        if (!aIsKo && bIsKo) return 1
-        return a.name.localeCompare(b.name)
-      })
-
-      setVoices(formatted)
-
-      // Auto-select preferred voice (saved or first Korean voice)
-      const savedURI = localStorage.getItem('voice_selected_uri')
-      if (savedURI && formatted.some((v) => v.voice.voiceURI === savedURI)) {
-        setSelectedVoiceURI(savedURI)
-      } else {
-        const firstKo = formatted.find((v) => v.lang.toLowerCase().includes('ko'))
-        if (firstKo) {
-          setSelectedVoiceURI(firstKo.voice.voiceURI)
-        } else if (formatted.length > 0) {
-          setSelectedVoiceURI(formatted[0].voice.voiceURI)
-        }
+    const updateVoice = () => {
+      const best = findBestKoreanVoice()
+      if (best) {
+        bestVoiceRef.current = best
       }
     }
 
-    updateVoices()
+    // 1. 브라우저/안드로이드 TTS 백엔드 데몬 즉각 사전 연결 및 음성 로드
     if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.onvoiceschanged = updateVoices
+      updateVoice()
+      window.speechSynthesis.onvoiceschanged = updateVoice
     }
+
+    // 2. 사용자의 최초 화면 터치/클릭 즉시 오디오 채널 선제적 기상
+    const warmUpAudio = () => {
+      updateVoice()
+      try {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
+        if (AudioCtx) {
+          const ctx = new AudioCtx()
+          if (ctx.state === 'suspended') {
+            ctx.resume()
+          }
+          // 40Hz 극저주파 미세 펄스로 하드웨어 오디오 스트림 사전 활성화
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.frequency.value = 40
+          gain.gain.value = 0.01
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+          osc.start()
+          osc.stop(ctx.currentTime + 0.05)
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    window.addEventListener('touchstart', warmUpAudio, { once: true, passive: true })
+    window.addEventListener('click', warmUpAudio, { once: true, passive: true })
 
     // Load saved rate & pitch
     const savedRate = localStorage.getItem('voice_rate')
     if (savedRate) setRate(parseFloat(savedRate))
     const savedPitch = localStorage.getItem('voice_pitch')
     if (savedPitch) setPitch(parseFloat(savedPitch))
+
+    return () => {
+      window.removeEventListener('touchstart', warmUpAudio)
+      window.removeEventListener('click', warmUpAudio)
+    }
   }, [])
 
   // Save custom words to localStorage
@@ -146,54 +169,98 @@ export default function Voice() {
       }
     }
 
+    // 1.5. 스마트폰 사운드 앰프 하드웨어 즉시 강제 기상 (Wake-up Audio Pulse)
+    // 귀에 들리지 않는 극저주파(40Hz) 미세 펄스를 출력하여 절전 모드의 앰프 회로를 즉각 활성화
     try {
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.volume = 1.0
-      utterance.rate = rate
-      utterance.pitch = pitch
-      utterance.lang = 'ko-KR'
-
-      // Android Fix: Do NOT force utterance.voice on Android unless selected by user
-      // Mismatched voice objects in Samsung Chrome silently drop speech!
-      if (selectedVoiceURI) {
-        const target = voices.find((v) => v.voice.voiceURI === selectedVoiceURI)
-        if (target && target.voice) {
-          utterance.voice = target.voice
-          utterance.lang = target.voice.lang || 'ko-KR'
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
+      if (AudioCtx) {
+        const ctx = new AudioCtx()
+        if (ctx.state === 'suspended') {
+          ctx.resume()
         }
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.frequency.value = 40
+        gain.gain.value = 0.02
+        osc.connect(gain)
+        gain.connect(ctx.destination)
+        osc.start()
+        osc.stop(ctx.currentTime + 0.1)
       }
+    } catch (e) {
+      // ignore
+    }
 
-      // Keep strong reference against Chrome GC
-      utteranceRef.current = utterance
-      ;(window as any).__voiceUtterance = utterance
+    const executeSpeak = () => {
+      try {
+        // 문두 무음 쉼표로 자연스러운 호흡 부여
+        const spokenText = text.trim().startsWith(',') ? text : `, ${text}`
+        const utterance = new SpeechSynthesisUtterance(spokenText)
+        utterance.volume = 1.0
+        utterance.rate = rate
 
-      utterance.onstart = () => {
-        setSpeakingText(text)
-        setDebugLog(`🔊 소리 재생 중: "${text}"`)
+        // Google 한국어 음성 엔진은 '?' 문장부호 자체로 자연스러운 말끝 상승 억양(의문문)을 자체 처리합니다.
+        // 인위적으로 전체 pitch를 대폭 상승(+0.3)시키면 주파수 보코더 왜곡으로 인해 말꼬리가 파르르 떨리는 현상이 발생하므로,
+        // 기본 pitch를 온전히 유지하여 깨끗하고 매끄러운 질문 억양을 출력합니다.
+        utterance.pitch = pitch
+
+        // 데스크톱 크롬(Windows SAPI 버그) 및 모바일 환경 최적 음성 지정:
+        // 'Google 한국어'를 명시적으로 연결하여 윈도우 기본 SAPI(Microsoft Heami)의 첫 음절 잘림 버그를 원천 차단
+        const targetVoice = bestVoiceRef.current || findBestKoreanVoice()
+        if (targetVoice) {
+          utterance.voice = targetVoice
+          utterance.lang = targetVoice.lang || 'ko-KR'
+        } else {
+          utterance.lang = 'ko-KR'
+        }
+
+        // Keep strong reference against Chrome GC
+        utteranceRef.current = utterance
+        ;(window as any).__voiceUtterance = utterance
+
+        utterance.onstart = () => {
+          setSpeakingText(text)
+          setDebugLog(`🔊 소리 재생 중: "${text}"`)
+        }
+
+        utterance.onend = () => {
+          setSpeakingText(null)
+          setDebugLog(`✅ 재생 완료: "${text}"`)
+        }
+
+        utterance.onerror = (event: any) => {
+          const errorMsg = event.error || '알 수 없는 오류'
+          console.warn('Speech error:', errorMsg)
+          setSpeakingText(null)
+          setDebugLog(`⚠️ 음성 오류 발생: ${errorMsg} (기기 볼륨 및 TTS 설정 확인)`)
+        }
+
+        window.speechSynthesis.speak(utterance)
+      } catch (err: any) {
+        setDebugLog(`❌ 실행 실패: ${err.message || err}`)
       }
+    }
 
-      utterance.onend = () => {
-        setSpeakingText(null)
-        setDebugLog(`✅ 재생 완료: "${text}"`)
-      }
-
-      utterance.onerror = (event: any) => {
-        const errorMsg = event.error || '알 수 없는 오류'
-        console.warn('Speech error:', errorMsg)
-        setSpeakingText(null)
-        setDebugLog(`⚠️ 음성 오류 발생: ${errorMsg} (기기 볼륨 및 TTS 설정 확인)`)
-      }
-
-      window.speechSynthesis.speak(utterance)
-    } catch (err: any) {
-      setDebugLog(`❌ 실행 실패: ${err.message || err}`)
+    // 첫 실행(Cold Start) 시에는 앰프 회로가 완전히 깨어날 시간(120ms)을 대기하여 첫 글자 씹힘을 100% 차단
+    if (isFirstSpeakRef.current) {
+      isFirstSpeakRef.current = false
+      setSpeakingText(text)
+      setTimeout(executeSpeak, 120)
+    } else {
+      executeSpeak()
     }
   }
 
-  const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value
-    setSelectedVoiceURI(val)
-    localStorage.setItem('voice_selected_uri', val)
+  const stopSpeaking = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel()
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+    setSpeakingText(null)
+    setDebugLog('⏹️ 음성 재생을 정지했습니다.')
   }
 
   const handleRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,6 +329,14 @@ export default function Voice() {
               <span className="voice-soundwave-bar" />
             </span>
             <span>재생 중: "{speakingText}"</span>
+            <button
+              type="button"
+              className="voice-stop-btn"
+              onClick={stopSpeaking}
+              title="음성 정지"
+            >
+              ⏹ 정지
+            </button>
           </div>
         )}
         {debugLog && (
@@ -307,8 +382,7 @@ export default function Voice() {
         {customText.trim() && (
           <button
             type="button"
-            className="voice-quick-btn"
-            style={{ background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255,255,255,0.2)' }}
+            className="voice-quick-btn voice-quick-add-btn"
             onClick={handleAddCustomWord}
             title="자주 쓰는 말로 등록"
           >
@@ -359,24 +433,6 @@ export default function Voice() {
           </div>
 
           <div className="voice-controls-grid">
-            <div className="voice-control-group">
-              <label className="voice-control-label">
-                <span>목소리 종류 선택</span>
-                <span>{voices.filter((v) => v.lang.includes('ko')).length}개 한국어 음성 감지됨</span>
-              </label>
-              <select
-                className="voice-select"
-                value={selectedVoiceURI}
-                onChange={handleVoiceChange}
-              >
-                <option value="">기본 한국어 음성 (시스템 권장)</option>
-                {voices.map((v) => (
-                  <option key={v.voice.voiceURI} value={v.voice.voiceURI}>
-                    {v.name}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             <div className="voice-sliders">
               <div className="voice-control-group">

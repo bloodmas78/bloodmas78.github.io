@@ -32,7 +32,7 @@ function Home() {
               </div>
               <p className="home-subtitle">
                 실시간 <strong>당구 랭킹</strong>부터 짜릿한 <strong>스타 팀 매칭</strong>,<br className="mobile-break" />
-                물론 칼같은 <strong>N분의 1 정산</strong>까지! 🎱<br />
+                칼같은 <strong>N분의 1 정산</strong>과 핫한 <strong>관심사 레이더</strong>까지! 🎯<br />
                 <span className="highlight-text">이 모든 걸 한방에 즐기자구~ 🚀</span>
               </p>
             </header>
@@ -117,6 +117,23 @@ function Home() {
                 </div>
                 <Link className="home-card-link settlement-btn" to="/n1">
                   <span>정산 돌리기</span>
+                  <span className="material-symbols-outlined arrow-icon">arrow_forward</span>
+                </Link>
+              </article>
+
+              {/* Interest / Item Radar Card */}
+              <article className="home-card interest-card">
+                <div className="card-bg-effect"></div>
+                <div className="card-badge">INTEREST</div>
+                <div className="card-icon-wrapper">
+                  <span className="material-symbols-outlined">radar</span>
+                </div>
+                <div className="card-content">
+                  <h2>관심사</h2>
+                  <p>꽂혀있는 상품, 주식, 게임 등 관심 아이템의 최신 소식과 핫딜을 추적합니다.</p>
+                </div>
+                <Link className="home-card-link interest-btn" to="/interest">
+                  <span>관심사 보기</span>
                   <span className="material-symbols-outlined arrow-icon">arrow_forward</span>
                 </Link>
               </article>
