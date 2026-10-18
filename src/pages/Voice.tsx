@@ -3,6 +3,21 @@ import '../styles/voice.css'
 
 const MAX_SLOTS = 9
 
+interface VoicePreset {
+  id: string
+  label: string
+  desc: string
+  pitch: number
+  rate: number
+  icon: string
+}
+
+const VOICE_PRESETS: VoicePreset[] = [
+  { id: 'calm', label: '차분한 톤', desc: '낮고 편안한 느낌', pitch: 0.9, rate: 0.95, icon: '☕' },
+  { id: 'standard', label: '기본 톤', desc: '자연스러운 표준 밸런스', pitch: 1.0, rate: 1.0, icon: '✨' },
+  { id: 'bright', label: '밝은 톤', desc: '화사하고 선명한 전달력', pitch: 1.1, rate: 1.05, icon: '☀️' },
+]
+
 export default function Voice() {
   const [rate, setRate] = useState<number>(1.0)
   const [pitch, setPitch] = useState<number>(1.0)
@@ -133,7 +148,7 @@ export default function Voice() {
     const savedRate = localStorage.getItem('voice_rate')
     if (savedRate) setRate(parseFloat(savedRate))
     const savedPitch = localStorage.getItem('voice_pitch')
-    if (savedPitch) setPitch(parseFloat(savedPitch))
+    if (savedPitch) setPitch(Math.min(1.10, parseFloat(savedPitch)))
 
     return () => {
       window.removeEventListener('touchstart', warmUpAudio)
@@ -145,7 +160,7 @@ export default function Voice() {
   const [debugLog, setDebugLog] = useState<string>('')
 
   // Bulletproof Speech Playback for Android (Fold 5) & iOS
-  const speak = (text: string) => {
+  const speak = (text: string, overridePitch?: number, overrideRate?: number) => {
     if (!text) return
 
     if (typeof window === 'undefined' || !window.speechSynthesis) {
@@ -211,12 +226,8 @@ export default function Voice() {
         const spokenText = text.trim().startsWith(',') ? text : `, ${text}`
         const utterance = new SpeechSynthesisUtterance(spokenText)
         utterance.volume = 1.0
-        utterance.rate = rate
-
-        // Google 한국어 음성 엔진은 '?' 문장부호 자체로 자연스러운 말끝 상승 억양(의문문)을 자체 처리합니다.
-        // 인위적으로 전체 pitch를 대폭 상승(+0.3)시키면 주파수 보코더 왜곡으로 인해 말꼬리가 파르르 떨리는 현상이 발생하므로,
-        // 기본 pitch를 온전히 유지하여 깨끗하고 매끄러운 질문 억양을 출력합니다.
-        utterance.pitch = pitch
+        utterance.rate = overrideRate !== undefined ? overrideRate : rate
+        utterance.pitch = overridePitch !== undefined ? overridePitch : pitch
 
         // 데스크톱 크롬(Windows SAPI 버그) 및 모바일 환경 최적 음성 지정:
         // 'Google 한국어'를 명시적으로 연결하여 윈도우 기본 SAPI(Microsoft Heami)의 첫 음절 잘림 버그를 원천 차단
@@ -285,8 +296,17 @@ export default function Voice() {
 
   const handlePitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value)
-    setPitch(val)
-    localStorage.setItem('voice_pitch', val.toString())
+    const clamped = Math.min(1.10, val)
+    setPitch(clamped)
+    localStorage.setItem('voice_pitch', clamped.toString())
+  }
+
+  const handleApplyPreset = (p: VoicePreset) => {
+    setPitch(p.pitch)
+    setRate(p.rate)
+    localStorage.setItem('voice_pitch', p.pitch.toString())
+    localStorage.setItem('voice_rate', p.rate.toString())
+    speak(`안녕하세요. ${p.label} 목소리입니다.`, p.pitch, p.rate)
   }
 
   const handleQuickSubmit = (e: React.FormEvent) => {
@@ -526,6 +546,34 @@ export default function Voice() {
             </button>
           </div>
 
+          {/* Preset Voice Templates */}
+          <div className="voice-presets-section">
+            <div className="voice-presets-header">
+              <span className="voice-presets-title">목소리 톤 템플릿</span>
+              <span className="voice-presets-sub">터치하여 즉시 적용 & 미리듣기</span>
+            </div>
+            <div className="voice-presets-grid">
+              {VOICE_PRESETS.map((p) => {
+                const isSelected =
+                  Math.abs(pitch - p.pitch) < 0.03 && Math.abs(rate - p.rate) < 0.05
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className={`voice-preset-chip ${isSelected ? 'is-selected' : ''}`}
+                    onClick={() => handleApplyPreset(p)}
+                  >
+                    <div className="voice-preset-chip-top">
+                      <span className="voice-preset-icon">{p.icon}</span>
+                      <span className="voice-preset-label">{p.label}</span>
+                    </div>
+                    <span className="voice-preset-desc">{p.desc}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <div className="voice-controls-grid">
             <div className="voice-sliders">
               <div className="voice-control-group">
@@ -546,15 +594,22 @@ export default function Voice() {
 
               <div className="voice-control-group">
                 <label className="voice-control-label">
-                  <span>음높이 (톤 / 성별 느낌)</span>
-                  <span>{pitch < 1 ? '남성/낮은톤' : pitch === 1 ? '보통' : '여성/높은톤'} ({pitch.toFixed(1)})</span>
+                  <span>음높이 (톤)</span>
+                  <span>
+                    {pitch <= 0.92
+                      ? '차분한 톤'
+                      : pitch <= 1.03
+                      ? '기본 톤'
+                      : '밝은 톤 (맥시멈 1.1)'}{' '}
+                    ({pitch.toFixed(2)})
+                  </span>
                 </label>
                 <input
                   type="range"
                   className="voice-slider"
-                  min="0.5"
-                  max="1.5"
-                  step="0.1"
+                  min="0.85"
+                  max="1.10"
+                  step="0.05"
                   value={pitch}
                   onChange={handlePitchChange}
                 />

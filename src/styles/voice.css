@@ -877,6 +877,116 @@
   color: var(--c-black);
 }
 
+/* ==========================================================
+   VOICE TONE PRESET TEMPLATES
+   감각적인 6가지 톤/성별 템플릿 (뉴모피즘 카드 & 인셋 선택 효과)
+   ========================================================== */
+.voice-presets-section {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--c-black-10);
+}
+
+.voice-presets-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.voice-presets-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--c-black);
+}
+
+.voice-presets-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-black-50);
+}
+
+.voice-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .voice-presets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.voice-preset-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--nm-canvas);
+  border: 1px solid var(--c-white-90);
+  box-shadow: 
+    -3px -3px 8px var(--nm-shadow-light),
+    3px 3px 8px var(--nm-shadow-dark);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.voice-preset-chip:hover {
+  background: var(--nm-canvas-light);
+  border-color: var(--c-white);
+  transform: translateY(-1px);
+}
+
+.voice-preset-chip:active {
+  transform: scale(0.98);
+}
+
+/* Selected Preset: Pressed Concave Inset Socket */
+.voice-preset-chip.is-selected {
+  background: var(--c-gray-inset);
+  box-shadow: 
+    inset 3px 3px 6px var(--nm-shadow-dark),
+    inset -3px -3px 6px var(--nm-shadow-light);
+  border-color: var(--c-black-25);
+  transform: none;
+}
+
+.voice-preset-chip-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.voice-preset-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.voice-preset-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--c-black);
+  letter-spacing: -0.2px;
+}
+
+.voice-preset-desc {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-black-50);
+  line-height: 1.3;
+}
+
+.voice-preset-chip.is-selected .voice-preset-desc {
+  color: var(--c-black-75);
+  font-weight: 700;
+}
+
 .voice-controls-grid {
   display: grid;
   grid-template-columns: 1fr;
