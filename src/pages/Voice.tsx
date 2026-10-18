@@ -35,6 +35,7 @@ export default function Voice() {
   })
 
   const [showSettings, setShowSettings] = useState<boolean>(false)
+  const [showInfo, setShowInfo] = useState<boolean>(false)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   const isFirstSpeakRef = useRef<boolean>(true)
   const bestVoiceRef = useRef<SpeechSynthesisVoice | null>(null)
@@ -301,54 +302,87 @@ export default function Voice() {
       <div className="voice-bg-glow-1" />
       <div className="voice-bg-glow-2" />
 
-      {/* Header */}
-      <header className="voice-header">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '8px' }}>
-          <div className="voice-badge" style={{ margin: 0 }}>
-            <span className="voice-badge-dot" />
-            <span>Voice Communicator</span>
-          </div>
-          <button
-            type="button"
-            className="voice-setting-toggle-btn"
-            onClick={() => setShowSettings((prev) => !prev)}
-            aria-label="설정 토글"
-          >
-            ⚙️ 목소리 설정 {showSettings ? '닫기 ▲' : '열기 ▼'}
-          </button>
+      {/* Top Floating App Bar (Ultra Minimal & Modern) */}
+      <header className="voice-top-bar">
+        <div
+          className="voice-brand"
+          onClick={() => setShowInfo((prev) => !prev)}
+          title="안내 및 로그 토글"
+        >
+          <span className="voice-brand-logo">💧</span>
+          <span className="voice-brand-name">물방울</span>
+          <span className="voice-brand-sub">대화기</span>
         </div>
-        <h1 className="voice-title">물방울 음성 대화기</h1>
-        <p className="voice-subtitle">
-          버튼을 누르면 스피커로 즉시 음성이 나옵니다
-        </p>
+
+        {/* Dynamic Island Voice Status (Only visible while actively speaking) */}
         {speakingText && (
-          <div className="voice-speaking-banner">
+          <div className="voice-island-capsule">
             <span className="voice-soundwave-bars">
               <span className="voice-soundwave-bar" />
               <span className="voice-soundwave-bar" />
               <span className="voice-soundwave-bar" />
             </span>
-            <span>재생 중: "{speakingText}"</span>
+            <span className="voice-island-text">{speakingText}</span>
             <button
               type="button"
-              className="voice-stop-btn"
+              className="voice-island-stop"
               onClick={stopSpeaking}
               title="음성 정지"
             >
-              ⏹ 정지
+              ⏹
             </button>
           </div>
         )}
-        {debugLog && (
-          <div className="voice-debug-banner">
-            <span>{debugLog}</span>
-          </div>
-        )}
+
+        {/* Action icons on top right */}
+        <div className="voice-top-actions">
+          <button
+            type="button"
+            className={`voice-icon-btn ${showInfo ? 'is-active' : ''}`}
+            onClick={() => setShowInfo((prev) => !prev)}
+            title="정보/로그"
+            aria-label="정보 토글"
+          >
+            ⓘ
+          </button>
+          <button
+            type="button"
+            className={`voice-icon-btn ${showSettings ? 'is-active' : ''}`}
+            onClick={() => setShowSettings((prev) => !prev)}
+            title="목소리 설정"
+            aria-label="설정 토글"
+          >
+            ⚙️
+          </button>
+        </div>
       </header>
+
+      {/* Info / Log Card (Toggled only) */}
+      {showInfo && (
+        <section className="voice-info-card">
+          <div className="voice-info-card-header">
+            <h4>💧 물방울 음성 대화기</h4>
+            <button
+              type="button"
+              className="voice-custom-del"
+              onClick={() => setShowInfo(false)}
+            >
+              ✕
+            </button>
+          </div>
+          <p className="voice-info-card-desc">
+            버튼을 누르면 상대방에게 선명하고 자연스러운 음성이 스피커로 즉시 재생됩니다.
+          </p>
+          {debugLog && (
+            <div className="voice-info-log">
+              <span>{debugLog}</span>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Main 9 Water Drop Buttons */}
       <section className="voice-grid-section">
-        <div className="voice-section-title">핵심 표현 (9 Drops)</div>
         <div className="voice-drops-grid">
           {DEFAULT_WORDS.map((item) => {
             const isActive = speakingText === item.text
@@ -394,7 +428,7 @@ export default function Voice() {
       {/* Custom Registered Phrases */}
       {customWords.length > 0 && (
         <section className="voice-custom-section">
-          <div className="voice-section-title">등록된 빠른 문장들 (탭하여 즉시 말하기)</div>
+          <div className="voice-section-title">자주 쓰는 말</div>
           <div className="voice-custom-tags">
             {customWords.map((word) => (
               <div
@@ -418,10 +452,10 @@ export default function Voice() {
 
       {/* Settings Card (Collapsible) */}
       {showSettings && (
-        <section className="voice-settings-card" style={{ marginTop: '24px' }}>
+        <section className="voice-settings-card">
           <div className="voice-settings-header">
             <div className="voice-settings-title">
-              <span>⚙️ 목소리 및 사운드 설정</span>
+              <span>⚙️ 목소리 속도 및 톤 설정</span>
             </div>
             <button
               type="button"
@@ -433,7 +467,6 @@ export default function Voice() {
           </div>
 
           <div className="voice-controls-grid">
-
             <div className="voice-sliders">
               <div className="voice-control-group">
                 <label className="voice-control-label">
@@ -470,13 +503,6 @@ export default function Voice() {
           </div>
         </section>
       )}
-
-      {/* Mobile Audio Tip */}
-      <footer className="voice-mobile-tip">
-        <span>💡 <strong>모바일 사운드 가이드</strong>: <br />
-        • <strong>갤럭시/폴드</strong>: 측면 볼륨 버튼 누른 뒤 <strong>[⋯]</strong>을 눌러 <strong>미디어 및 시스템/알림 음량</strong>을 켜주세요.<br />
-        • <strong>아이폰</strong>: 측면 <strong>무음 스위치(진동 모드)</strong>를 올려 벨소리 모드로 변경해 주세요.</span>
-      </footer>
     </div>
   )
 }
